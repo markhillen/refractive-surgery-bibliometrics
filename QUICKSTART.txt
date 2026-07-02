@@ -1,0 +1,42 @@
+HOW TO RUN THIS (no technical knowledge needed)
+================================================
+
+1. Double-click the file called   Start.command
+
+   A black Terminal window opens and sets things up. The first time, this
+   takes about a minute while it downloads the packages it needs. After
+   that it starts in a few seconds.
+
+   Your web browser will open automatically to the app.
+
+2. To STOP the app: close the black Terminal window (or click inside it and
+   press the Ctrl and C keys together).
+
+3. To run it again later: just double-click Start.command again.
+
+
+IF DOUBLE-CLICKING DOESN'T WORK
+-------------------------------
+macOS sometimes blocks double-clicking a downloaded script the first time.
+If nothing happens, or you see a security warning:
+
+  - Right-click (or Control-click) Start.command  ->  Open  ->  Open.
+    You only have to do this once.
+
+  - Or open the Terminal app and run these two lines (drag the folder onto
+    the Terminal window to get its path):
+
+        cd "/path/to/this/folder"
+        ./Start.command
+
+
+IF IT SAYS PYTHON IS MISSING
+----------------------------
+Install Python from  https://www.python.org/downloads/  (click the big
+yellow Download button and run the installer), then double-click
+Start.command again.
+
+
+NOTHING ELSE IS REQUIRED. An NCBI API key is optional — it only makes
+fetching new data from PubMed a little faster. The app runs fine without it
+using the data already stored in the "cache" folder.

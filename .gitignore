@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+venv/
+.claude/
+# regenerable data / large artifacts — reproduce via the included PMID list
+cache/
+output/
+outputs/
+data/analysis.json
+data/*/cache/
+data/*/output/
+*.tmp
+*.json.tmp

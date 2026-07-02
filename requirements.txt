@@ -1,0 +1,15 @@
+# Keratoconus Bibliometrics — Python dependencies
+# Install with:  python3 -m pip install -r requirements.txt
+#
+# HTTP uses the standard-library urllib, so `requests` is NOT required.
+# pandas / seaborn / scipy are NOT used by this pipeline.
+
+# ── Required ──────────────────────────────────────────────────────────────────
+numpy>=1.26.0          # numerical arrays (visualize.py)
+matplotlib>=3.9.0      # static figures (visualize.py, gui.py)
+networkx>=3.3.0        # collaboration network graphs (visualize.py)
+openpyxl>=3.1.0        # Excel workbook output (report.py)
+
+# ── Optional ──────────────────────────────────────────────────────────────────
+# pyvis>=0.3.2         # interactive HTML co-authorship network (visualize.py).
+#                      # Uncomment to enable; the pipeline runs fine without it.

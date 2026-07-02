@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__PROJECT_NAME__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300;9..144,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0e1117;
+    --surface:  #161b27;
+    --card:     #1d2535;
+    --border:   #2a3347;
+    --accent:   #4f8ef7;
+    --accent2:  #38d9a9;
+    --accent3:  #f7934f;
+    --warn:     #f7c94f;
+    --danger:   #f7614f;
+    --text:     #e2e8f4;
+    --muted:    #7a8ba8;
+    --mono:     'DM Mono', monospace;
+    --serif:    'Fraunces', Georgia, serif;
+    --sans:     'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1.4rem;
+    background: var(--surface);
+  }
+  header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.55rem;
+    letter-spacing: -.02em;
+    color: var(--text);
+  }
+  header h1 span { color: var(--accent); font-weight: 600; }
+  header .sub {
+    font-size: .78rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted);
+    display: inline-block;
+    margin-left: auto;
+    transition: background .3s;
+  }
+  .status-dot.running { background: var(--accent2); animation: pulse 1.2s infinite; }
+  .status-dot.done    { background: var(--accent2); }
+  .status-dot.error   { background: var(--danger); }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.5; transform:scale(1.3); }
+  }
+
+  /* ── Layout ── */
+  main {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+    height: calc(100vh - 61px);
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1.6rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: .68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    margin-bottom: .6rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+  }
+  .card h3 {
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+  }
+
+  /* Presets */
+  .presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+  }
+  .preset-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: .45rem .6rem;
+    font-size: .8rem;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .preset-btn.active { border-color: var(--accent); background: #1a2a4a; color: var(--accent); }
+
+  /* Year sliders */
+  .year-row {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin-bottom: .7rem;
+  }
+  .year-row label {
+    font-size: .78rem;
+    color: var(--muted);
+    width: 2.8rem;
+    font-family: var(--mono);
+  }
+  .year-row input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  .year-row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  .year-row input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+  .year-display {
+    font-family: var(--mono);
+    font-size: .88rem;
+    color: var(--accent);
+    width: 2.4rem;
+    text-align: right;
+  }
+  .year-range-summary {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--accent2);
+    text-align: center;
+    padding: .4rem;
+    background: #0d1f18;
+    border-radius: 5px;
+    border: 1px solid #1d4035;
+    margin-top: .2rem;
+  }
+
+  /* Text inputs */
+  .field { margin-bottom: .85rem; }
+  .field label {
+    display: block;
+    font-size: .75rem;
+    color: var(--muted);
+    margin-bottom: .35rem;
+    font-family: var(--mono);
+  }
+  .field input, .field textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: .8rem;
+    padding: .5rem .7rem;
+    outline: none;
+    transition: border-color .15s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); }
+  .field .hint {
+    font-size: .7rem;
+    color: var(--muted);
+    margin-top: .3rem;
+    line-height: 1.4;
+  }
+
+  /* Toggle row */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .6rem;
+  }
+  .toggle-row span {
+    font-size: .8rem;
+    color: var(--text);
+  }
+  .toggle-row .hint-inline {
+    font-size: .7rem;
+    color: var(--muted);
+    margin-top: .1rem;
+  }
+  .toggle {
+    position: relative;
+    width: 36px; height: 20px;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    left: 3px; bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform .2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent2); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+  /* Run button */
+  #run-btn {
+    width: 100%;
+    padding: .85rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: .95rem;
+    font-weight: 500;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .02em;
+  }
+  #run-btn:hover:not(:disabled) { background: #6fa3fa; transform: translateY(-1px); }
+  #run-btn:disabled {
+    background: var(--border);
+    color: var(--muted);
+    cursor: not-allowed;
+    transform: none;
+  }
+  #run-btn.running { background: var(--danger); }
+  #run-btn.running:hover:not(:disabled) { background: #f97a6b; }
+
+  /* ── Main panel ── */
+  .main-panel {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+  }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width .4s;
+  }
+  .progress-bar.indeterminate {
+    width: 30%;
+    animation: indeterminate 1.5s infinite ease-in-out;
+  }
+  @keyframes indeterminate {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0 1.5rem;
+    gap: .2rem;
+  }
+  .tab {
+    padding: .7rem 1rem;
+    font-size: .82rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .15s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab .badge {
+    display: inline-block;
+    background: var(--border);
+    border-radius: 10px;
+    font-size: .65rem;
+    padding: .05rem .4rem;
+    margin-left: .4rem;
+    vertical-align: middle;
+    color: var(--muted);
+  }
+  .tab.active .badge { background: #1a2a4a; color: var(--accent); }
+
+  /* Tab panels */
+  .tab-panels { overflow: hidden; flex: 1; position: relative; }
+  .tab-panel {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    padding: 1.4rem 1.6rem;
+    display: none;
+  }
+  .tab-panel.active { display: block; }
+
+  /* Log panel */
+  #log-panel {
+    background: var(--bg);
+    font-family: var(--mono);
+    font-size: .78rem;
+    line-height: 1.7;
+  }
+  .log-line { display: flex; gap: .8rem; }
+  .log-time { color: var(--border); min-width: 5rem; }
+  .log-msg  { flex: 1; word-break: break-word; }
+  .log-msg.info  { color: var(--text); }
+  .log-msg.ok    { color: var(--accent2); }
+  .log-msg.warn  { color: var(--warn); }
+  .log-msg.error { color: var(--danger); }
+  .log-msg.head  { color: var(--accent); font-weight: 500; }
+  .log-msg.dim   { color: var(--muted); }
+  .log-empty { color: var(--muted); text-align: center; margin-top: 3rem; font-size: .85rem; }
+
+  /* Results panel */
+  #results-panel { background: var(--bg); }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: .8rem;
+    margin-bottom: 1.6rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .9rem 1rem;
+    text-align: center;
+  }
+  .stat-card .val {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .stat-card .lbl {
+    font-size: .72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-family: var(--mono);
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin: 1.4rem 0 .8rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Figures grid */
+  .figures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+  .fig-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .15s, transform .15s;
+  }
+  .fig-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .fig-card img { width: 100%; display: block; }
+  .fig-card .fig-label {
+    padding: .5rem .8rem;
+    font-size: .75rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Downloads */
+  .downloads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .6rem;
+  }
+  .dl-btn {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: .65rem .9rem;
+    color: var(--text);
+    text-decoration: none;
+    font-size: .8rem;
+    font-family: var(--mono);
+    transition: all .15s;
+    cursor: pointer;
+  }
+  .dl-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .dl-btn .icon { font-size: 1.1rem; }
+  .dl-btn .size { font-size: .68rem; color: var(--muted); margin-left: auto; }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 92vw;
+    max-height: 92vh;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+  #lightbox-close {
+    position: fixed;
+    top: 1rem; right: 1.5rem;
+    font-size: 1.8rem;
+    color: #fff;
+    cursor: pointer;
+    opacity: .7;
+    transition: opacity .15s;
+  }
+  #lightbox-close:hover { opacity: 1; }
+
+  /* Status bar */
+  .statusbar {
+    border-top: 1px solid var(--border);
+    padding: .4rem 1.5rem;
+    font-size: .73rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    background: var(--surface);
+    display: flex;
+    gap: 1.5rem;
+  }
+  .statusbar span { display: flex; align-items: center; gap: .4rem; }
+  .statusbar .ok   { color: var(--accent2); }
+  .statusbar .warn { color: var(--warn); }
+
+  /* Source mode tabs */
+  .source-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+    margin-bottom: .1rem;
+  }
+  .src-tab {
+    flex: 1;
+    background: var(--surface);
+    border: none;
+    color: var(--muted);
+    font-size: .75rem;
+    font-family: var(--mono);
+    padding: .45rem .3rem;
+    cursor: pointer;
+    transition: all .15s;
+    border-right: 1px solid var(--border);
+  }
+  .src-tab:last-child { border-right: none; }
+  .src-tab:hover { color: var(--text); background: var(--card); }
+  .src-tab.active { background: #1a2a4a; color: var(--accent); font-weight: 500; }
+
+  /* Textarea override */
+  .field textarea {
+    min-height: 110px;
+    line-height: 1.5;
+  }
+
+  /* Action buttons (inline, smaller) */
+  .action-btn {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: .4rem .6rem;
+    font-size: .78rem;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .action-btn:hover { background: #6fa3fa; }
+  .action-btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
+  .action-btn.secondary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .action-btn.secondary:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* Query count result pill */
+  .count-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .8rem;
+    border-radius: 20px;
+    font-size: .78rem;
+    font-family: var(--mono);
+    margin-top: .2rem;
+  }
+  .count-pill.ok    { background: #0d1f18; border: 1px solid #1d4035; color: var(--accent2); }
+  .count-pill.warn  { background: #1f1a08; border: 1px solid #3f3010; color: var(--warn); }
+  .count-pill.error { background: #1f0d0d; border: 1px solid #3f1010; color: var(--danger); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Empty state */
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    gap: .8rem;
+    color: var(--muted);
+  }
+  .empty .big { font-size: 3rem; opacity: .3; }
+  .empty p { font-size: .85rem; text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="brand">__BRAND_MAIN__ <span>Bibliometrics</span></h1>
+  <span class="sub">PubMed · OpenAlex · ROR</span>
+  <span class="status-dot" id="status-dot"></span>
+</header>
+
+<main>
+<!-- ── Sidebar ────────────────────────────────────────────── -->
+<aside>
+
+  <div class="card">
+    <h3>📅 Date Range</h3>
+
+    <div class="presets" id="presets">
+      <button class="preset-btn" data-start="2001" data-end="__END_YEAR__" data-period="all_time">All (2001–__END_YEAR__)</button>
+      <button class="preset-btn" data-start="__LAST10_START__" data-end="__END_YEAR__" data-period="last_10yr">Last 10 yr</button>
+      <button class="preset-btn" data-start="__LAST5_START__" data-end="__END_YEAR__" data-period="last_5yr">Last 5 yr</button>
+      <button class="preset-btn" data-start="__LAST3_START__" data-end="__END_YEAR__" data-period="last_3yr">Last 3 yr</button>
+      <button class="preset-btn" data-start="2001" data-end="2010" data-period="decade_2001_10">2001–2010</button>
+      <button class="preset-btn" data-start="2011" data-end="2020" data-period="decade_2011_20">2011–2020</button>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <div class="year-row">
+        <label>From</label>
+        <input type="range" id="start-year" min="2001" max="__END_YEAR__" value="2001">
+        <span class="year-display" id="start-display">2001</span>
+      </div>
+      <div class="year-row">
+        <label>To</label>
+        <input type="range" id="end-year" min="2001" max="__END_YEAR__" value="__END_YEAR__">
+        <span class="year-display" id="end-display">__END_YEAR__</span>
+      </div>
+      <div class="year-range-summary" id="range-summary">
+        2001 – __END_YEAR__ &nbsp;·&nbsp; __SPAN_YEARS__ years
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚙️ Data Source</h3>
+
+    <!-- Source mode selector -->
+    <div class="source-tabs" id="source-tabs">
+      <button class="src-tab active" data-mode="pmid"  onclick="setSourceMode('pmid')">PMID File</button>
+      <button class="src-tab"        data-mode="query" onclick="setSourceMode('query')">PubMed Query</button>
+      <button class="src-tab"        data-mode="cache" onclick="setSourceMode('cache')">Cache Only</button>
+    </div>
+
+    <!-- PMID file panel -->
+    <div class="src-panel" id="src-pmid">
+      <div class="field" style="margin-top:.8rem;margin-bottom:.5rem">
+        <label>PMID list file</label>
+        <input type="text" id="pmid-file" value="pmids_expanded.txt" placeholder="path/to/pmids.txt">
+        <div class="hint">One PMID per line. Date-range filter applied after load.</div>
+      </div>
+    </div>
+
+    <!-- PubMed query panel -->
+    <div class="src-panel" id="src-query" style="display:none">
+      <div class="field" style="margin-top:.8rem;margin-bottom:.4rem">
+        <label>PubMed search query</label>
+        <textarea id="pubmed-query" rows="6"
+          placeholder="e.g. &quot;corneal cross-linking&quot;[tiab] AND &quot;keratoconus&quot;[tiab]&#10;&#10;Paste any PubMed query here — the date range sliders above will be appended automatically."
+          oninput="onQueryInput()"
+        ></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.3rem">
+          <div class="hint" id="query-hint">Paste a query from PubMed Advanced Search.</div>
+          <span id="query-char-count" style="font-family:var(--mono);font-size:.68rem;color:var(--muted)">0 chars</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
+        <button class="action-btn" onclick="validateQuery()" id="validate-btn">
+          🔍 Count results
+        </button>
+        <button class="action-btn secondary" onclick="loadExampleQuery()">
+          ↙ CXL example
+        </button>
+      </div>
+      <div id="query-count-result" style="display:none"></div>
+    </div>
+
+    <!-- Cache only panel -->
+    <div class="src-panel" id="src-cache" style="display:none">
+      <div style="margin-top:.8rem;padding:.7rem;background:var(--surface);border-radius:6px;border:1px solid var(--border)">
+        <div id="cache-info" style="font-size:.8rem;font-family:var(--mono);color:var(--muted)">
+          Checking cache…
+        </div>
+      </div>
+      <div class="hint" style="margin-top:.5rem">Re-runs analysis and charts on already-downloaded records. Fastest option.</div>
+    </div>
+
+    <!-- API key always visible -->
+    <div class="field" style="margin-top:.9rem;margin-bottom:0">
+      <label>NCBI API key</label>
+      <input type="password" id="api-key" placeholder="Paste your key (optional)">
+      <div class="hint">10 req/s with key vs 3 without. Free at ncbi.nlm.nih.gov/account</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔬 Options</h3>
+
+    <div class="toggle-row">
+      <div>
+        <span>Fetch citation counts</span><br>
+        <span class="hint-inline">CrossRef cross-check · optional (~20 min)</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="fetch-citations">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span>Multi-period analysis</span><br>
+        <span class="hint-inline">All-time + last 20/15/10/5 yr</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="multi-period" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span>Use cached records</span><br>
+        <span class="hint-inline">Skip re-downloading</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="use-cache" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span>Force full refresh</span><br>
+        <span class="hint-inline">Re-download everything</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="force-refresh">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div style="margin-top:.8rem; border-top: 1px solid var(--border); padding-top:.8rem;">
+      <div class="field" style="margin-bottom:.5rem">
+        <label>Min author publications</label>
+        <input type="number" id="min-author-pubs" value="3" min="1" max="50"
+               style="width:70px; text-align:center;">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Top N authors/countries/journals</label>
+        <input type="number" id="top-n" value="20" min="5" max="100"
+               style="width:70px; text-align:center;">
+      </div>
+    </div>
+  </div>
+
+  <button id="run-btn" onclick="runPipeline()">▶ Run Analysis</button>
+
+</aside>
+
+<!-- ── Main panel ─────────────────────────────────────────── -->
+<div class="main-panel">
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <div style="display:grid; grid-template-rows: auto 1fr; overflow:hidden; height:100%;">
+    <div class="tabs">
+      <div class="tab active" data-tab="log" onclick="switchTab('log')">
+        Console <span class="badge" id="log-badge">0</span>
+      </div>
+      <div class="tab" data-tab="results" onclick="switchTab('results')">
+        Results <span class="badge" id="results-badge">–</span>
+      </div>
+      <div class="tab" data-tab="figures" onclick="switchTab('figures')">
+        Figures <span class="badge" id="fig-badge">0</span>
+      </div>
+      <div class="tab" data-tab="downloads" onclick="switchTab('downloads')">
+        Downloads <span class="badge" id="dl-badge">0</span>
+      </div>
+    </div>
+
+    <div class="tab-panels" style="position:relative; overflow:hidden;">
+
+      <div class="tab-panel active" id="log-panel">
+        <div class="log-empty" id="log-empty">
+          Configure settings and click <strong>Run Analysis</strong> to begin.
+        </div>
+      </div>
+
+      <div class="tab-panel" id="results-panel">
+        <div class="empty" id="results-empty">
+          <div class="big">📊</div>
+          <p>Results will appear here after a successful run.<br>
+          Summary statistics, top authors, journals, and countries.</p>
+        </div>
+        <div class="period-selector" id="res-period-selector" style="display:none; margin-bottom:.8rem;">
+          <label style="font-size:.72rem; color:var(--muted); margin-right:.5rem;">Period:</label>
+          <select id="res-period" onchange="loadResults()" style="font-family:var(--mono); font-size:.78rem; padding:.3rem .5rem; background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:6px;"></select>
+        </div>
+        <div id="res-notice" style="display:none;padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;"></div>
+      </div>
+
+      <div class="tab-panel" id="figures-panel">
+        <div class="empty" id="figures-empty">
+          <div class="big">📈</div>
+          <p>Charts will appear here after a successful run.</p>
+        </div>
+        <div id="fig-notice" style="display:none;padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;"></div>
+        <div class="period-selector" id="fig-period-selector" style="display:none; margin-bottom:.8rem;">
+          <label style="font-size:.72rem; color:var(--muted); margin-right:.5rem;">Period:</label>
+          <select id="fig-period" onchange="loadFigures()" style="font-family:var(--mono); font-size:.78rem; padding:.3rem .5rem; background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:6px;"></select>
+        </div>
+        <div class="figures-grid" id="figures-grid" style="display:none"></div>
+      </div>
+
+      <div class="tab-panel" id="downloads-panel">
+        <div class="empty" id="downloads-empty">
+          <div class="big">⬇️</div>
+          <p>Download links will appear here after a successful run.</p>
+        </div>
+        <div id="dl-notice" style="display:none;padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;"></div>
+        <div class="period-selector" id="dl-period-selector" style="display:none; margin-bottom:.8rem;">
+          <label style="font-size:.72rem; color:var(--muted); margin-right:.5rem;">Period:</label>
+          <select id="dl-period" onchange="loadDownloads()" style="font-family:var(--mono); font-size:.78rem; padding:.3rem .5rem; background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:6px;"></select>
+        </div>
+        <div id="downloads-grid" style="display:none"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <span id="sb-records">Records: —</span>
+    <span id="sb-cache">Cache: checking…</span>
+    <span id="sb-output">Output: loading…</span>
+  </div>
+</div>
+</main>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let logCount = 0;
+let pollTimer = null;
+let running   = false;
+
+// Injected by the server from config.ANALYSIS_PERIODS — [{name,start,end},…].
+// Guarded so the script still runs if served statically (token left un-substituted).
+const KNOWN_PERIODS = (typeof __PERIODS_JSON__ !== 'undefined') ? __PERIODS_JSON__ : [];
+
+function resolvePeriod(start, end) {
+  const m = KNOWN_PERIODS.find(p => p.start === start && p.end === end);
+  return m ? m.name : null;
+}
+
+// ── Year range controls ────────────────────────────────────────────────────
+const startSlider = document.getElementById('start-year');
+const endSlider   = document.getElementById('end-year');
+const startDisp   = document.getElementById('start-display');
+const endDisp     = document.getElementById('end-display');
+const rangeSumm   = document.getElementById('range-summary');
+
+// Set the date-range UI from the actual period data. This corrects any tokens
+// the server did not substitute (e.g. static hosting) AND replaces the hard-coded
+// start year, so it is right for every topic (CXL 2001, keratoconus 1950, …).
+(function initDateRange() {
+  // Brand/title fallback if the server did not substitute the tokens (static hosting)
+  if (document.title.includes('__')) document.title = 'Bibliometrics';
+  const brand = document.getElementById('brand');
+  if (brand && brand.textContent.includes('__')) brand.innerHTML = '<span>Bibliometrics</span>';
+
+  const at = KNOWN_PERIODS.find(p => p.name === 'all_time');
+  const startY = at ? at.start : (parseInt(startSlider && startSlider.min) || 2001);
+  const endY   = at ? at.end   : (new Date().getFullYear());
+  if (startSlider) { startSlider.min = startY; startSlider.max = endY; startSlider.value = startY; }
+  if (endSlider)   { endSlider.min   = startY; endSlider.max   = endY; endSlider.value   = endY; }
+  if (startDisp) startDisp.textContent = startY;
+  if (endDisp)   endDisp.textContent   = endY;
+  if (rangeSumm) rangeSumm.textContent = `${startY} – ${endY}  ·  ${endY - startY + 1} years`;
+
+  // Rebuild preset buttons from the actual periods (topic-correct: no CXL-only
+  // decades leaking into other topics). The delegated #presets click handler
+  // keeps working. Falls back to the static HTML buttons if periods absent.
+  const presetsEl = document.getElementById('presets');
+  if (presetsEl && KNOWN_PERIODS.length) {
+    const label = p => {
+      if (p.name === 'all_time') return `All (${p.start}–${p.end})`;
+      const m = p.name.match(/^last_(\d+)yr$/); if (m) return `Last ${m[1]} yr`;
+      return `${p.start}–${p.end}`;
+    };
+    presetsEl.innerHTML = KNOWN_PERIODS.map(p =>
+      `<button class="preset-btn" data-start="${p.start}" data-end="${p.end}" data-period="${p.name}">${label(p)}</button>`
+    ).join('');
+  } else {
+    const allBtn = document.querySelector('.preset-btn[data-period="all_time"]');
+    if (allBtn) { allBtn.dataset.start = startY; allBtn.dataset.end = endY;
+                  allBtn.textContent = `All (${startY}–${endY})`; }
+    document.querySelectorAll('.preset-btn[data-period^="last_"]').forEach(b => { b.dataset.end = endY; });
+  }
+})();
+
+function updateRangeSummary() {
+  const s = parseInt(startSlider.value);
+  const e = parseInt(endSlider.value);
+  if (s > e) { startSlider.value = e; return updateRangeSummary(); }
+  startDisp.textContent = s;
+  endDisp.textContent   = e;
+  const yrs = e - s + 1;
+  rangeSumm.textContent = `${s} – ${e}  ·  ${yrs} year${yrs>1?'s':''}`;
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    b.classList.toggle('active',
+      parseInt(b.dataset.start) === s && parseInt(b.dataset.end) === e);
+  });
+}
+
+// Called on every slider move or preset click — resolves to a named period
+// and immediately updates Results (from cached JSON) + Figures/Downloads.
+function onDateRangeChange() {
+  const s = parseInt(startSlider.value);
+  const e = parseInt(endSlider.value);
+  if (s > e) { startSlider.value = e; return onDateRangeChange(); }
+  updateRangeSummary();
+
+  const period = resolvePeriod(s, e);
+  if (period) {
+    // Sync all three dropdowns to this period
+    const resSel = document.getElementById('res-period');
+    if (resSel && [...resSel.options].some(o => o.value === period)) resSel.value = period;
+    const figSel = document.getElementById('fig-period');
+    if (figSel && [...figSel.options].some(o => o.value === period)) figSel.value = period;
+    const dlSel  = document.getElementById('dl-period');
+    if (dlSel  && [...dlSel.options].some(o => o.value === period))  dlSel.value  = period;
+    loadResults();
+    loadFigures();
+    loadDownloads();
+  } else {
+    // Custom range — no pre-computed data available
+    const msg = `Custom range ${s}–${e}. Click <strong>Run</strong> to compute results for this window.`;
+    _setNotice('res-notice', msg);
+    _setNotice('fig-notice', `📈 &nbsp;${msg}`);
+    _setNotice('dl-notice',  `⬇️ &nbsp;${msg}`);
+    const rc = document.querySelector('#results-panel .results-content');
+    if (rc) rc.style.display = 'none';
+    document.getElementById('figures-grid').style.display    = 'none';
+    document.getElementById('downloads-grid').style.display  = 'none';
+    document.getElementById('figures-empty').style.display   = 'none';
+    document.getElementById('downloads-empty').style.display = 'none';
+  }
+}
+
+function _setNotice(id, html) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = html;
+  el.style.display = '';
+}
+
+startSlider.addEventListener('input', onDateRangeChange);
+endSlider.addEventListener('input',   onDateRangeChange);
+
+document.getElementById('presets').addEventListener('click', e => {
+  const btn = e.target.closest('.preset-btn');
+  if (!btn) return;
+  startSlider.value = btn.dataset.start;
+  endSlider.value   = btn.dataset.end;
+  onDateRangeChange();
+});
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === name + '-panel');
+  });
+}
+
+// ── Logging ────────────────────────────────────────────────────────────────
+function addLog(msg, cls='info') {
+  const panel = document.getElementById('log-panel');
+  const empty = document.getElementById('log-empty');
+  if (empty) empty.remove();
+
+  const now  = new Date();
+  const time = now.toTimeString().slice(0,8);
+  const line = document.createElement('div');
+  line.className = 'log-line';
+
+  // Detect message type
+  if (!cls || cls === 'info') {
+    if (msg.startsWith('===') || msg.startsWith('CXL'))         cls = 'head';
+    else if (msg.includes('saved') || msg.includes('Done') ||
+             msg.includes('complete') || msg.includes('COMPLETE')) cls = 'ok';
+    else if (msg.includes('[warn]') || msg.includes('warn'))    cls = 'warn';
+    else if (msg.includes('[error]') || msg.includes('ERROR') ||
+             msg.includes('Traceback') || msg.includes('Exception')) cls = 'error';
+    else if (msg.startsWith('  ') || msg.startsWith('\t'))      cls = 'dim';
+  }
+
+  line.innerHTML = `<span class="log-time">${time}</span>
+                    <span class="log-msg ${cls}">${escHtml(msg)}</span>`;
+  panel.appendChild(line);
+  panel.scrollTop = panel.scrollHeight;
+
+  logCount++;
+  document.getElementById('log-badge').textContent = logCount;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Run pipeline ───────────────────────────────────────────────────────────
+async function runPipeline() {
+  if (running) {
+    await fetch('/api/stop', {method:'POST'});
+    return;
+  }
+
+  const mode = document.querySelector('.src-tab.active')?.dataset.mode || 'pmid';
+  const cfg = {
+    start_year:       parseInt(startSlider.value),
+    end_year:         parseInt(endSlider.value),
+    source_mode:      mode,
+    pmid_file:        mode === 'pmid'  ? document.getElementById('pmid-file').value.trim() : '',
+    pubmed_query:     mode === 'query' ? document.getElementById('pubmed-query').value.trim() : '',
+    api_key:          document.getElementById('api-key').value.trim(),
+    fetch_citations:  document.getElementById('fetch-citations').checked,
+    use_cache:        mode === 'cache' || document.getElementById('use-cache').checked,
+    force_refresh:    mode !== 'cache' && document.getElementById('force-refresh').checked,
+    min_author_pubs:  parseInt(document.getElementById('min-author-pubs').value) || 3,
+    top_n:            parseInt(document.getElementById('top-n').value) || 20,
+    multi_period:     document.getElementById('multi-period').checked,
+  };
+
+  // Validate query mode has content
+  if (mode === 'query' && !cfg.pubmed_query) {
+    addLog('Please enter a PubMed query before running.', 'warn');
+    switchTab('log');
+    setRunning(false);
+    return;
+  }
+
+  // Reset UI
+  logCount = 0;
+  document.getElementById('log-panel').innerHTML = '';
+  document.getElementById('log-badge').textContent = '0';
+  document.getElementById('results-badge').textContent = '–';
+  document.getElementById('fig-badge').textContent = '0';
+  document.getElementById('dl-badge').textContent = '0';
+  document.getElementById('figures-grid').style.display = 'none';
+  document.getElementById('figures-empty').style.display = '';
+  document.getElementById('downloads-grid').style.display = 'none';
+  document.getElementById('downloads-empty').style.display = '';
+  document.getElementById('results-empty').style.display = '';
+
+  switchTab('log');
+  setRunning(true);
+  addLog('Starting analysis pipeline…', 'head');
+  addLog(`Date range: ${cfg.start_year} – ${cfg.end_year}`, 'dim');
+  if (cfg.source_mode === 'pmid' && cfg.pmid_file)
+    addLog(`PMID file: ${cfg.pmid_file}`, 'dim');
+  else if (cfg.source_mode === 'query')
+    addLog(`Query: ${cfg.pubmed_query.slice(0,80)}${cfg.pubmed_query.length>80?'…':''}`, 'dim');
+  else if (cfg.source_mode === 'cache')
+    addLog('Using cached records only (no new fetch)', 'dim');
+
+  const resp = await fetch('/api/run', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(cfg)
+  });
+
+  if (!resp.ok) {
+    addLog('Failed to start pipeline: ' + await resp.text(), 'error');
+    setRunning(false);
+    return;
+  }
+
+  startPolling();
+}
+
+function setRunning(state) {
+  running = state;
+  const btn = document.getElementById('run-btn');
+  const dot = document.getElementById('status-dot');
+  const bar = document.getElementById('progress-bar');
+  btn.disabled  = false;
+  btn.textContent = state ? '■ Stop' : '▶ Run Analysis';
+  btn.className   = state ? 'running' : '';
+  dot.className   = 'status-dot' + (state ? ' running' : '');
+  bar.className   = 'progress-bar' + (state ? ' indeterminate' : '');
+  if (!state) bar.style.width = '0%';
+}
+
+// ── Poll for log lines ─────────────────────────────────────────────────────
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(pollLogs, 300);
+}
+
+async function pollLogs() {
+  try {
+    const r = await fetch('/api/logs');
+    const d = await r.json();
+    d.lines.forEach(l => addLog(l));
+    if (d.done) {
+      clearInterval(pollTimer);
+      setRunning(false);
+      const dot = document.getElementById('status-dot');
+      if (d.error) {
+        dot.className = 'status-dot error';
+        addLog('Pipeline finished with errors.', 'error');
+      } else {
+        dot.className = 'status-dot done';
+        addLog('Pipeline complete ✓', 'ok');
+        // Fetch available periods from figures endpoint, then sync all dropdowns
+        fetch('/api/figures?period=all_time').then(r=>r.json()).then(d=>{
+          if (d.periods?.length) {
+            _syncResultsPeriod(d.periods, 'all_time');
+            _syncPeriodDropdown('fig-period', d.periods, 'all_time');
+            _syncPeriodDropdown('dl-period',  d.periods, 'all_time');
+            document.getElementById('fig-period-selector').style.display = '';
+            document.getElementById('dl-period-selector').style.display  = '';
+          }
+          loadResults();
+          loadFigures();
+          loadDownloads();
+          switchTab('results');
+        }).catch(()=>{ loadResults(); loadFigures(); loadDownloads(); switchTab('results'); });
+      }
+    }
+  } catch(e) { console.error('[poll]', e); }
+}
+
+// ── Load results ───────────────────────────────────────────────────────────
+async function loadResults() {
+  try {
+    const sel    = document.getElementById('res-period');
+    const period = sel?.value || 'all_time';
+    const r = await fetch('/api/results?period=' + encodeURIComponent(period));
+    if (!r.ok) {
+      const msg = running
+        ? '⏳ Computing results for this period…'
+        : 'No results yet for this period. Click <strong>Run</strong> to compute.';
+      _setNotice('res-notice', msg);
+      const rc = document.querySelector('#results-panel .results-content');
+      if (rc) rc.style.display = 'none';
+      return;
+    }
+    document.getElementById('res-notice').style.display = 'none';
+    const rc = document.querySelector('#results-panel .results-content');
+    if (rc) rc.style.display = '';
+    const d = await r.json();
+    renderResults(d);
+  } catch(e) { console.error('[results]', e); }
+}
+
+function _syncResultsPeriod(periods, current) {
+  const sel = document.getElementById('res-period');
+  if (!periods?.length) return;
+  const existing = Array.from(sel.options).map(o => o.value);
+  if (existing.join(',') !== periods.join(',')) {
+    sel.innerHTML = periods.map(p => `<option value="${p}">${_periodLabel(p)}</option>`).join('');
+  }
+  if (current && sel.value !== current) sel.value = current;
+  document.getElementById('res-period-selector').style.display = '';
+}
+
+function renderResults(d) {
+  document.getElementById('results-empty').style.display = 'none';
+  const panel = document.getElementById('results-panel');
+
+  // ── Derived metrics (computed here so the on-screen tables match the
+  //    downloadable CSV/Excel: citations/paper, Bradford zone, concentration) ──
+  const cpp = (cites, n) => n ? (Math.round((cites||0)/n*10)/10) : '—';
+  const totalCites = (d.temporal?.citations||[]).reduce((s,x)=>s+(x||0),0);
+  const meanCPP = d.n_records ? (totalCites/d.n_records).toFixed(1) : '—';
+  const jall = d.journals || [];
+  const top3 = jall.slice(0,3).reduce((s,j)=>s+parseFloat(j.percentage||0),0).toFixed(1);
+  // Bradford zones over the full journal set (cumulative thirds of articles)
+  const jtot = jall.reduce((s,j)=>s+(j.count||0),0) || 1;
+  let _run = 0; const _zone = {};
+  jall.forEach(j => { _run += (j.count||0); const f=_run/jtot; _zone[j.journal] = f<=1/3?1:(f<=2/3?2:3); });
+  // efficiency rank over the top-20 valid countries (matches the CSV)
+  const cvalid = (d.countries||[]).filter(c=>c.country!=='Unknown').slice(0,20);
+  const effOrder = [...cvalid].sort((a,b)=>cpp(b.citations,b.count)-cpp(a.citations,a.count));
+  const effRank = {}; effOrder.forEach((c,i)=>effRank[c.country]=i+1);
+
+  // Stat cards
+  const stats = [
+    {val: d.n_records,                    lbl: 'Publications'},
+    {val: meanCPP,                        lbl: 'Mean cites/pub'},
+    {val: d.journals?.length || '—',       lbl: 'Journals'},
+    {val: top3+'%',                        lbl: 'Top-3 journals'},
+    {val: (d.countries||[]).filter(c=>c.country!=='Unknown').length || '—', lbl: 'Countries'},
+    {val: cvalid[0]?.country || '—',       lbl: 'Leading country'},
+  ];
+
+  let html = '<div class="results-grid">';
+  stats.forEach(s => {
+    html += `<div class="stat-card">
+      <div class="val">${s.val}</div>
+      <div class="lbl">${s.lbl}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('sb-records').textContent = `Records: ${d.n_records}`;
+  document.getElementById('results-badge').textContent = d.n_records;
+
+  // Top authors table
+  if (d.authors?.length) {
+    html += '<div class="section-title">Top Authors</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.8rem;font-family:var(--mono)">';
+    html += '<tr style="color:var(--muted);border-bottom:1px solid var(--border)">'
+          + '<th style="text-align:left;padding:.4rem .6rem">#</th>'
+          + '<th style="text-align:left;padding:.4rem .6rem">Author</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Pubs</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">1st Author</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Citations</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Cites/Paper</th>'
+          + '</tr>';
+    d.authors.slice(0,20).forEach((a,i) => {
+      const rowBg = i%2===0 ? '' : 'background:var(--card)';
+      html += `<tr style="${rowBg}">
+        <td style="padding:.35rem .6rem;color:var(--muted)">${i+1}</td>
+        <td style="padding:.35rem .6rem;color:var(--accent)">${escHtml(a.author_id)}</td>
+        <td style="padding:.35rem .6rem;text-align:right">${a.pub_count}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${a.first_author_count}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--accent2)">${a.citation_total||0}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${cpp(a.citation_total,a.pub_count)}</td>
+      </tr>`;
+    });
+    html += '</table>';
+  }
+
+  // Top journals
+  if (d.journals?.length) {
+    html += '<div class="section-title">Top Journals</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.8rem;font-family:var(--mono)">';
+    html += '<tr style="color:var(--muted);border-bottom:1px solid var(--border)">'
+          + '<th style="text-align:left;padding:.4rem .6rem">#</th>'
+          + '<th style="text-align:left;padding:.4rem .6rem">Journal</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Pubs</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">%</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Cites/Paper</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Zone</th>'
+          + '</tr>';
+    d.journals.slice(0,15).forEach((j,i) => {
+      const rowBg = i%2===0 ? '' : 'background:var(--card)';
+      html += `<tr style="${rowBg}">
+        <td style="padding:.35rem .6rem;color:var(--muted)">${i+1}</td>
+        <td style="padding:.35rem .6rem">${escHtml(j.abbr||j.journal)}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--accent)">${j.count}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${j.percentage}%</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--accent2)">${cpp(j.citations,j.count)}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${_zone[j.journal]||''}</td>
+      </tr>`;
+    });
+    html += '</table>';
+  }
+
+  // Top countries
+  if (d.countries?.length) {
+    html += '<div class="section-title">Top Countries</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.8rem;font-family:var(--mono)">';
+    html += '<tr style="color:var(--muted);border-bottom:1px solid var(--border)">'
+          + '<th style="text-align:left;padding:.4rem .6rem">#</th>'
+          + '<th style="text-align:left;padding:.4rem .6rem">Country</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Pubs</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">%</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Citations</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Cites/Paper</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Eff.#</th>'
+          + '<th style="text-align:right;padding:.4rem .6rem">Pubs/M</th>'
+          + '</tr>';
+    d.countries.filter(c=>c.country!=='Unknown').slice(0,15).forEach((c,i) => {
+      const rowBg = i%2===0 ? '' : 'background:var(--card)';
+      html += `<tr style="${rowBg}">
+        <td style="padding:.35rem .6rem;color:var(--muted)">${i+1}</td>
+        <td style="padding:.35rem .6rem">${escHtml(c.country)}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--accent)">${c.count}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${c.percentage}%</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--accent2)">${c.citations||0}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${cpp(c.citations,c.count)}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${effRank[c.country]||''}</td>
+        <td style="padding:.35rem .6rem;text-align:right;color:var(--muted)">${c.pubs_per_million ?? ''}</td>
+      </tr>`;
+    });
+    html += '</table>';
+  }
+
+  // Inject
+  const existing = panel.querySelector('.results-content');
+  if (existing) existing.remove();
+  const div = document.createElement('div');
+  div.className = 'results-content';
+  div.innerHTML = html;
+  panel.appendChild(div);
+}
+
+// ── Load figures ───────────────────────────────────────────────────────────
+function _periodLabel(p) {
+  return ({all_time:'All time', last_20yr:'Last 20 years', last_15yr:'Last 15 years',
+           last_10yr:'Last 10 years', last_5yr:'Last 5 years', last_3yr:'Last 3 years',
+           decade_2011_20:'2011–2020', decade_2001_10:'2001–2010'})[p] || p;
+}
+
+function _syncPeriodDropdown(selectId, periods, current) {
+  const sel = document.getElementById(selectId);
+  if (!periods || !periods.length) return;
+  const existing = Array.from(sel.options).map(o => o.value);
+  if (existing.join(',') !== periods.join(',')) {
+    sel.innerHTML = periods.map(p => `<option value="${p}">${_periodLabel(p)}</option>`).join('');
+  }
+  if (current) sel.value = current;
+}
+
+async function loadFigures() {
+  try {
+    const sel = document.getElementById('fig-period');
+    const period = sel.value || 'all_time';
+    const r = await fetch('/api/figures?period=' + encodeURIComponent(period));
+    if (!r.ok) return;
+    const d = await r.json();
+
+    document.getElementById('fig-notice').style.display = 'none';
+
+    if (d.periods?.length) {
+      document.getElementById('fig-period-selector').style.display = '';
+      _syncPeriodDropdown('fig-period', d.periods, period);
+    }
+    if (!d.figures?.length) {
+      const msg = running
+        ? '⏳ Figures are being generated for this period — check back in a moment.'
+        : 'No figures for this period yet. Click <strong>Run</strong> to generate them.';
+      _setNotice('fig-notice', msg);
+      document.getElementById('figures-empty').style.display  = 'none';
+      document.getElementById('figures-grid').style.display   = 'none';
+      return;
+    }
+
+    document.getElementById('figures-empty').style.display = 'none';
+    const grid = document.getElementById('figures-grid');
+    grid.style.display = '';
+    grid.innerHTML = '';
+
+    const pq = '&period=' + encodeURIComponent(document.getElementById('fig-period').value || 'all_time');
+    d.figures.forEach(f => {
+      const card = document.createElement('div');
+      card.className = 'fig-card';
+      card.innerHTML = `<img src="/api/figure?name=${encodeURIComponent(f.name)}${pq}&t=${Date.now()}"
+                             alt="${f.label}" loading="lazy">
+                        <div class="fig-label">${f.label}</div>`;
+      card.querySelector('img').addEventListener('click', () => openLightbox('/api/figure?name=' + encodeURIComponent(f.name) + pq));
+      grid.appendChild(card);
+    });
+
+    document.getElementById('fig-badge').textContent = d.figures.length;
+  } catch(e) { console.error('[figures]', e); }
+}
+
+// ── Load downloads ─────────────────────────────────────────────────────────
+async function loadDownloads() {
+  try {
+    const sel = document.getElementById('dl-period');
+    const period = sel.value || 'all_time';
+    const r = await fetch('/api/downloads?period=' + encodeURIComponent(period));
+    if (!r.ok) return;
+    const d = await r.json();
+
+    const fsel = document.getElementById('fig-period');
+    if (fsel && fsel.options.length) {
+      const periods = Array.from(fsel.options).map(o => o.value);
+      document.getElementById('dl-period-selector').style.display = '';
+      _syncPeriodDropdown('dl-period', periods, period);
+    }
+    document.getElementById('dl-notice').style.display = 'none';
+    if (!d.files?.length) {
+      const msg = running
+        ? '⏳ Files are being generated for this period — check back in a moment.'
+        : 'No files for this period yet. Click <strong>Run</strong> to generate them.';
+      _setNotice('dl-notice', msg);
+      document.getElementById('downloads-empty').style.display = 'none';
+      document.getElementById('downloads-grid').style.display  = 'none';
+      return;
+    }
+
+    document.getElementById('downloads-empty').style.display = 'none';
+    const grid = document.getElementById('downloads-grid');
+    grid.style.display = '';
+
+    const pq = '&period=' + encodeURIComponent(document.getElementById('dl-period').value || 'all_time');
+    const icons = {png:'🖼️', pdf:'📕', xlsx:'📊', csv:'📄', json:'📋', txt:'📝', md:'📝', html:'🌐'};
+
+    // Group by type
+    const imgs  = d.files.filter(f => f.ext === 'png' || f.ext === 'pdf');
+    const data  = d.files.filter(f => f.ext !== 'png' && f.ext !== 'pdf');
+
+    let html = '';
+    if (data.length) {
+      html += '<div class="section-title" style="margin-top:0">Data Files</div>';
+      html += '<div class="downloads-grid">';
+      data.forEach(f => {
+        html += `<a class="dl-btn" href="/api/download?name=${encodeURIComponent(f.name)}${pq}" download="${f.name}">
+          <span class="icon">${icons[f.ext]||'📄'}</span>
+          <span>${f.name}</span>
+          <span class="size">${f.size}</span>
+        </a>`;
+      });
+      html += '</div>';
+    }
+    if (imgs.length) {
+      html += '<div class="section-title">Figures</div>';
+      html += '<div class="downloads-grid">';
+      imgs.forEach(f => {
+        html += `<a class="dl-btn" href="/api/download?name=${encodeURIComponent(f.name)}${pq}" download="${f.name}">
+          <span class="icon">${icons[f.ext]||'🖼️'}</span>
+          <span>${f.name}</span>
+          <span class="size">${f.size}</span>
+        </a>`;
+      });
+      html += '</div>';
+    }
+
+    grid.innerHTML = html;
+    document.getElementById('dl-badge').textContent = d.files.length;
+  } catch(e) { console.error('[downloads]', e); }
+}
+
+// ── Lightbox ───────────────────────────────────────────────────────────────
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+// ── Cache status ───────────────────────────────────────────────────────────
+async function checkCache() {
+  try {
+    const r = await fetch('/api/status');
+    const d = await r.json();
+    const sb = document.getElementById('sb-cache');
+    if (d.cached_records) {
+      sb.innerHTML = `<span class="ok">✓ Cache: ${d.cached_records} records</span>`;
+    } else {
+      sb.innerHTML = `Cache: none`;
+    }
+    if (d.output_dir) {
+      document.getElementById('sb-output').textContent = `Output: ${d.output_dir}`;
+    }
+  } catch(e) { console.error('[cache]', e); }
+}
+
+// ── Source mode switching ──────────────────────────────────────────────────
+let _sourceMode = 'pmid';
+
+function setSourceMode(mode) {
+  _sourceMode = mode;
+  document.querySelectorAll('.src-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.mode === mode));
+  document.querySelectorAll('.src-panel').forEach(p => p.style.display = 'none');
+  document.getElementById('src-' + mode).style.display = '';
+
+  // Auto-toggle "use-cache" toggle for UX clarity
+  const useCache = document.getElementById('use-cache');
+  if (mode === 'cache') {
+    useCache.checked = true;
+    useCache.disabled = true;
+  } else {
+    useCache.disabled = false;
+  }
+
+  if (mode === 'cache') refreshCacheInfo();
+}
+
+function refreshCacheInfo() {
+  fetch('/api/status').then(r => r.json()).then(d => {
+    const el = document.getElementById('cache-info');
+    if (d.cached_records) {
+      el.innerHTML = `<span style="color:var(--accent2)">✓ ${d.cached_records} records cached</span>`
+                   + (d.cache_date ? `<br><span style="color:var(--muted);font-size:.7rem">Last fetched: ${d.cache_date}</span>` : '');
+    } else {
+      el.innerHTML = '<span style="color:var(--danger)">✗ No cache found — fetch records first using PMID File or PubMed Query mode.</span>';
+    }
+  });
+}
+
+// ── Query input / validation ────────────────────────────────────────────────
+const CXL_EXAMPLE_QUERY = (typeof __PUBMED_QUERY_JS__ !== "undefined") ? __PUBMED_QUERY_JS__ : `("corneal cross-linking"[tiab] OR "corneal crosslinking"[tiab] OR "corneal collagen cross-linking"[tiab] OR "riboflavin ultraviolet"[tiab] OR "PACK-CXL"[tiab] OR "Corneal Cross-Linking"[MeSH Terms]) AND ("cornea"[tiab] OR "keratoconus"[tiab] OR "ectasia"[tiab] OR "keratitis"[tiab] OR "cornea"[MeSH Terms]) NOT ("cartilage"[tiab] OR "dental"[tiab] OR "bone"[tiab] OR "hydrogel"[tiab] OR "polymer"[tiab])`;
+
+function loadExampleQuery() {
+  document.getElementById('pubmed-query').value = CXL_EXAMPLE_QUERY;
+  onQueryInput();
+}
+
+function onQueryInput() {
+  const q = document.getElementById('pubmed-query').value;
+  document.getElementById('query-char-count').textContent = q.length + ' chars';
+  // Reset count result if query changed
+  const res = document.getElementById('query-count-result');
+  res.style.display = 'none';
+}
+
+let _validateTimer = null;
+async function validateQuery() {
+  const q = document.getElementById('pubmed-query').value.trim();
+  if (!q) return;
+
+  const btn = document.getElementById('validate-btn');
+  const res = document.getElementById('query-count-result');
+  const s   = parseInt(startSlider.value);
+  const e   = parseInt(endSlider.value);
+  const key = document.getElementById('api-key').value.trim();
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Counting…';
+  res.style.display = 'none';
+
+  try {
+    const resp = await fetch('/api/validate_query', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({query: q, start_year: s, end_year: e, api_key: key})
+    });
+    const d = await resp.json();
+
+    let cls = 'ok', icon = '✓';
+    if (d.error)        { cls = 'error'; icon = '✗'; }
+    else if (d.count === 0) { cls = 'warn';  icon = '⚠'; }
+    else if (d.count > 20000) { cls = 'warn'; icon = '⚠'; }
+
+    const msg = d.error
+      ? `Error: ${d.error}`
+      : `${d.count.toLocaleString()} results for ${s}–${e}`;
+
+    res.innerHTML = `<div class="count-pill ${cls}">${icon} ${msg}</div>`;
+    if (!d.error && d.count > 20000)
+      res.innerHTML += `<div class="hint" style="margin-top:.4rem;color:var(--warn)">Large result set — consider narrowing your query.</div>`;
+    if (!d.error && d.count === 0)
+      res.innerHTML += `<div class="hint" style="margin-top:.4rem;">No results — check your syntax at pubmed.ncbi.nlm.nih.gov</div>`;
+    res.style.display = '';
+  } catch(err) {
+    res.innerHTML = `<div class="count-pill error">✗ Could not reach NCBI — check your internet connection.</div>`;
+    res.style.display = '';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🔍 Count results';
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+checkCache();
+updateRangeSummary();
+// Mark "All" preset as active by default
+document.querySelector('.preset-btn[data-period="all_time"]').classList.add('active');
+
+// Auto-detect existing output and populate all period selectors on load.
+// This means users who have run the CLI don't need to re-run the GUI to
+// browse per-period results — the dropdowns appear immediately.
+(async function initFromExistingOutput() {
+  try {
+    const r = await fetch('/api/figures?period=all_time');
+    const d = await r.json();
+    if (d.periods && d.periods.length) {
+      _syncResultsPeriod(d.periods, 'all_time');
+      _syncPeriodDropdown('fig-period', d.periods, 'all_time');
+      _syncPeriodDropdown('dl-period',  d.periods, 'all_time');
+      document.getElementById('fig-period-selector').style.display = '';
+      document.getElementById('dl-period-selector').style.display  = '';
+      loadResults();
+      loadFigures();
+      loadDownloads();
+    }
+  } catch(_) {}
+})();
+</script>
+</body>
+</html>
