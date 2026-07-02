@@ -58,7 +58,7 @@ TransPRK, and related corneal laser procedures (1988–present).
 
 ### Option B — PMID list file
 ```bash
-python3 main.py --api-key YOUR_KEY --pmid-file pmids.txt
+python3 main.py --api-key YOUR_KEY --pmid-file pmids_expanded.txt
 ```
 
 ### Option C — Cached records only (fastest, no network)
@@ -71,6 +71,18 @@ python3 main.py --skip-fetch --skip-citations
 ---
 
 ## Running the Pipeline
+
+### Launch the web GUI
+
+```bash
+python3 gui.py
+```
+
+Opens a local app in your browser (date-range sliders, results tables, figures,
+and downloadable CSV/Excel). Non-technical users can just double-click
+`Start.command` instead (see Quick start).
+
+
 
 ### Full run (fetch + citations + analysis)
 ```bash
