@@ -38,5 +38,5 @@ Start.command again.
 
 
 NOTHING ELSE IS REQUIRED. An NCBI API key is optional — it only makes
-fetching new data from PubMed a little faster. The app runs fine without it
-using the data already stored in the "cache" folder.
+fetching new data from PubMed a little faster. On first use, open the app and click "Run Analysis" (PMID-file mode, with
+pmids_expanded.txt) to build the dataset — a key just makes fetching faster.
