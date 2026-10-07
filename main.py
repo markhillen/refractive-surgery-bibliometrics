@@ -239,20 +239,6 @@ def main():
                                     "CrossRef" if srcs <= {"crossref", None} else
                                     "OpenAlex; CrossRef/ROR fallback, see SDC")
 
-    # ── Attribution audit table (one row per record) ──────────────────────────
-    import csv as _csv
-    attr_path = pathlib.Path(config.OUTPUT_DIR) / "record_attribution.csv"
-    with open(attr_path, "w", newline="", encoding="utf-8") as fh:
-        w = _csv.writer(fh)
-        w.writerow(["pmid", "year", "country", "country_source", "countries_all",
-                    "citation_count", "citation_source", "oa_matched"])
-        for rec in records:
-            w.writerow([rec.get("pmid"), rec.get("year"), rec.get("country"),
-                        rec.get("country_source", ""), "|".join(rec.get("countries_all", []) or []),
-                        rec.get("citation_count"), rec.get("citation_source", ""),
-                        rec.get("oa_matched", "")])
-    print(f"[main] Attribution table: {attr_path}")
-
     if getattr(config, "IMPUTE_MISSING_AFFILIATIONS", False):
         import impute
         _imp = impute.impute_affiliations(
@@ -282,6 +268,21 @@ def main():
                 n_fix += 1
         print(f"[main] first-author country corrected from the author's own nearby affiliation: {n_fix} records")
         _imp["country_corrected_from_imputed_affiliation"] = n_fix
+
+    # ── Attribution audit table (one row per record), written after the
+    #    imputation-based country correction so it matches every country table ──────────────────────────
+    import csv as _csv
+    attr_path = pathlib.Path(config.OUTPUT_DIR) / "record_attribution.csv"
+    with open(attr_path, "w", newline="", encoding="utf-8") as fh:
+        w = _csv.writer(fh)
+        w.writerow(["pmid", "year", "country", "country_source", "countries_all",
+                    "citation_count", "citation_source", "oa_matched"])
+        for rec in records:
+            w.writerow([rec.get("pmid"), rec.get("year"), rec.get("country"),
+                        rec.get("country_source", ""), "|".join(rec.get("countries_all", []) or []),
+                        rec.get("citation_count"), rec.get("citation_source", ""),
+                        rec.get("oa_matched", "")])
+    print(f"[main] Attribution table: {attr_path}")
 
     # Final analysed record set (after overlay and imputation), so that tables
     # built outside the pipeline read exactly what the analysis read.

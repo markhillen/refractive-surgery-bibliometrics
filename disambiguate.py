@@ -302,6 +302,16 @@ _KEY_STOPWORDS = {"of", "to", "the", "at", "and", "an", "a", "in", "for", "with"
                   "national", "state", "medical", "normal", "technical", "technological"}
 
 
+def _modal_inst_key(affils: list[str]) -> str | None:
+    """The institution key seen most often across a component's affiliations.
+    _inst_key() returns the key of the FIRST matching affiliation, which made
+    display labels depend on record order ("Zhao J (Capital)" for an author
+    whose 63 of 65 affiliations are Fudan)."""
+    import collections as _c
+    cnt = _c.Counter(k for k in (_inst_key([a]) for a in affils) if k)
+    return cnt.most_common(1)[0][0] if cnt else None
+
+
 def _inst_conflict(affils_i: list[str], affils_j: list[str]) -> bool:
     """
     Return True if two affiliation sets clearly point to DIFFERENT institutions.
@@ -618,7 +628,7 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         # name so that different Zhang Ls are visually distinguishable in outputs.
         # e.g. "Zhang L (Wenzhou)" vs "Zhang L (Peking)"
         if _norm_last(best_last) in _COMMON_SURNAMES:
-            inst_key = _inst_key(comp_affils.get(root, []))
+            inst_key = _modal_inst_key(comp_affils.get(root, []))
             if inst_key:
                 # Capitalise first letter for readability
                 inst_label = inst_key.title()
@@ -638,7 +648,7 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         roots.sort(key=lambda r: -sum(comp_names[r].values()))   # largest keeps the bare name
         used = {name}
         for k, root in enumerate(roots[1:], start=2):
-            key = _inst_key(comp_affils.get(root, []))
+            key = _modal_inst_key(comp_affils.get(root, []))
             label = key.title() if key else f"#{k}"
             cand = f"{name} ({label})"
             if cand in used or name.endswith(f"({label})"):

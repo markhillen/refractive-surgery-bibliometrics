@@ -9,7 +9,7 @@ families (comparative studies), so shares need not add up to 100%.
 
   LASIK                 LASIK, FS-LASIK, laser (assisted) in situ keratomileusis, SBK
   Surface ablation      PRK, LASEK, epi-LASIK, transepithelial PRK, surface ablation
-  Lenticule extraction  SMILE, ReLEx, FLEx, KLEx, SmartSight, CLEAR, lenticule extraction
+  Lenticule extraction  SMILE, ReLEx, FLEx, KLEx, SmartSight, CLEAR, SILK, lenticule extraction
 
 Output: output/procedure_mix_by_year.csv, output/procedure_mix_by_period.csv,
         output/procedure_mix_records.csv
@@ -34,7 +34,7 @@ FAMILIES = {
         r"surface ablation|transepithelial (?:photorefractive|surface))\b", re.I),
     "Lenticule extraction": re.compile(
         r"\b(smile|relex|flex|klex|smartsight|lenticule extraction|small[\s-]incision lenticule|"
-        r"keratorefractive lenticule|femtosecond lenticule)\b", re.I),
+        r"keratorefractive lenticule|femtosecond lenticule|smooth incision lenticular keratomileusis|silk)\b", re.I),
 }
 # "SMILE" is an ordinary English word; count it only in upper case or when the
 # record also names lenticules, ReLEx or small-incision surgery.
@@ -55,7 +55,7 @@ def families(rec: dict) -> set[str]:
             only_smile = all(_SMILE_WORD.fullmatch(h) for h in hits)
             if only_smile and not ("SMILE" in text or _LENTICULE_CONTEXT.search(text)):
                 continue
-            if all(h.lower() == "flex" for h in hits):   # "FLEx" alone is ambiguous
+            if all(h.lower() in ("flex", "silk") for h in hits):   # "FLEx"/"SILK" alone are ambiguous
                 if not _LENTICULE_CONTEXT.search(text):
                     continue
         out.add(fam)
