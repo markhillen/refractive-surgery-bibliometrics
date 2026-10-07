@@ -1,0 +1,7 @@
+period,start_year,end_year,total_publications,total_citations,records_with_citation_count,records_without_citation_count,unique_authors,unique_journals,unique_countries,records_country_unresolved,mean_cites_per_pub,h_index_field
+all_time,1988,2025,12887,336335,12808,79,4143,548,85,1858,26.3,188
+last_25yr,2001,2025,10484,253899,10427,57,3517,484,84,1377,24.4,161
+last_20yr,2006,2025,8191,173449,8159,32,2917,425,82,1003,21.3,135
+last_15yr,2011,2025,6129,106245,6103,26,2319,363,77,765,17.4,108
+last_10yr,2016,2025,4202,55030,4194,8,1718,295,73,491,13.1,75
+last_5yr,2021,2025,2153,14020,2149,4,920,229,64,181,6.5,36

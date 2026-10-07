@@ -1,0 +1,16 @@
+{
+ "retrieved": 14112,
+ "parsed": 14097,
+ "books": 15,
+ "screened": 1840,
+ "queue": 337,
+ "sample": 200,
+ "stratum": 1303,
+ "rule_excluded": 363,
+ "ptk": 196,
+ "nosignal": 119,
+ "nooph": 9,
+ "notices": 39,
+ "manual_excluded": 847,
+ "final": 12887
+}

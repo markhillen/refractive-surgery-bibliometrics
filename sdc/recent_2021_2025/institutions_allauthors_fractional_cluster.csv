@@ -1,0 +1,41 @@
+rank,institution,publications,pct_of_resolved,citations,n_cited_known
+1,Fudan University,104.5,4.91,759,116
+2,Hoopes Vision Research Center,53.5,2.51,381,58
+3,Wenzhou Medical University,42.18,1.98,489,48
+4,Tianjin Medical University,39.25,1.84,324,57
+5,University of Arizona,34.58,1.63,351,36
+6,Peking University,32.33,1.52,222,38
+7,University of Utah School of Medicine,31.25,1.47,296,64
+8,Tehran University of Medical Sciences,30.5,1.43,256,32
+9,Tianjin Eye Hospital,29.5,1.39,283,45
+10,All India Institute of Medical Sciences,28.0,1.32,293,28
+11,Beijing Tongren Eye Center,24.33,1.14,145,26
+12,Cleveland Clinic,24.0,1.13,416,25
+13,Singapore National Eye Centre,22.83,1.07,351,28
+14,Shahid Beheshti University of Medical Sciences,21.5,1.01,190,22
+15,Saarland University,21.33,1.0,120,22
+16,Narayana Nethralaya Bangalore,21.0,0.99,131,21
+17,Rio de Janeiro,19.0,0.89,155,19
+18,Tel Aviv University,18.83,0.89,90,23
+19,Utah Lions Eye Bank,18.67,0.88,175,56
+20,SCHWIND eye-tech-solutions,18.0,0.85,80,18
+21,Harvard Medical School,16.58,0.78,163,19
+=22,LV Prasad Eye Institute,16.5,0.78,158,17
+=22,Baylor College of Medicine,16.5,0.78,252,17
+24,Nankai University,16.42,0.77,169,25
+25,Mashhad University of Medical Sciences,16.33,0.77,79,17
+26,Humanitas University Milan,15.5,0.73,104,17
+27,Vissum Alicante,15.33,0.72,195,20
+28,Sun Yat-sen University,15.17,0.71,84,18
+29,Stanford University,15.0,0.7,206,15
+30,Federal University of São Paulo,14.75,0.69,187,23
+31,Chinese University of Hong Kong,14.67,0.69,162,17
+=32,Guangdong Provincial Clinical Research Center for Ocular Diseases,14.33,0.67,203,19
+=32,University of Pittsburgh,14.33,0.67,162,17
+=34,Chung Shan Medical University Hospital,14.0,0.66,60,14
+=34,Bascom Palmer Eye Institute,14.0,0.66,122,14
+=34,West China Hospital,14.0,0.66,54,14
+37,Yonsei University College of Medicine,13.45,0.63,89,15
+38,University of Liverpool,12.67,0.6,188,20
+=39,Noor Eye Hospital Tehran,12.0,0.56,165,12
+=39,Chinese Academy of Medical Sciences & Peking Union Medical College,12.0,0.56,132,13

@@ -1,0 +1,31 @@
+Corneal laser refractive surgery corpus - screening log
+============================================================
+
+Search run 7 October 2026 (query in config.py: PUBMED_QUERY_SPECIFIC OR
+(PUBMED_QUERY_GENERIC AND PUBMED_QUERY_ANCHOR)), publication dates
+1 January 1988 to 31 December 2025.
+
+PubMed identifiers returned:        14,112   (data/retrieved_pmids.txt)
+Book chapters (no journal record):      15
+Journal records screened:           14,097
+Excluded:                            1,210   (data/excluded_records.csv)
+Analysed publications:              12,887   (data/final_pmids.txt)
+
+Exclusions by rule:
+    847  manual.exclude
+    196  content.ptk_only
+    119  content.no_procedure_signal
+     39  content.notice_not_publication
+      9  content.no_ophthalmic_term
+
+Records screened individually against the written decision rule (1,840;
+data/manual_screening.csv), in three sets:
+   1303  procedure term in abstract or keywords only
+    337  rule-unresolved queue
+    200  precision sample (random 200 of auto-kept)
+
+Claude (Anthropic) proposed each decision and reason on 7 October 2026
+(993 kept, 847 excluded). An author (MH) checked every
+proposed exclusion on 7 October 2026 and confirmed all 847; proposed
+inclusions were not checked individually.
+The full decision for every record is in sdc/exclusion_log.csv.

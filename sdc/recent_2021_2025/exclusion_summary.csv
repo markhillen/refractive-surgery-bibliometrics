@@ -1,0 +1,8 @@
+decision,stage,rule_id,n
+keep,keep,keep.content,11894
+keep,manual,manual.include,993
+exclude,manual,manual.exclude,847
+exclude,content,content.ptk_only,196
+exclude,content,content.no_procedure_signal,119
+exclude,content,content.notice_not_publication,39
+exclude,content,content.no_ophthalmic_term,9

@@ -1,0 +1,41 @@
+rank,institution,publications,pct_of_resolved,citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,213.67,1.74,4343,237
+2,Cleveland Clinic,206.0,1.68,10636,206
+3,Vissum Alicante,152.33,1.24,5585,161
+4,Massachusetts Eye and Ear,125.62,1.02,4909,132
+5,University of Crete,115.0,0.94,6150,117
+6,Tianjin Eye Hospital,113.97,0.93,2339,140
+7,Wenzhou Medical University,112.43,0.92,2317,128
+8,All India Institute of Medical Sciences,109.0,0.89,1804,109
+9,Stanford University,103.5,0.84,2400,104
+10,Emory University,99.33,0.81,7207,101
+11,Chinese University of Hong Kong,96.28,0.79,2180,112
+12,Yonsei University College of Medicine,90.12,0.74,2814,94
+13,Johns Hopkins University,88.5,0.72,3050,90
+14,Shahid Beheshti University of Medical Sciences,87.75,0.72,1208,90
+15,Baylor College of Medicine,86.5,0.71,3928,87
+16,Farabi Eye Hospital,84.33,0.69,1222,88
+17,Moorfields Eye Hospital,81.83,0.67,2962,93
+18,University of California Los Angeles,81.5,0.66,4279,83
+19,Singapore Eye Research Institute,79.53,0.65,3071,104
+20,University of Southern California,77.09,0.63,3228,92
+21,Bascom Palmer Eye Institute,77.0,0.63,2662,82
+22,Sun Yat-sen University,74.67,0.61,1362,78
+23,Universidad Miguel Hernández,70.83,0.58,2801,92
+=24,Tianjin Medical University,70.42,0.57,964,95
+=24,London Vision Clinic,70.42,0.57,4102,81
+26,Narayana Nethralaya Bangalore,69.0,0.56,1237,69
+27,Singapore National Eye Centre,67.48,0.55,2434,95
+28,University of Arizona,62.68,0.51,1249,66
+29,University of California San Francisco,61.33,0.5,1748,70
+30,Tel Aviv University,57.75,0.47,870,67
+31,Hoopes Vision Research Center,56.5,0.46,429,61
+32,Federal University of São Paulo,55.92,0.46,2140,75
+33,Peking University,54.33,0.44,422,62
+34,Beijing Tongren Eye Center,52.83,0.43,426,55
+35,Aarhus University Hospital,49.5,0.4,3958,51
+36,Fudan University,48.83,0.4,1205,58
+37,University of Toronto,48.5,0.4,987,52
+38,University of Utah School of Medicine,47.15,0.38,590,91
+39,University of Alicante,46.83,0.38,2003,51
+40,LV Prasad Eye Institute,41.25,0.34,1225,43

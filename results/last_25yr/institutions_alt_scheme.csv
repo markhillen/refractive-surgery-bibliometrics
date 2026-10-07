@@ -1,0 +1,51 @@
+rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,193,1.96,3924,193
+2,Cleveland Clinic,165,1.67,8372,163
+3,Vissum Alicante,137,1.39,5010,136
+4,All India Institute of Medical Sciences,97,0.98,1483,97
+5,University of Crete,87,0.88,3990,87
+6,Wenzhou Medical University,82,0.83,1492,82
+7,Massachusetts Eye and Ear,74,0.75,2793,73
+=8,Emory University,73,0.74,4757,73
+=8,Stanford University,73,0.74,1846,73
+=8,Tianjin Eye Hospital,73,0.74,1724,73
+11,Yonsei University College of Medicine,67,0.68,2355,67
+12,Farabi Eye Hospital,64,0.65,931,64
+13,Chinese University of Hong Kong,63,0.64,1268,61
+14,Sun Yat-sen University,62,0.63,1118,62
+15,Shahid Beheshti University of Medical Sciences,59,0.6,975,59
+=16,Narayana Nethralaya Bangalore,58,0.59,1048,58
+=16,Baylor College of Medicine,58,0.59,3097,57
+=16,Tianjin Medical University,58,0.59,737,58
+=16,Singapore Eye Research Institute,58,0.59,2336,58
+20,London Vision Clinic,57,0.58,3222,57
+21,Peking University,56,0.57,396,56
+22,Bascom Palmer Eye Institute,53,0.54,1703,53
+23,Laservision Institute Athens,51,0.52,2505,50
+24,Johns Hopkins University,49,0.5,1350,49
+=25,Beijing Tongren Eye Center,46,0.47,364,46
+=25,Hoopes Vision Research Center,46,0.47,357,46
+27,University of California Los Angeles,44,0.45,2149,44
+28,Moorfields Eye Hospital,42,0.43,1274,42
+29,University of California San Francisco,40,0.41,1174,40
+30,Singapore National Eye Centre,38,0.39,1218,37
+=31,Mayo Clinic,35,0.35,1962,35
+=31,Federal University of São Paulo,35,0.35,1668,35
+=31,University of Southern California,35,0.35,1813,35
+=31,Aarhus University Hospital,35,0.35,2474,35
+=31,Noor Eye Hospital Tehran,35,0.35,472,35
+36,University of Toronto,33,0.33,646,33
+=37,University of Kitasato School of Medicine,32,0.32,1364,32
+=37,University of Siena,32,0.32,616,32
+=37,Universidad Miguel Hernández,32,0.32,1436,32
+=37,Mashhad University of Medical Sciences,32,0.32,354,32
+=41,Tel Aviv University,31,0.31,436,31
+=41,Isfahan University of Medical Sciences,31,0.31,245,31
+=41,Saarland University Medical Center,31,0.31,407,31
+=44,Humanitas University Milan,29,0.29,608,29
+=44,Minamiaoyama Eye Clinic,29,0.29,1410,29
+46,Fudan University,28,0.28,601,28
+47,LV Prasad Eye Institute,24,0.24,199,24
+=48,Semmelweis University,23,0.23,370,22
+=48,Ludwig-Maximilians-University,23,0.23,531,23
+50,Wills Eye Hospital,22,0.22,626,22

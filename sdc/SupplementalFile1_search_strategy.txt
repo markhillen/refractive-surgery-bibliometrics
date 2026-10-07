@@ -1,0 +1,20 @@
+PubMed search strategy - corneal laser refractive surgery bibliometrics
+Run 7 October 2026 through the NCBI E-utilities (esearch), publication dates
+1988/01/01 to 2025/12/31. No language or publication-type limits; NCBI
+Bookshelf records (no journal record) were not analyzed.
+
+Query = SPECIFIC OR (GENERIC AND ANCHOR)
+
+SPECIFIC (procedure terms that identify the field on their own):
+"laser in situ keratomileusis"[tiab] OR "LASIK"[tiab] OR "femto-LASIK"[tiab] OR "FS-LASIK"[tiab] OR "keratomileusis"[tiab] OR "photorefractive keratectomy"[tiab] OR "photorefractive keratectomies"[tiab] OR "LASEK"[tiab] OR "laser epithelial keratomileusis"[tiab] OR "laser subepithelial keratomileusis"[tiab] OR "epi-LASIK"[tiab] OR "small incision lenticule extraction"[tiab] OR "small-incision lenticule extraction"[tiab] OR "lenticule extraction"[tiab] OR "ReLEx"[tiab] OR "femtosecond lenticule extraction"[tiab] OR "KLEx"[tiab] OR "SmartSight"[tiab] OR "transepithelial photorefractive keratectomy"[tiab] OR "TransPRK"[tiab] OR "trans-PRK"[tiab] OR "laser vision correction"[tiab] OR "laser refractive surgery"[tiab] OR "corneal refractive surgery"[tiab] OR "keratorefractive surgery"[tiab] OR "laser refractive correction"[tiab] OR "PRESBYOND"[tiab] OR "presbyLASIK"[tiab] OR "Keratomileusis, Laser In Situ"[MeSH Terms] OR "Photorefractive Keratectomy"[MeSH Terms] OR "Keratectomy, Subepithelial, Laser-Assisted"[MeSH Terms]
+
+GENERIC (refractive-surgery terms that need an anchor):
+"PRK"[tiab] OR "excimer laser"[tiab] OR "excimer lasers"[tiab] OR "surface ablation"[tiab] OR "wavefront-guided"[tiab] OR "wavefront guided"[tiab] OR "wavefront-optimized"[tiab] OR "topography-guided"[tiab] OR "topography guided"[tiab] OR "Lasers, Excimer"[MeSH Terms]
+
+ANCHOR (cornea/laser context required for the generic terms):
+"cornea"[tiab] OR "corneal"[tiab] OR "myopia"[tiab] OR "myopic"[tiab] OR "hyperopia"[tiab] OR "hyperopic"[tiab] OR "astigmatism"[tiab] OR "astigmatic"[tiab] OR "presbyopia"[tiab] OR "ametropia"[tiab] OR "refractive error"[tiab] OR "refractive errors"[tiab] OR "refractive surgery"[tiab] OR "refractive outcome"[tiab] OR "refractive outcomes"[tiab] OR "visual acuity"[tiab] OR "Cornea"[MeSH Terms] OR "Refractive Errors"[MeSH Terms] OR "Refractive Surgical Procedures"[MeSH Terms]
+
+Full query as submitted:
+("laser in situ keratomileusis"[tiab] OR "LASIK"[tiab] OR "femto-LASIK"[tiab] OR "FS-LASIK"[tiab] OR "keratomileusis"[tiab] OR "photorefractive keratectomy"[tiab] OR "photorefractive keratectomies"[tiab] OR "LASEK"[tiab] OR "laser epithelial keratomileusis"[tiab] OR "laser subepithelial keratomileusis"[tiab] OR "epi-LASIK"[tiab] OR "small incision lenticule extraction"[tiab] OR "small-incision lenticule extraction"[tiab] OR "lenticule extraction"[tiab] OR "ReLEx"[tiab] OR "femtosecond lenticule extraction"[tiab] OR "KLEx"[tiab] OR "SmartSight"[tiab] OR "transepithelial photorefractive keratectomy"[tiab] OR "TransPRK"[tiab] OR "trans-PRK"[tiab] OR "laser vision correction"[tiab] OR "laser refractive surgery"[tiab] OR "corneal refractive surgery"[tiab] OR "keratorefractive surgery"[tiab] OR "laser refractive correction"[tiab] OR "PRESBYOND"[tiab] OR "presbyLASIK"[tiab] OR "Keratomileusis, Laser In Situ"[MeSH Terms] OR "Photorefractive Keratectomy"[MeSH Terms] OR "Keratectomy, Subepithelial, Laser-Assisted"[MeSH Terms]) OR (("PRK"[tiab] OR "excimer laser"[tiab] OR "excimer lasers"[tiab] OR "surface ablation"[tiab] OR "wavefront-guided"[tiab] OR "wavefront guided"[tiab] OR "wavefront-optimized"[tiab] OR "topography-guided"[tiab] OR "topography guided"[tiab] OR "Lasers, Excimer"[MeSH Terms]) AND ("cornea"[tiab] OR "corneal"[tiab] OR "myopia"[tiab] OR "myopic"[tiab] OR "hyperopia"[tiab] OR "hyperopic"[tiab] OR "astigmatism"[tiab] OR "astigmatic"[tiab] OR "presbyopia"[tiab] OR "ametropia"[tiab] OR "refractive error"[tiab] OR "refractive errors"[tiab] OR "refractive surgery"[tiab] OR "refractive outcome"[tiab] OR "refractive outcomes"[tiab] OR "visual acuity"[tiab] OR "Cornea"[MeSH Terms] OR "Refractive Errors"[MeSH Terms] OR "Refractive Surgical Procedures"[MeSH Terms]))
+
+Identifiers returned: 14,112 (data/retrieved_pmids.txt)

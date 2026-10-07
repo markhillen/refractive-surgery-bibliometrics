@@ -1,0 +1,92 @@
+rank,country,publications,pct
+1,United States,2665.27,23.91
+2,China,1401.65,12.58
+3,Germany,776.8,6.97
+4,Spain,639.57,5.74
+5,Italy,432.45,3.88
+6,United Kingdom,400.07,3.59
+7,India,376.43,3.38
+8,South Korea,338.58,3.04
+9,Japan,329.23,2.95
+10,Iran,273.71,2.46
+11,Turkey,249.44,2.24
+12,France,244.92,2.2
+13,Brazil,214.89,1.93
+14,Canada,212.04,1.9
+15,Australia,210.96,1.89
+16,Israel,188.9,1.69
+17,Greece,186.84,1.68
+18,Egypt,150.28,1.35
+19,Switzerland,141.17,1.27
+20,Taiwan,139.4,1.25
+21,Singapore,131.1,1.18
+22,Saudi Arabia,120.73,1.08
+23,Finland,85.1,0.76
+24,Denmark,84.5,0.76
+25,Hong Kong,82.0,0.74
+26,Russia,78.39,0.7
+27,Netherlands,64.34,0.58
+28,Czechia,64.14,0.58
+29,Mexico,62.53,0.56
+30,Hungary,60.86,0.55
+31,Poland,59.33,0.53
+32,Sweden,58.87,0.53
+33,Ireland,48.62,0.44
+34,Colombia,45.51,0.41
+35,Austria,42.38,0.38
+36,Argentina,39.07,0.35
+37,Lebanon,36.94,0.33
+38,Belgium,35.93,0.32
+39,Portugal,35.12,0.32
+40,New Zealand,33.8,0.3
+41,Thailand,32.7,0.29
+42,Norway,29.25,0.26
+43,Romania,21.94,0.2
+44,United Arab Emirates,19.56,0.18
+45,Croatia,18.99,0.17
+46,Venezuela,18.5,0.17
+47,Oman,16.0,0.14
+48,Philippines,15.58,0.14
+49,Pakistan,14.75,0.13
+50,Slovakia,10.5,0.09
+51,South Africa,10.0,0.09
+52,Serbia,8.45,0.08
+53,Bosnia and Herzegovina,7.36,0.07
+54,Yemen,6.5,0.06
+55,Malaysia,6.33,0.06
+56,Peru,5.27,0.05
+57,Nepal,5.03,0.05
+=58,Chile,5.0,0.04
+=58,Vietnam,5.0,0.04
+60,Indonesia,4.0,0.04
+61,Lithuania,3.33,0.03
+62,Kosovo,3.1,0.03
+63,Jordan,2.95,0.03
+64,Azerbaijan,2.5,0.02
+65,Kuwait,2.2,0.02
+=66,Tunisia,2.0,0.02
+=66,Cuba,2.0,0.02
+=66,Ukraine,2.0,0.02
+=66,Georgia (country),2.0,0.02
+=66,Qatar,2.0,0.02
+=66,Iraq,2.0,0.02
+72,Bulgaria,1.7,0.02
+73,Albania,1.5,0.01
+74,Bahrain,1.33,0.01
+75,Latvia,1.27,0.01
+76,Algeria,1.1,0.01
+=77,Slovenia,1.0,0.01
+=77,Iceland,1.0,0.01
+=77,Bolivia,1.0,0.01
+=77,Sudan,1.0,0.01
+=77,Kazakhstan,1.0,0.01
+=77,Costa Rica,1.0,0.01
+=77,Palestine,1.0,0.01
+=84,Belarus,0.67,0.01
+=84,Syria,0.67,0.01
+86,San Marino,0.5,0.0
+87,Nigeria,0.49,0.0
+88,GD,0.4,0.0
+89,Puerto Rico,0.33,0.0
+90,BI,0.25,0.0
+91,Ecuador,0.12,0.0

@@ -16,13 +16,13 @@ across projects where relevant.
 
 ## Scope
 
-Covers: LASIK, PRK, SMILE/ReLEx, LASEK, TransPRK, excimer laser surgery,
-wavefront-guided and topography-guided procedures, presbyopia laser correction
-(PRESBYOND/presbyLASIK). Excludes: cataract/IOL surgery, phakic IOL,
-orthokeratology, contact lens wear.
+Corneal laser refractive surgery (surface ablation, LASIK, KLEx/SMILE, wavefront-
+and topography-guided, laser presbyopia correction) and eyes that have had it.
+Excludes lens-based refractive surgery, incisional/implant corneal procedures,
+PTK without refractive aim, femtosecond keratoplasty/cataract, CXL alone, errata.
+Decision rule: `validation/screening/decision_rule.md`.
 
-Start year: 1988 (first clinical excimer PRK trials). DO NOT lower this —
-the literature does not predate it meaningfully.
+Start year: 1988 (first clinical excimer PRK reports). DO NOT lower this.
 
 ## Environment
 
@@ -52,13 +52,11 @@ for full architecture notes.
 
 ## config.py essentials
 
-- `ALL_TIME_START = 1988`
-- `END_YEAR = date.today().year`
-- `ANALYSIS_PERIODS`: all_time + last_25/20/15/10/5yr
-- `OUTPUT_DIR` overridable via `RS_OUTPUT_DIR`
-- `CACHE_DIR` overridable via `RS_CACHE_DIR`
-- `FIGURE_FORMAT = "pdf"` for CLI; GUI overrides to `png`
-- `MIN_KEYWORD_FREQ = 20` / `MIN_COOCCURRENCE = 20` (higher — larger corpus)
+- `ALL_TIME_START = 1988`, `END_YEAR = 2025` (frozen for the JRS submission)
+- Query v2 = `PUBMED_QUERY_SPECIFIC OR (PUBMED_QUERY_GENERIC AND PUBMED_QUERY_ANCHOR)`, no NOT block
+- `ANALYSIS_PERIODS`: all_time + last_25/20/15/10/5yr; `RECENT_PERIOD = "last_5yr"`
+- `HIGHLIGHT_JOURNAL = None` (do not single out the target journal in figures)
+- `MIN_KEYWORD_FREQ = 20` / `MIN_COOCCURRENCE = 20`
 
 ## Data conventions
 
@@ -67,8 +65,20 @@ for full architecture notes.
 - The corpus is large (~15,000–25,000 expected). Full CrossRef enrichment
   will be slow; last_5yr enrichment first is recommended.
 
+## Published analysis (JRS submission, 7 Oct 2026)
+
+- 14,112 retrieved → 12,887 analyzed (`data/final_pmids.txt`); screening log in
+  `data/screening_summary.txt`. 1,840 records screened individually (Claude
+  proposed; MH confirmed all 847 exclusions; inclusions not checked).
+- Extra steps beyond the shared engine: `procedures.py` (multi-label procedure
+  families), `field_share.py` (per 1,000 PubMed ophthalmology records),
+  `validate_pubmed.py` (PubMed recount), `manuscript_figures.py` (Figs 1–5).
+- Run: `python3 main.py --skip-fetch --skip-citations --use-openalex`; after a
+  screening change use `--reparse --screen-only` first; after a disambiguation
+  change delete `cache/records_disambig.json` and `cache/records_cited.json`.
+- OpenAlex rate limits by IP: if the cloud IP gets 429, run `openalex_batch.py`
+  elsewhere in time-limited slices (`--max-seconds 160`).
+
 ## Outstanding tasks
 
-- First full fetch and analysis run.
-- Manuscript draft targeting Journal of Refractive Surgery.
-- GitHub repo: `markhillen/refractive-surgery-bibliometrics` (to be created).
+- Journal of Refractive Surgery submission and revision.

@@ -1,0 +1,51 @@
+rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,149,3.69,2226,149
+2,Wenzhou Medical University,53,1.31,834,53
+3,Cleveland Clinic,51,1.26,1555,51
+4,Tianjin Medical University,50,1.24,580,50
+5,Narayana Nethralaya Bangalore,48,1.19,869,48
+6,Hoopes Vision Research Center,46,1.14,357,46
+7,Tianjin Eye Hospital,45,1.11,916,45
+8,Peking University,43,1.07,293,43
+9,All India Institute of Medical Sciences,38,0.94,581,38
+=10,Farabi Eye Hospital,37,0.92,283,37
+=10,Beijing Tongren Eye Center,37,0.92,309,37
+12,Sun Yat-sen University,35,0.87,611,35
+13,Singapore Eye Research Institute,32,0.79,1149,32
+14,Yonsei University College of Medicine,27,0.67,853,27
+=15,Vissum Alicante,26,0.64,457,26
+=15,Saarland University Medical Center,26,0.64,277,26
+17,Shahid Beheshti University of Medical Sciences,24,0.59,323,24
+=18,Mashhad University of Medical Sciences,23,0.57,223,23
+=18,Chinese University of Hong Kong,23,0.57,311,23
+=18,Tel Aviv University,23,0.57,324,23
+=21,Stanford University,22,0.55,311,22
+=21,McGill University,22,0.55,291,22
+23,Noor Eye Hospital Tehran,21,0.52,281,21
+24,Laservision Institute Athens,20,0.5,515,20
+=25,Isfahan University of Medical Sciences,18,0.45,91,18
+=25,Ludwig-Maximilians-University,18,0.45,461,18
+=25,University of Southern California,18,0.45,516,18
+=25,Bascom Palmer Eye Institute,18,0.45,211,18
+=29,London Vision Clinic,17,0.42,458,17
+=29,LV Prasad Eye Institute,17,0.42,76,17
+=31,Rio de Janeiro,16,0.4,100,16
+=31,Nethradhama Superspeciality Eye Hospital,16,0.4,558,16
+=31,Chinese Academy of Medical Sciences & Peking Union Medical College,16,0.4,150,16
+=34,Federal University of São Paulo,15,0.37,1031,15
+=34,Singapore National Eye Centre,15,0.37,384,14
+=34,Fudan University,15,0.37,324,15
+=34,The Eye Foundation,15,0.37,177,15
+=34,University of Salerno,15,0.37,177,15
+=39,University of California San Francisco,14,0.35,261,14
+=39,Baylor College of Medicine,14,0.35,431,14
+=39,Chung Shan Medical University,14,0.35,51,14
+=39,West China Hospital,14,0.35,54,14
+=39,Aarhus University Hospital,14,0.35,410,14
+44,Johns Hopkins University,13,0.32,152,13
+=45,Massachusetts Eye and Ear,12,0.3,152,12
+=45,University of Toronto,12,0.3,157,12
+=45,Second Affiliated Hospital,12,0.3,392,12
+=45,Motwani LASIK Institute,12,0.3,192,12
+=45,University of Marburg,12,0.3,276,12
+=45,University of Siena,12,0.3,157,12

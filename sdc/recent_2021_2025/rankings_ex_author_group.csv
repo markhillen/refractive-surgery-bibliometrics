@@ -1,0 +1,54 @@
+table,name,publications,rank
+records,all,2153,
+records,without author group,2142,
+records,removed,11,
+author,Zhou X (Fudan),94,
+author,Moshirfar M,81,
+author,Hoopes PCS,61,
+author,Wang Y (Tianjin),48,
+author,Arba-Mosquera S,35,
+author,Zhang Y (Peking),33,
+author,Chen Y (Peking),32,
+author,Zhao J (Fudan),31,
+author,Ronquillo YC,30,
+author,Mimouni M,28,
+author,Han T (Fudan),22,
+author,Mehta JS (Singapore),21,
+author,Kaiserman I,21,
+author,Yuan Y,20,
+author,Liu S (Fudan),20,
+author,Reinstein DZ,20,
+author,Archer TJ,20,
+author,Li M (Fudan),19,
+author,Alió JL,19,
+author,Zhang F (Capital),19,
+country,China,573,1
+country,United States,271,2
+country,India,123,3
+country,Spain,88,4
+country,Iran,87,5
+country,Germany,86,6
+country,Italy,62,7
+country,Turkey,53,8
+country,South Korea,45,9
+country,Taiwan,40,10
+country,Egypt,39,=11
+country,Saudi Arabia,39,=11
+country,Israel,37,13
+country,Australia,31,14
+country,Brazil,30,15
+institution,Eye & ENT Hospital of Fudan University,110,1
+institution,University of Utah School of Medicine,64,2
+institution,Hoopes Vision Research Center,58,3
+institution,Tianjin Medical University,57,4
+institution,Utah Lions Eye Bank,56,5
+institution,Tianjin Eye Hospital,45,6
+institution,Wenzhou Medical University,43,7
+institution,Peking University,38,8
+institution,University of Arizona,36,9
+institution,Farabi Eye Hospital,31,10
+institution,All India Institute of Medical Sciences,28,11
+institution,Beijing Tongren Eye Center,26,12
+institution,Nankai University,25,=13
+institution,Cleveland Clinic,25,=13
+institution,Singapore Eye Research Institute,24,15

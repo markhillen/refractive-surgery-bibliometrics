@@ -1,0 +1,41 @@
+rank,institution,publications,pct_of_resolved,citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,87,4.19,661,87
+2,Hoopes Vision Research Center,43,2.07,309,43
+3,Wenzhou Medical University,36,1.73,387,36
+4,Peking University,33,1.59,178,33
+5,Tianjin Medical University,32,1.54,261,32
+6,All India Institute of Medical Sciences,23,1.11,186,23
+7,Farabi Eye Hospital,22,1.06,150,22
+8,Beijing Tongren Eye Center,21,1.01,129,21
+9,Cleveland Clinic,19,0.91,282,19
+10,Saarland University Medical Center,16,0.77,81,16
+=11,Chung Shan Medical University,14,0.67,51,14
+=11,Mashhad University of Medical Sciences,14,0.67,42,14
+=11,Narayana Nethralaya Bangalore,14,0.67,91,14
+=11,West China Hospital,14,0.67,54,14
+=15,Sun Yat-sen University,11,0.53,57,11
+=15,Singapore Eye Research Institute,11,0.53,138,11
+=15,Rio de Janeiro,11,0.53,72,11
+=15,Tianjin Eye Hospital,11,0.53,64,11
+=15,Chinese Academy of Medical Sciences & Peking Union Medical College,11,0.53,117,11
+=20,Bascom Palmer Eye Institute,10,0.48,112,10
+=20,Guangdong Provincial Clinical Research Center for Ocular Diseases,10,0.48,178,10
+=20,Shahid Beheshti University of Medical Sciences,10,0.48,84,10
+=20,Chinese University of Hong Kong,10,0.48,81,10
+=20,Qassim University,10,0.48,32,10
+=20,Isfahan University of Medical Sciences,10,0.48,46,10
+=20,London Vision Clinic,10,0.48,234,10
+=27,Krasnov Research Institute of Eye Diseases,9,0.43,6,9
+=27,Vissum Alicante,9,0.43,111,9
+=27,Yonsei University College of Medicine,9,0.43,62,9
+=27,LV Prasad Eye Institute,9,0.43,38,9
+=27,Noor Eye Hospital Tehran,9,0.43,129,9
+=27,Stanford University,9,0.43,105,9
+=27,Eye Institute of Shandong First Medical University,9,0.43,31,9
+=27,McGill University,9,0.43,52,9
+=35,University of Siena,8,0.39,81,8
+=35,Laservision Institute Athens,8,0.39,102,8
+=37,Montreal,7,0.34,14,7
+=37,Humanitas University Milan,7,0.34,64,7
+=37,West China Hospital of Sichuan University,7,0.34,32,7
+=37,Tel Aviv University,7,0.34,28,7

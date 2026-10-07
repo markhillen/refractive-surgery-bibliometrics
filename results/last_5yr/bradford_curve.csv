@@ -1,0 +1,230 @@
+rank,journal,abbr,count,cumulative,cumulative_pct,zone
+1,"Journal of refractive surgery (Thorofare, N.J. : 1995)",J Refract Surg,233,233,10.82,1
+2,Journal of cataract and refractive surgery,J Cataract Refract Surg,157,390,18.11,1
+3,"Clinical ophthalmology (Auckland, N.Z.)",Clin Ophthalmol,109,499,23.18,1
+4,BMC ophthalmology,BMC Ophthalmol,104,603,28.01,1
+5,Indian journal of ophthalmology,Indian J Ophthalmol,92,695,32.28,1
+6,International ophthalmology,Int Ophthalmol,87,782,36.32,1
+7,Cornea,Cornea,77,859,39.9,2
+8,International journal of ophthalmology,Int J Ophthalmol,61,920,42.73,2
+9,Journal of clinical medicine,J Clin Med,59,979,45.47,2
+10,Scientific reports,Sci Rep,48,1027,47.7,2
+11,Frontiers in medicine,Front Med (Lausanne),47,1074,49.88,2
+12,Ophthalmology and therapy,Ophthalmol Ther,46,1120,52.02,2
+13,Cureus,Cureus,38,1158,53.79,2
+14,Graefe's archive for clinical and experimental ophthalmology = Albrecht von Graefes Archiv fur klinische und experimentelle Ophthalmologie,Graefes Arch Clin Exp Ophthalmol,36,1194,55.46,2
+15,[Zhonghua yan ke za zhi] Chinese journal of ophthalmology,Zhonghua Yan Ke Za Zhi,33,1227,56.99,2
+16,European journal of ophthalmology,Eur J Ophthalmol,31,1258,58.43,2
+17,Translational vision science & technology,Transl Vis Sci Technol,27,1285,59.68,2
+18,Journal of ophthalmology,J Ophthalmol,27,1312,60.94,2
+19,Journal francais d'ophtalmologie,J Fr Ophtalmol,26,1338,62.15,2
+20,Eye & contact lens,Eye Contact Lens,26,1364,63.35,2
+21,American journal of ophthalmology,Am J Ophthalmol,23,1387,64.42,2
+22,Current eye research,Curr Eye Res,22,1409,65.44,2
+23,Experimental eye research,Exp Eye Res,21,1430,66.42,2
+24,American journal of ophthalmology case reports,Am J Ophthalmol Case Rep,21,1451,67.39,2
+25,Photodiagnosis and photodynamic therapy,Photodiagnosis Photodyn Ther,21,1472,68.37,2
+26,"Eye (London, England)",Eye (Lond),19,1491,69.25,2
+27,Medicine,Medicine (Baltimore),19,1510,70.13,2
+28,Klinische Monatsblatter fur Augenheilkunde,Klin Monbl Augenheilkd,19,1529,71.02,3
+29,Vestnik oftalmologii,Vestn Oftalmol,17,1546,71.81,3
+30,PloS one,PLoS One,17,1563,72.6,3
+31,Current opinion in ophthalmology,Curr Opin Ophthalmol,17,1580,73.39,3
+32,Frontiers in bioengineering and biotechnology,Front Bioeng Biotechnol,15,1595,74.08,3
+33,Lasers in medical science,Lasers Med Sci,15,1610,74.78,3
+34,Case reports in ophthalmology,Case Rep Ophthalmol,15,1625,75.48,3
+35,"Eye and vision (London, England)",Eye Vis (Lond),14,1639,76.13,3
+36,Clinical & experimental optometry,Clin Exp Optom,12,1651,76.68,3
+37,Arquivos brasileiros de oftalmologia,Arq Bras Oftalmol,12,1663,77.24,3
+38,Journal of current ophthalmology,J Curr Ophthalmol,11,1674,77.75,3
+39,"Diagnostics (Basel, Switzerland)",Diagnostics (Basel),11,1685,78.26,3
+40,Acta ophthalmologica,Acta Ophthalmol,11,1696,78.77,3
+41,BMJ case reports,BMJ Case Rep,11,1707,79.28,3
+42,Archivos de la Sociedad Espanola de Oftalmologia,Arch Soc Esp Oftalmol (Engl Ed),11,1718,79.8,3
+43,Die Ophthalmologie,Ophthalmologie,10,1728,80.26,3
+44,Ophthalmology,Ophthalmology,9,1737,80.68,3
+45,Seminars in ophthalmology,Semin Ophthalmol,9,1746,81.1,3
+46,Saudi journal of ophthalmology : official journal of the Saudi Ophthalmological Society,Saudi J Ophthalmol,8,1754,81.47,3
+47,Experimental and therapeutic medicine,Exp Ther Med,7,1761,81.79,3
+48,Romanian journal of ophthalmology,Rom J Ophthalmol,7,1768,82.12,3
+49,Therapeutic advances in ophthalmology,Ther Adv Ophthalmol,7,1775,82.44,3
+50,International medical case reports journal,Int Med Case Rep J,7,1782,82.77,3
+51,Canadian journal of ophthalmology. Journal canadien d'ophtalmologie,Can J Ophthalmol,7,1789,83.09,3
+52,Optometry and vision science : official publication of the American Academy of Optometry,Optom Vis Sci,7,1796,83.42,3
+53,"Medical hypothesis, discovery & innovation ophthalmology journal",Med Hypothesis Discov Innov Ophthalmol,6,1802,83.7,3
+54,Beyoglu eye journal,Beyoglu Eye J,6,1808,83.98,3
+55,Korean journal of ophthalmology : KJO,Korean J Ophthalmol,6,1814,84.25,3
+56,Oman journal of ophthalmology,Oman J Ophthalmol,6,1820,84.53,3
+57,Ceska a slovenska oftalmologie : casopis Ceske oftalmologicke spolecnosti a Slovenske oftalmologicke spolecnosti,Cesk Slov Oftalmol,6,1826,84.81,3
+58,Middle East African journal of ophthalmology,Middle East Afr J Ophthalmol,6,1832,85.09,3
+59,Journal of the College of Physicians and Surgeons--Pakistan : JCPSP,J Coll Physicians Surg Pak,6,1838,85.37,3
+60,Taiwan journal of ophthalmology,Taiwan J Ophthalmol,6,1844,85.65,3
+61,Der Ophthalmologe : Zeitschrift der Deutschen Ophthalmologischen Gesellschaft,Ophthalmologe,6,1850,85.93,3
+62,Investigative ophthalmology & visual science,Invest Ophthalmol Vis Sci,5,1855,86.16,3
+63,Journal of personalized medicine,J Pers Med,5,1860,86.39,3
+64,"Vision (Basel, Switzerland)",Vision (Basel),5,1865,86.62,3
+65,Ophthalmic & physiological optics : the journal of the British College of Ophthalmic Opticians (Optometrists),Ophthalmic Physiol Opt,5,1870,86.86,3
+66,Survey of ophthalmology,Surv Ophthalmol,5,1875,87.09,3
+67,Journal of ophthalmic inflammation and infection,J Ophthalmic Inflamm Infect,5,1880,87.32,3
+68,Heliyon,Heliyon,5,1885,87.55,3
+69,Ophthalmic research,Ophthalmic Res,5,1890,87.78,3
+70,Frontiers in neuroscience,Front Neurosci,5,1895,88.02,3
+71,Annals of translational medicine,Ann Transl Med,5,1900,88.25,3
+72,"Bioengineering (Basel, Switzerland)",Bioengineering (Basel),4,1904,88.43,3
+73,Journal of ophthalmic & vision research,J Ophthalmic Vis Res,4,1908,88.62,3
+74,Frontiers in cell and developmental biology,Front Cell Dev Biol,4,1912,88.81,3
+75,Biomedical engineering online,Biomed Eng Online,4,1916,88.99,3
+76,The ocular surface,Ocul Surf,4,1920,89.18,3
+77,Journal of optometry,J Optom,4,1924,89.36,3
+78,"Asia-Pacific journal of ophthalmology (Philadelphia, Pa.)",Asia Pac J Ophthalmol (Phila),4,1928,89.55,3
+79,Frontiers in ophthalmology,Front Ophthalmol (Lausanne),4,1932,89.74,3
+80,The British journal of ophthalmology,Br J Ophthalmol,4,1936,89.92,3
+81,Turkish journal of ophthalmology,Turk J Ophthalmol,4,1940,90.11,3
+82,Journal of glaucoma,J Glaucoma,4,1944,90.29,3
+83,Computational and mathematical methods in medicine,Comput Math Methods Med,4,1948,90.48,3
+84,"Medical journal, Armed Forces India",Med J Armed Forces India,3,1951,90.62,3
+85,Annals of medicine and surgery (2012),Ann Med Surg (Lond),3,1954,90.76,3
+86,Advances in ophthalmology practice and research,Adv Ophthalmol Pract Res,3,1957,90.9,3
+87,Journal of visualized experiments : JoVE,J Vis Exp,3,1960,91.04,3
+88,Biomedicines,Biomedicines,3,1963,91.18,3
+89,International ophthalmology clinics,Int Ophthalmol Clin,3,1966,91.31,3
+90,SAGE open medical case reports,SAGE Open Med Case Rep,3,1969,91.45,3
+91,"Life (Basel, Switzerland)",Life (Basel),3,1972,91.59,3
+92,Cirugia y cirujanos,Cir Cir,3,1975,91.73,3
+93,Clinical & experimental ophthalmology,Clin Exp Ophthalmol,3,1978,91.87,3
+94,Asian journal of surgery,Asian J Surg,3,1981,92.01,3
+95,Journal of the mechanical behavior of biomedical materials,J Mech Behav Biomed Mater,3,1984,92.15,3
+96,International journal of molecular sciences,Int J Mol Sci,3,1987,92.29,3
+97,Military medicine,Mil Med,3,1990,92.43,3
+98,Ophthalmology science,Ophthalmol Sci,2,1992,92.52,3
+99,American journal of translational research,Am J Transl Res,2,1994,92.61,3
+100,Journal of ocular pharmacology and therapeutics : the official journal of the Association for Ocular Pharmacology and Therapeutics,J Ocul Pharmacol Ther,2,1996,92.71,3
+101,BMJ open ophthalmology,BMJ Open Ophthalmol,2,1998,92.8,3
+102,Trials,Trials,2,2000,92.89,3
+103,Japanese journal of ophthalmology,Jpn J Ophthalmol,2,2002,92.99,3
+104,"In vivo (Athens, Greece)",In Vivo,2,2004,93.08,3
+105,Journal of biomechanics,J Biomech,2,2006,93.17,3
+106,The Cochrane database of systematic reviews,Cochrane Database Syst Rev,2,2008,93.27,3
+107,JAMA ophthalmology,JAMA Ophthalmol,2,2010,93.36,3
+108,"Medicina (Kaunas, Lithuania)",Medicina (Kaunas),2,2012,93.45,3
+109,Aerospace medicine and human performance,Aerosp Med Hum Perform,2,2014,93.54,3
+110,Annals of medicine,Ann Med,2,2016,93.64,3
+111,Acta informatica medica : AIM : journal of the Society for Medical Informatics of Bosnia & Herzegovina : casopis Drustva za medicinsku informatiku BiH,Acta Inform Med,2,2018,93.73,3
+112,Journal of surgical case reports,J Surg Case Rep,2,2020,93.82,3
+113,Sheng wu yi xue gong cheng xue za zhi = Journal of biomedical engineering = Shengwu yixue gongchengxue zazhi,Sheng Wu Yi Xue Gong Cheng Xue Za Zhi,2,2022,93.92,3
+114,"Healthcare (Basel, Switzerland)",Healthcare (Basel),2,2024,94.01,3
+115,The Journal of international medical research,J Int Med Res,2,2026,94.1,3
+116,European review for medical and pharmacological sciences,Eur Rev Med Pharmacol Sci,2,2028,94.19,3
+117,South Dakota medicine : the journal of the South Dakota State Medical Association,S D Med,2,2030,94.29,3
+118,Journal of healthcare engineering,J Healthc Eng,2,2032,94.38,3
+119,Therapeutics and clinical risk management,Ther Clin Risk Manag,2,2034,94.47,3
+120,Medical science monitor : international medical journal of experimental and clinical research,Med Sci Monit,2,2036,94.57,3
+121,Frontiers in public health,Front Public Health,2,2038,94.66,3
+122,"Biomedical papers of the Medical Faculty of the University Palacky, Olomouc, Czechoslovakia",Biomed Pap Med Fac Univ Palacky Olomouc Czech Repub,2,2040,94.75,3
+123,Infection and drug resistance,Infect Drug Resist,2,2042,94.84,3
+124,Journal of medicine and life,J Med Life,2,2044,94.94,3
+125,La Clinica terapeutica,Clin Ter,2,2046,95.03,3
+126,Journal of medical case reports,J Med Case Rep,2,2048,95.12,3
+127,Cell and tissue banking,Cell Tissue Bank,2,2050,95.22,3
+128,Mathematical biosciences and engineering : MBE,Math Biosci Eng,2,2052,95.31,3
+129,"Experimental biology and medicine (Maywood, N.J.)",Exp Biol Med (Maywood),1,2053,95.36,3
+130,Journal of vitreoretinal diseases,J Vitreoretin Dis,1,2054,95.4,3
+131,BMJ open,BMJ Open,1,2055,95.45,3
+132,GMS ophthalmology cases,GMS Ophthalmol Cases,1,2056,95.49,3
+133,European journal of medical research,Eur J Med Res,1,2057,95.54,3
+134,The Medical journal of Malaysia,Med J Malaysia,1,2058,95.59,3
+135,Health science reports,Health Sci Rep,1,2059,95.63,3
+136,Saudi journal of medicine & medical sciences,Saudi J Med Med Sci,1,2060,95.68,3
+137,BMC research notes,BMC Res Notes,1,2061,95.73,3
+138,Brazilian journal of medical and biological research = Revista brasileira de pesquisas medicas e biologicas,Braz J Med Biol Res,1,2062,95.77,3
+139,Acta clinica Croatica,Acta Clin Croat,1,2063,95.82,3
+140,Journal of UOEH,J UOEH,1,2064,95.87,3
+141,Health and quality of life outcomes,Health Qual Life Outcomes,1,2065,95.91,3
+142,Frontiers in molecular biosciences,Front Mol Biosci,1,2066,95.96,3
+143,African health sciences,Afr Health Sci,1,2067,96.01,3
+144,Nan fang yi ke da xue xue bao = Journal of Southern Medical University,Nan Fang Yi Ke Da Xue Xue Bao,1,2068,96.05,3
+145,Deutsches Arzteblatt international,Dtsch Arztebl Int,1,2069,96.1,3
+146,Frontiers in genetics,Front Genet,1,2070,96.14,3
+147,Biomaterials,Biomaterials,1,2071,96.19,3
+148,Biomaterials research,Biomater Res,1,2072,96.24,3
+149,Ophthalmic epidemiology,Ophthalmic Epidemiol,1,2073,96.28,3
+150,"Clinical biomechanics (Bristol, Avon)",Clin Biomech (Bristol),1,2074,96.33,3
+151,Quantitative imaging in medicine and surgery,Quant Imaging Med Surg,1,2075,96.38,3
+152,Zeitschrift fur medizinische Physik,Z Med Phys,1,2076,96.42,3
+153,Oman medical journal,Oman Med J,1,2077,96.47,3
+154,NPJ digital medicine,NPJ Digit Med,1,2078,96.52,3
+155,Acta medica Philippina,Acta Med Philipp,1,2079,96.56,3
+156,Annali italiani di chirurgia,Ann Ital Chir,1,2080,96.61,3
+157,Clinical optometry,Clin Optom (Auckl),1,2081,96.66,3
+158,The Israel Medical Association journal : IMAJ,Isr Med Assoc J,1,2082,96.7,3
+159,Journal of special operations medicine : a peer reviewed journal for SOF medical professionals,J Spec Oper Med,1,2083,96.75,3
+160,Neurology. Genetics,Neurol Genet,1,2084,96.8,3
+161,Galen medical journal,Galen Med J,1,2085,96.84,3
+162,Journal of research in pharmacy practice,J Res Pharm Pract,1,2086,96.89,3
+163,BMC public health,BMC Public Health,1,2087,96.93,3
+164,"Neurobiology of pain (Cambridge, Mass.)",Neurobiol Pain,1,2088,96.98,3
+165,"Retina (Philadelphia, Pa.)",Retina,1,2089,97.03,3
+166,iScience,iScience,1,2090,97.07,3
+167,Proceedings of the National Academy of Sciences of the United States of America,Proc Natl Acad Sci U S A,1,2091,97.12,3
+168,PeerJ,PeerJ,1,2092,97.17,3
+169,International journal for numerical methods in biomedical engineering,Int J Numer Method Biomed Eng,1,2093,97.21,3
+170,Risk management and healthcare policy,Risk Manag Healthc Policy,1,2094,97.26,3
+171,Journal of proteome research,J Proteome Res,1,2095,97.31,3
+172,Contact lens & anterior eye : the journal of the British Contact Lens Association,Cont Lens Anterior Eye,1,2096,97.35,3
+173,Clinical case reports,Clin Case Rep,1,2097,97.4,3
+174,Sultan Qaboos University medical journal,Sultan Qaboos Univ Med J,1,2098,97.45,3
+175,Clinical proteomics,Clin Proteomics,1,2099,97.49,3
+176,BMC medical informatics and decision making,BMC Med Inform Decis Mak,1,2100,97.54,3
+177,Journal of biomedical optics,J Biomed Opt,1,2101,97.58,3
+178,Journal of biophotonics,J Biophotonics,1,2102,97.63,3
+179,Community eye health,Community Eye Health,1,2103,97.68,3
+180,JMIR formative research,JMIR Form Res,1,2104,97.72,3
+181,Journal of cellular and molecular medicine,J Cell Mol Med,1,2105,97.77,3
+182,Journal of neuro-ophthalmology : the official journal of the North American Neuro-Ophthalmology Society,J Neuroophthalmol,1,2106,97.82,3
+183,Microorganisms,Microorganisms,1,2107,97.86,3
+184,Acta bio-medica : Atenei Parmensis,Acta Biomed,1,2108,97.91,3
+185,Case reports in ophthalmological medicine,Case Rep Ophthalmol Med,1,2109,97.96,3
+186,"Asian biomedicine : research, reviews and news",Asian Biomed (Res Rev News),1,2110,98.0,3
+187,The Journal of emergency medicine,J Emerg Med,1,2111,98.05,3
+188,Journal of academic ophthalmology (2017),J Acad Ophthalmol (2017),1,2112,98.1,3
+189,Journal of proteomics,J Proteomics,1,2113,98.14,3
+190,Molecular vision,Mol Vis,1,2114,98.19,3
+191,Biomolecules,Biomolecules,1,2115,98.24,3
+192,Cell journal,Cell J,1,2116,98.28,3
+193,International immunopharmacology,Int Immunopharmacol,1,2117,98.33,3
+194,ACS omega,ACS Omega,1,2118,98.37,3
+195,Materia socio-medica,Mater Sociomed,1,2119,98.42,3
+196,Cutaneous and ocular toxicology,Cutan Ocul Toxicol,1,2120,98.47,3
+197,Biotechnology & genetic engineering reviews,Biotechnol Genet Eng Rev,1,2121,98.51,3
+198,BioMed research international,Biomed Res Int,1,2122,98.56,3
+199,"Biomedical materials (Bristol, England)",Biomed Mater,1,2123,98.61,3
+200,Journal of neurophysiology,J Neurophysiol,1,2124,98.65,3
+201,Sovremennye tekhnologii v meditsine,Sovrem Tekhnologii Med,1,2125,98.7,3
+202,Polymers,Polymers (Basel),1,2126,98.75,3
+203,Perceptual and motor skills,Percept Mot Skills,1,2127,98.79,3
+204,JAMA,JAMA,1,2128,98.84,3
+205,Missouri medicine,Mo Med,1,2129,98.89,3
+206,Nepalese journal of ophthalmology : a biannual peer-reviewed academic journal of the Nepal Ophthalmic Society : NEPJOPH,Nepal J Ophthalmol,1,2130,98.93,3
+207,Contrast media & molecular imaging,Contrast Media Mol Imaging,1,2131,98.98,3
+208,Computer methods in biomechanics and biomedical engineering,Comput Methods Biomech Biomed Engin,1,2132,99.02,3
+209,World journal of clinical cases,World J Clin Cases,1,2133,99.07,3
+210,Journal of advanced research,J Adv Res,1,2134,99.12,3
+211,Advanced healthcare materials,Adv Healthc Mater,1,2135,99.16,3
+212,Journal of the Chinese Medical Association : JCMA,J Chin Med Assoc,1,2136,99.21,3
+213,Optics express,Opt Express,1,2137,99.26,3
+214,Minerva surgery,Minerva Surg,1,2138,99.3,3
+215,Current ophthalmology reports,Curr Ophthalmol Rep,1,2139,99.35,3
+216,Advances in therapy,Adv Ther,1,2140,99.4,3
+217,"Medical archives (Sarajevo, Bosnia and Herzegovina)",Med Arch,1,2141,99.44,3
+218,Frontiers in pharmacology,Front Pharmacol,1,2142,99.49,3
+219,Annals of palliative medicine,Ann Palliat Med,1,2143,99.54,3
+220,The British and Irish orthoptic journal,Br Ir Orthopt J,1,2144,99.58,3
+221,Tissue engineering. Part A,Tissue Eng Part A,1,2145,99.63,3
+222,The Medical clinics of North America,Med Clin North Am,1,2146,99.67,3
+223,Digital journal of ophthalmology : DJO,Digit J Ophthalmol,1,2147,99.72,3
+224,Journal of AAPOS : the official publication of the American Association for Pediatric Ophthalmology and Strabismus,J AAPOS,1,2148,99.77,3
+225,Neural regeneration research,Neural Regen Res,1,2149,99.81,3
+226,The Medical journal of Australia,Med J Aust,1,2150,99.86,3
+227,Zhong nan da xue xue bao. Yi xue ban = Journal of Central South University. Medical sciences,Zhong Nan Da Xue Xue Bao Yi Xue Ban,1,2151,99.91,3
+228,Physical and engineering sciences in medicine,Phys Eng Sci Med,1,2152,99.95,3
+229,Retinal cases & brief reports,Retin Cases Brief Rep,1,2153,100.0,3

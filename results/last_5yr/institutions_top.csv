@@ -1,0 +1,51 @@
+rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,110,5.17,857,110
+2,University of Utah School of Medicine,64,3.01,551,64
+3,Hoopes Vision Research Center,58,2.73,392,58
+4,Tianjin Medical University,57,2.68,462,57
+5,Utah Lions Eye Bank,56,2.63,524,56
+6,Wenzhou Medical University,48,2.26,551,48
+7,Tianjin Eye Hospital,45,2.11,377,45
+8,Peking University,38,1.79,269,38
+9,University of Arizona,36,1.69,354,36
+10,Farabi Eye Hospital,31,1.46,242,31
+11,All India Institute of Medical Sciences,28,1.32,293,28
+12,Beijing Tongren Eye Center,26,1.22,163,26
+=13,Nankai University,25,1.17,229,25
+=13,Cleveland Clinic,25,1.17,421,25
+15,Singapore Eye Research Institute,24,1.13,365,24
+=16,Ulster University,23,1.08,376,23
+=16,Tel Aviv University,23,1.08,98,23
+=16,Ben-Gurion University of the Negev,23,1.08,114,23
+=16,Federal University of São Paulo,23,1.08,263,23
+=20,Saarland University Medical Center,22,1.03,121,22
+=20,Shahid Beheshti University of Medical Sciences,22,1.03,200,22
+22,Narayana Nethralaya Bangalore,21,0.99,131,21
+=23,Nobel Eye Institute,20,0.94,92,20
+=23,Vissum Alicante,20,0.94,280,20
+=23,University of Liverpool,20,0.94,308,20
+=26,Guangdong Provincial Clinical Research Center for Ocular Diseases,19,0.89,230,19
+=26,Chinese Academy of Medical Sciences,19,0.89,182,19
+=26,Fudan University,19,0.89,108,19
+=26,Rambam Health Care Campus,19,0.89,67,19
+=26,Columbia University,19,0.89,380,19
+=26,Rio de Janeiro,19,0.89,155,19
+=32,Sun Yat-sen University,18,0.85,89,18
+=32,SCHWIND eye-tech-solutions,18,0.85,80,18
+=32,Singapore National Eye Centre,18,0.85,349,18
+=35,Chung Shan Medical University,17,0.8,97,17
+=35,Mashhad University of Medical Sciences,17,0.8,79,17
+=35,Universidad Miguel Hernández,17,0.8,253,17
+=35,LV Prasad Eye Institute,17,0.8,158,17
+=35,Humanitas University Milan,17,0.8,141,17
+=35,Technion-Israel Institute of Technology,17,0.8,73,17
+=35,Chinese University of Hong Kong,17,0.8,182,17
+=35,University of Pittsburgh,17,0.8,180,17
+=35,Baylor College of Medicine,17,0.8,256,17
+=44,Moorfields Eye Hospital,16,0.75,235,16
+=44,Central South University,16,0.75,146,16
+=44,London Vision Clinic,16,0.75,349,16
+=44,Sorbonne Université,16,0.75,374,16
+=48,Bascom Palmer Eye Institute,15,0.7,123,14
+=48,Yonsei University College of Medicine,15,0.7,100,15
+=48,Beihang University,15,0.7,247,15

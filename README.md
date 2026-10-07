@@ -139,27 +139,37 @@ Opens at <http://localhost:7434>
 
 ## Scope
 
-Covers corneal laser refractive surgery: LASIK, PRK, SMILE/ReLEx, LASEK,
-TransPRK, excimer laser surgery, wavefront-guided and topography-guided
-procedures, and presbyopia correction (PRESBYOND/presbyLASIK).
+A record is in scope if corneal laser refractive surgery, or eyes that have had
+it, is a subject of the work: surface ablation (PRK, LASEK, epi-LASIK,
+transepithelial PRK), LASIK (including femtosecond-flap LASIK), keratorefractive
+lenticule extraction (KLEx: SMILE and other lenticule procedures),
+wavefront- and topography-guided treatments, and laser presbyopia correction.
+Papers on eyes after these procedures (for example, IOL power calculation after
+LASIK, or ectasia after laser refractive surgery) are included.
 
-Excludes: cataract/IOL surgery (separate field), phakic IOL implantation,
-orthokeratology, contact lens wear.
+Excluded: lens-based refractive surgery (phakic IOLs, refractive lens exchange),
+incisional and implant corneal procedures unless laser surgery is also a subject,
+phototherapeutic keratectomy without a refractive aim, femtosecond laser
+keratoplasty and cataract surgery, cross-linking alone, errata, and records that
+mention laser refractive surgery only in passing. The written decision rule is
+in `validation/screening/decision_rule.md`.
 
-Start year: **1988** — first clinical excimer PRK trials.
+Start year: **1988** — first clinical excimer PRK reports.
 
 ---
 
 ## Time Windows
 
-| Label       | Years          |
-|-------------|----------------|
-| `all_time`  | 1988–present   |
-| `last_25yr` | 2002–present   |
-| `last_20yr` | 2007–present   |
-| `last_15yr` | 2012–present   |
-| `last_10yr` | 2017–present   |
-| `last_5yr`  | 2022–present   |
+Six nested windows, all ending in 2025 (`END_YEAR` in `config.py`):
+
+| Label       | Years      |
+|-------------|------------|
+| `all_time`  | 1988–2025  |
+| `last_25yr` | 2001–2025  |
+| `last_20yr` | 2006–2025  |
+| `last_15yr` | 2011–2025  |
+| `last_10yr` | 2016–2025  |
+| `last_5yr`  | 2021–2025  |
 
 ---
 
@@ -219,6 +229,44 @@ demo.py          synthetic smoke test
 **CrossRef enrichment slow** — expected (~1 req/s). Use `--skip-citations` for fast pass.
 
 **`ModuleNotFoundError`** — run `python3 check_deps.py` for diagnosis.
+
+---
+
+## Data behind the published analysis
+
+The analysis in the paper was run on 7 October 2026 for publications dated
+1988–2025. Everything needed to check or repeat it is in this repository:
+
+| Path | Contents |
+|------|----------|
+| `sdc/SupplementalFile1_search_strategy.txt` | The PubMed query |
+| `data/retrieved_pmids.txt` | The 14,112 identifiers the query returned |
+| `data/final_pmids.txt` | The 12,887 publications analyzed (fixed list) |
+| `data/screening_summary.txt` | How 14,112 became 12,887 |
+| `data/excluded_records.csv` | The 1,210 excluded records with rule and reason |
+| `data/manual_screening.csv` | All 1,840 individual screening decisions (every exclusion confirmed by an author) |
+| `validation/screening/` | Decision rule, precision sample, recall samples and the procedure-classification check |
+| `data/affiliation_corrections.csv`, `data/institution_aliases.csv`, `data/keyword_synonyms.csv` | Curated corrections and normalization tables |
+| `data/author_group.csv` | The pre-specified author group removed in the sensitivity analysis |
+| `sdc/` | Every supplementary and sensitivity table (all years; `sdc/recent_2021_2025/` for 2021–2025), plus the procedure mix (`procedure_mix_*.csv`), field share per 1,000 ophthalmology records (`field_share_by_year.csv`) and the PubMed recount of journals and authors (`validation_*.csv`) |
+| `results/<window>/` | The main ranking and trend tables for each time window |
+
+`manuscript_figures.py` redraws the manuscript figures (Arial; PDF and 600-dpi
+TIFF) from these outputs. To rebuild the dataset from the fixed list, run
+`python3 main.py --pmid-file data/final_pmids.txt --use-openalex`. PubMed and
+OpenAlex keep changing, so a fresh run of the query will return a slightly
+different set, and citation counts will have grown.
+
+---
+
+## Citation
+
+If you use this pipeline in published research, please cite:
+
+> Hillen M, Torres-Netto EA, Furrer ML, Kollros L, Hafezi NL, Hafezi F.
+> From LASIK to keratorefractive lenticule extraction: a bibliometric analysis
+> of corneal laser refractive surgery research, 1988–2025. *Journal of
+> Refractive Surgery* [submitted].
 
 ---
 

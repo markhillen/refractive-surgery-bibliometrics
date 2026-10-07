@@ -1,0 +1,65 @@
+rank,country,publications,pct
+1,China,575,29.16
+2,United States,271,13.74
+3,India,123,6.24
+4,Spain,88,4.46
+5,Iran,87,4.41
+6,Germany,86,4.36
+7,Italy,63,3.19
+8,Turkey,53,2.69
+9,South Korea,45,2.28
+10,Taiwan,40,2.03
+=11,Egypt,39,1.98
+=11,Saudi Arabia,39,1.98
+13,Israel,37,1.88
+=14,Australia,31,1.57
+=14,Brazil,31,1.57
+16,United Kingdom,28,1.42
+17,France,26,1.32
+=18,Russia,22,1.12
+=18,Switzerland,22,1.12
+20,Poland,21,1.06
+21,Canada,20,1.01
+22,Singapore,19,0.96
+23,Japan,18,0.91
+24,Mexico,17,0.86
+25,Greece,16,0.81
+26,Portugal,14,0.71
+27,Colombia,11,0.56
+28,Hong Kong,9,0.46
+=29,Croatia,8,0.41
+=29,Romania,8,0.41
+=29,Pakistan,8,0.41
+=29,Netherlands,8,0.41
+=33,Belgium,6,0.3
+=33,Philippines,6,0.3
+=35,Finland,5,0.25
+=35,Nepal,5,0.25
+=35,Thailand,5,0.25
+=35,Czechia,5,0.25
+=35,Norway,5,0.25
+=40,Austria,4,0.2
+=40,Denmark,4,0.2
+=40,New Zealand,4,0.2
+=40,Lebanon,4,0.2
+=44,Chile,3,0.15
+=44,United Arab Emirates,3,0.15
+=44,Indonesia,3,0.15
+=44,Peru,3,0.15
+=44,Kosovo,3,0.15
+=49,Malaysia,2,0.1
+=49,Vietnam,2,0.1
+=49,Argentina,2,0.1
+=49,Bosnia and Herzegovina,2,0.1
+=49,Ireland,2,0.1
+=54,Qatar,1,0.05
+=54,Jordan,1,0.05
+=54,Bahrain,1,0.05
+=54,Ukraine,1,0.05
+=54,San Marino,1,0.05
+=54,Syria,1,0.05
+=54,Serbia,1,0.05
+=54,Iraq,1,0.05
+=54,Kuwait,1,0.05
+=54,Azerbaijan,1,0.05
+=54,Algeria,1,0.05

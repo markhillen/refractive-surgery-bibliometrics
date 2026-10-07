@@ -1,0 +1,41 @@
+scope,counting,treatment,institution,publications,rank
+first author,primary,separate,ELZA Institute,0,
+first author,primary,separate,University of Zurich,17,=100
+first author,primary,separate,IROC Zurich,21,=71
+first author,primary,separate,University Hospital Zurich,0,
+first author,primary,merged,Zurich cluster (ELZA + UZH/CABMM + IROC),39,33
+first author,primary,merged-table context,Tehran University of Medical Sciences,67,=15
+first author,primary,merged-table context,Shahid Beheshti University of Medical Sciences,59,=20
+first author,primary,merged-table context,Wenzhou Medical University,82,10
+first author,primary,merged-table context,LV Prasad Eye Institute,24,=58
+first author,primary,merged-table context,Moorfields Eye Hospital,58,=22
+first author,whole,separate,ELZA Institute,0,
+first author,whole,separate,University of Zurich,22,=78
+first author,whole,separate,IROC Zurich,23,=74
+first author,whole,separate,University Hospital Zurich,0,
+first author,whole,merged,Zurich cluster (ELZA + UZH/CABMM + IROC),47,=32
+first author,whole,merged-table context,Tehran University of Medical Sciences,77,14
+first author,whole,merged-table context,Shahid Beheshti University of Medical Sciences,61,=22
+first author,whole,merged-table context,Wenzhou Medical University,96,9
+first author,whole,merged-table context,LV Prasad Eye Institute,26,=60
+first author,whole,merged-table context,Moorfields Eye Hospital,58,=25
+all authors,primary,separate,ELZA Institute,0,
+all authors,primary,separate,University of Zurich,20,=114
+all authors,primary,separate,IROC Zurich,25,=80
+all authors,primary,separate,University Hospital Zurich,14,=168
+all authors,primary,merged,Zurich cluster (ELZA + UZH/CABMM + IROC),50,36
+all authors,primary,merged-table context,Tehran University of Medical Sciences,98,13
+all authors,primary,merged-table context,Shahid Beheshti University of Medical Sciences,86,=16
+all authors,primary,merged-table context,Wenzhou Medical University,108,9
+all authors,primary,merged-table context,LV Prasad Eye Institute,41,=39
+all authors,primary,merged-table context,Moorfields Eye Hospital,76,23
+all authors,whole,separate,ELZA Institute,16,=177
+all authors,whole,separate,University of Zurich,35,=61
+all authors,whole,separate,IROC Zurich,28,=80
+all authors,whole,separate,University Hospital Zurich,15,=194
+all authors,whole,merged,Zurich cluster (ELZA + UZH/CABMM + IROC),64,34
+all authors,whole,merged-table context,Tehran University of Medical Sciences,103,12
+all authors,whole,merged-table context,Shahid Beheshti University of Medical Sciences,90,=20
+all authors,whole,merged-table context,Wenzhou Medical University,128,7
+all authors,whole,merged-table context,LV Prasad Eye Institute,43,=46
+all authors,whole,merged-table context,Moorfields Eye Hospital,93,=16

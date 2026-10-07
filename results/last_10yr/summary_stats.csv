@@ -1,0 +1,18 @@
+metric,value
+Total publications,4202
+Year range,2016–2025
+Peak publication year,2020
+Total citations (OpenAlex),55030
+Records with citation count,4194
+Records without citation count,8
+Mean citations per record (known),13.1
+Records with resolved first-author country,3711
+Records with unresolved first-author country,491
+Records with institution resolved / unresolved / no affiliation,4140 / 6 / 56
+Institution attribution scheme,"all authors, whole"
+Unique journals,295
+Unique countries,73
+Unique institutions (top),50
+Unique authors (≥min pubs),1718
+Unique keywords,47
+Unique MeSH terms,114

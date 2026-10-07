@@ -1,0 +1,41 @@
+rank,institution,publications,pct_of_resolved,citations,n_cited_known
+1,Eye & ENT Hospital of Fudan University,107,5.03,839,107
+2,Hoopes Vision Research Center,58,2.73,392,58
+=3,Wenzhou Medical University,43,2.02,496,43
+=3,Tianjin Medical University,43,2.02,345,43
+5,Peking University,37,1.74,262,37
+6,University of Arizona,35,1.64,354,35
+=7,Farabi Eye Hospital,30,1.41,229,30
+=7,Tianjin Eye Hospital,30,1.41,247,30
+9,All India Institute of Medical Sciences,28,1.32,293,28
+=10,Beijing Tongren Eye Center,25,1.17,147,25
+=10,Cleveland Clinic,25,1.17,421,25
+=12,Narayana Nethralaya Bangalore,21,0.99,131,21
+=12,Saarland University Medical Center,21,0.99,120,21
+=12,Singapore Eye Research Institute,21,0.99,337,21
+=12,Shahid Beheshti University of Medical Sciences,21,0.99,179,21
+16,Vissum Alicante,20,0.94,280,20
+=17,University of Utah School of Medicine,19,0.89,178,19
+=17,Tel Aviv University,19,0.89,88,19
+=17,Rio de Janeiro,19,0.89,155,19
+=20,Nobel Eye Institute,18,0.85,92,18
+=20,SCHWIND eye-tech-solutions,18,0.85,80,18
+=22,Mashhad University of Medical Sciences,17,0.8,79,17
+=22,LV Prasad Eye Institute,17,0.8,158,17
+=24,Chung Shan Medical University,16,0.75,83,16
+=24,Sun Yat-sen University,16,0.75,84,16
+=24,Fudan University,16,0.75,74,16
+=24,Humanitas University Milan,16,0.75,130,16
+=24,Baylor College of Medicine,16,0.75,248,16
+=24,London Vision Clinic,16,0.75,349,16
+=30,Bascom Palmer Eye Institute,15,0.7,123,14
+=30,University of Liverpool,15,0.7,240,15
+=30,Stanford University,15,0.7,206,15
+=30,Chinese University of Hong Kong,15,0.7,157,15
+=34,Chung Shan Medical University Hospital,14,0.66,60,14
+=34,Chang Gung Memorial Hospital,14,0.66,54,14
+=34,Yonsei University College of Medicine,14,0.66,96,14
+=34,West China Hospital,14,0.66,54,14
+=34,Rambam Health Care Campus,14,0.66,51,14
+=34,Federal University of São Paulo,14,0.66,203,14
+=34,Central South University,14,0.66,127,14

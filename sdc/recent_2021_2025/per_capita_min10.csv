@@ -1,0 +1,29 @@
+rank,country,publications,population_2024,pubs_per_million
+1,Israel,37,10002200,3.7
+2,Singapore,19,6036860,3.15
+3,Switzerland,22,9005582,2.44
+4,Spain,88,48848840,1.8
+5,Taiwan,40,23400220,1.71
+6,Greece,16,10405134,1.54
+7,Portugal,14,10694681,1.31
+8,Australia,31,27194286,1.14
+9,Saudi Arabia,39,35300280,1.1
+10,Italy,63,58952704,1.07
+11,Germany,86,83516593,1.03
+12,Iran,87,91567738,0.95
+13,South Korea,45,51751065,0.87
+14,United States,271,340003797,0.8
+15,Turkey,53,85518661,0.62
+16,Poland,21,36559233,0.57
+17,Canada,20,41262329,0.48
+18,China,575,1408975000,0.41
+19,United Kingdom,28,69281000,0.4
+20,France,26,68551653,0.38
+21,Egypt,39,116538258,0.33
+22,Colombia,11,52886363,0.21
+=23,Japan,18,123975371,0.15
+=23,Russia,22,143669648,0.15
+=23,Brazil,31,211998573,0.15
+26,Mexico,17,130861007,0.13
+27,India,123,1450935791,0.08
+,Switzerland excluding zurich_cluster first-author records,16,9005582,1.78

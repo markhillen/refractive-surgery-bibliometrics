@@ -1,0 +1,54 @@
+table,name,publications,rank
+records,all,12887,
+records,without author group,12850,
+records,removed,37,
+author,Zhou X (Fudan),224,
+author,Alió JL,211,
+author,Moshirfar M,182,
+author,Wang Y (Tianjin),134,
+author,Wilson SE,133,
+author,Reinstein DZ,131,
+author,Arba-Mosquera S,131,
+author,Archer TJ,110,
+author,Kohnen T,107,
+author,Krueger RR,104,
+author,Kymionis GD,100,
+author,Kim EK (Yonsei),98,
+author,Manche EE,96,
+author,Seiler T,95,
+author,Randleman JB,91,
+author,Seitz B,90,
+author,Mehta JS (Singapore),88,
+author,Teus MA,86,
+author,Hoopes PCS,86,
+author,Azar DT,84,
+country,United States,2614,1
+country,China,1367,2
+country,Germany,757,3
+country,Spain,635,4
+country,Italy,431,5
+country,United Kingdom,392,6
+country,India,373,7
+country,South Korea,340,8
+country,Japan,327,9
+country,Iran,279,10
+country,Turkey,248,11
+country,France,242,12
+country,Brazil,220,13
+country,Australia,211,=14
+country,Canada,211,=14
+institution,Eye & ENT Hospital of Fudan University,237,1
+institution,Cleveland Clinic,208,2
+institution,Vissum Alicante,162,3
+institution,Tianjin Eye Hospital,140,4
+institution,Massachusetts Eye and Ear,133,5
+institution,Wenzhou Medical University,121,6
+institution,University of Crete,116,7
+institution,Chinese University of Hong Kong,114,8
+institution,All India Institute of Medical Sciences,109,9
+institution,Stanford University,104,=10
+institution,Singapore Eye Research Institute,104,=10
+institution,Emory University,101,12
+institution,Singapore National Eye Centre,95,=13
+institution,Tianjin Medical University,95,=13
+institution,Yonsei University College of Medicine,94,15

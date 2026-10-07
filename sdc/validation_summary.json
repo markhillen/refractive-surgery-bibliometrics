@@ -1,0 +1,8 @@
+{
+ "journals_compared": 30,
+ "journals_identical": 30,
+ "journals_spearman": 1.0,
+ "authors_compared": 40,
+ "authors_within_2": 39,
+ "authors_spearman": 1.0
+}

@@ -1,0 +1,41 @@
+rank,institution,publications,pct_of_resolved,citations,n_cited_known
+1,Fudan University,253,2.06,4914,253
+2,Cleveland Clinic,211,1.72,10836,207
+3,Vissum Alicante,161,1.31,6008,160
+4,Harvard Medical School,143,1.17,5115,142
+5,Singapore National Eye Centre,136,1.11,5452,135
+6,University of Crete,115,0.94,6150,115
+7,Tianjin Eye Hospital,110,0.9,2259,110
+8,All India Institute of Medical Sciences,109,0.89,1804,109
+9,Wenzhou Medical University,108,0.88,2052,108
+10,Stanford University,103,0.84,2398,103
+=11,Emory University,100,0.82,7216,100
+=11,Chinese University of Hong Kong,100,0.82,2265,98
+13,Tehran University of Medical Sciences,98,0.8,1369,98
+14,Yonsei University College of Medicine,91,0.74,2792,91
+15,Johns Hopkins University,87,0.71,3042,87
+=16,Baylor College of Medicine,86,0.7,3904,85
+=16,Shahid Beheshti University of Medical Sciences,86,0.7,1191,86
+18,University of California Los Angeles,84,0.69,4399,83
+19,University of Southern California,81,0.66,3376,80
+=20,Tianjin Medical University,80,0.65,1085,80
+=20,London Vision Clinic,80,0.65,4538,80
+22,Bascom Palmer Eye Institute,77,0.63,2638,76
+23,Moorfields Eye Hospital,76,0.62,2786,76
+24,Sun Yat-sen University,75,0.61,1341,75
+25,University of California San Francisco,70,0.57,2182,70
+26,Narayana Nethralaya Bangalore,69,0.56,1237,69
+27,University of Arizona,65,0.53,1374,65
+=28,Peking University,61,0.5,481,61
+=28,Hoopes Vision Research Center,61,0.5,440,61
+=30,Tel Aviv University,54,0.44,793,54
+=30,Universidad Miguel Hernández,54,0.44,2156,54
+=30,Laservision Institute Athens,54,0.44,2592,53
+=30,Beijing Tongren Eye Center,54,0.44,428,54
+=34,Aarhus University,51,0.42,4027,51
+=34,Federal University of São Paulo,51,0.42,1979,51
+36,University of Toronto,49,0.4,993,49
+37,University of Alicante,48,0.39,1990,48
+=38,Humanitas University Milan,41,0.33,1033,41
+=38,LV Prasad Eye Institute,41,0.33,1190,41
+=38,Noor Eye Hospital Tehran,41,0.33,588,41
