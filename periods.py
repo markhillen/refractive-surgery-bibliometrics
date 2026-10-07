@@ -1,9 +1,16 @@
 """
 periods.py — Multi-period bibliometric analysis
 ================================================
-Slices a single fetched record set into multiple time windows and runs
+Slices the fetched refractive surgery record set into multiple time windows and runs
 the full bibliometric analysis pipeline on each, writing per-period
 output subdirectories.
+
+Time windows (defined in config.ANALYSIS_PERIODS):
+  all_time  — 1988–2025 (full indexed laser refractive literature)
+  last_20yr — 20 years to present
+  last_15yr — 15 years to present
+  last_10yr — 10 years to present
+  last_5yr  —  5 years to present
 
 Usage (called automatically by main.py):
     from periods import run_all_periods
@@ -36,7 +43,7 @@ def run_all_periods(records: list[dict], output_root: str = None,
     config.ANALYSIS_PERIODS.
 
     Returns a dict keyed by period label containing the analysis results
-    for each window.  Also writes per-period output subdirectories and
+    for each window. Also writes per-period output subdirectories and
     a combined summary CSV.
     """
     import analyze
@@ -61,7 +68,7 @@ def run_all_periods(records: list[dict], output_root: str = None,
         period_dir = pathlib.Path(output_root) / label
         period_dir.mkdir(parents=True, exist_ok=True)
 
-        # Override OUTPUT_DIR for this period so visualize/report write there
+        # Override OUTPUT_DIR so visualize/report write to the period subdir
         _orig = config.OUTPUT_DIR
         config.OUTPUT_DIR = str(period_dir)
 
@@ -70,24 +77,26 @@ def run_all_periods(records: list[dict], output_root: str = None,
             report.generate_reports(results)
             if not skip_viz:
                 visualize.run_visualizations(results, period_records)
-            # Write per-period analysis.json so the GUI's /api/results?period=X can serve it
-            import json as _json
-            with open(period_dir / "analysis.json", "w") as _f:
-                _json.dump(results, _f, default=str)
         finally:
             config.OUTPUT_DIR = _orig
 
-        # Field-level h-index: largest h s.t. ≥h papers each have ≥h citations.
-        # Must be computed here while per-paper records are still in scope.
+        # Save per-period analysis.json so the GUI Results tab can show
+        # period-specific data without a re-run.
+        import json as _json
+        with open(period_dir / "analysis.json", "w") as _f:
+            _json.dump(results, _f, indent=2, default=str)
+
+        # Compute field-level h-index now while period_records is in scope
         cite_counts = sorted(
-            [r.get("citation_count") or 0 for r in period_records],
+            (rec["citation_count"] for rec in period_records if rec.get("citation_count") is not None),
             reverse=True,
         )
-        results["h_index_field"] = sum(
-            1 for i, c in enumerate(cite_counts, 1) if c >= i
-        )
+        h_field = sum(1 for i, c in enumerate(cite_counts, 1) if c >= i)
 
-        results["_period"] = {"label": label, "start": start, "end": end, "n": n}
+        results["_period"] = {
+            "label": label, "start": start, "end": end, "n": n
+        }
+        results["_h_index_field"] = h_field
         all_results[label] = results
 
     # ── Combined summary table ────────────────────────────────────────────────
@@ -103,19 +112,32 @@ def _write_period_summary(all_results: dict, output_root: str) -> None:
     rows = []
     for label, res in all_results.items():
         p = res.get("_period", {})
-        n_records = res.get("n_records", 0)
+        n_pubs = p.get("n", 0)
         total_cites = sum(res.get("temporal", {}).get("citations", []))
+        unique_authors = len(res.get("authors", []))
+        unique_journals = len(res.get("journals", []))
+        unique_countries = len(
+            [c for c in res.get("countries", []) if c.get("country") != "Unknown"]
+        )
+        n_null = sum(res.get("temporal", {}).get("citations_null", []) or [])
+        n_known = n_pubs - n_null
+        mean_cites = round(total_cites / n_known, 1) if n_known else ""
+        n_unknown_country = sum(c.get("count", 0) for c in res.get("countries", [])
+                                if c.get("country") == "Unknown")
         rows.append({
-            "period":              label,
-            "start_year":          p.get("start", ""),
-            "end_year":            p.get("end", ""),
-            "total_publications":  p.get("n", ""),
-            "total_citations":     total_cites,
-            "unique_authors":      len(res.get("authors", [])),
-            "unique_journals":     len(res.get("journals", [])),
-            "unique_countries":    len(res.get("countries", [])),
-            "mean_cites_per_pub":  round(total_cites / n_records, 2) if n_records else "",
-            "h_index_field":       res.get("h_index_field", ""),
+            "period":             label,
+            "start_year":         p.get("start", ""),
+            "end_year":           p.get("end", ""),
+            "total_publications": n_pubs,
+            "total_citations":    total_cites,
+            "records_with_citation_count": n_known,
+            "records_without_citation_count": n_null,
+            "unique_authors":     unique_authors,
+            "unique_journals":    unique_journals,
+            "unique_countries":   unique_countries,
+            "records_country_unresolved": n_unknown_country,
+            "mean_cites_per_pub": mean_cites,
+            "h_index_field":      res.get("_h_index_field", ""),
         })
 
     outpath = pathlib.Path(output_root) / "period_comparison.csv"
@@ -127,3 +149,9 @@ def _write_period_summary(all_results: dict, output_root: str) -> None:
         w.writeheader()
         w.writerows(rows)
     print(f"\n[periods] Period comparison saved → {outpath}")
+
+    try:
+        import visualize
+        visualize.plot_period_comparison(rows, out_dir=pathlib.Path(output_root))
+    except Exception as exc:          # a figure must never break the pipeline
+        print(f"[periods] cross-period figure skipped: {exc}")

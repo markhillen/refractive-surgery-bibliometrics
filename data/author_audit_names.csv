@@ -1,0 +1,25 @@
+author_id,why
+Seitz B,rank 1 all-time and 2021–2025
+Alió JL,rank 2 all-time
+Ambrósio R,rank 3 all-time; transliteration and suffix variants (Ambrosio R; Ambrósio Júnior R) folded to one person
+Langenbucher A,rank 4 all-time
+Hashemi H,rank 5 all-time; OpenAlex splits into 8 IDs
+Hafezi F,manuscript author; KNOWN_DISTINCT_AFFIL separates the Tehran plastic surgeon of the same name
+Hafezi NL,manuscript author; KNOWN_DISTINCT from Hafezi F
+Torres-Netto EA,manuscript author; name-variant merge (Torres-Netto E / Netto EAT)
+Hillen M,manuscript author
+Kymionis GD,rank 7 all-time
+McGhee CNJ,rank 8 all-time
+Shetty R,rank 9 all-time; OpenAlex splits into 9 IDs
+Jhanji V,rank 10 all-time
+Zhou X (Fudan),common-surname display suffix (automatic); rank 2 in 2021–2025
+Wang Y (Fudan),common-surname display suffix (automatic)
+Chen S (Wenzhou),common-surname display suffix (automatic)
+Sharma N (New Delhi),common-surname display suffix (automatic)
+Flockerzi E,rank 6 in 2021–2025
+Vinciguerra R,rank 7 in 2021–2025
+Vinciguerra P,related author of the same surname kept separate
+Seiler T,Theo Seiler senior (KNOWN_DISTINCT from Seiler TG)
+Seiler TG,Theo G. Seiler junior
+Spoerl E,umlaut and digraph spellings (Spörl / Spoerl) folded; OpenAlex splits into 2 IDs
+Colin J,OpenAlex splits into 6 IDs

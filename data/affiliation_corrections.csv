@@ -1,0 +1,8 @@
+pmid,author_id,institution,country,basis,date
+34388074,Hafezi F,ELZA Institute,Switzerland,"PubMed affiliation reads ""Zurich, Switzerland."" with no institution named; resolved by the authors to ELZA (not IROC)",2026-09-17
+34237318,Hafezi F,ELZA Institute,Switzerland,"PubMed affiliation reads ""Zurich, Switzerland; Los Angeles, California, USA; Wenzhou, China."" with no Zurich institution named; resolved by the authors to ELZA (not IROC)",2026-09-17
+31146950,Hafezi F,ELZA Institute,,"PubMed affiliation reads ""Zurich, Switzerland."" with no institution named; resolved by the authors to ELZA (not IROC)",2026-09-17
+27292531,Hafezi F,ELZA Institute,,"PubMed affiliation reads ""Geneva, Switzerland; Los Angeles, California; and Zurich, Switzerland."" with no Zurich institution named; resolved by the authors to ELZA (not IROC)",2026-09-17
+26160699,Hafezi F,ELZA Institute,,"PubMed affiliation reads ""Los Angeles, California; Zurich, Switzerland."" with no Zurich institution named; resolved by the authors to ELZA (not IROC)",2026-09-17
+36367268,Hafezi F,ELZA Institute,Switzerland,"PubMed affiliation reads ""Zurich, Switzerland."" with no institution named; resolved to ELZA under the authors' rule for Hafezi's 2015-onward Zurich affiliations that are not IROC (the rule applied in the CXL analysis)",2026-09-28
+36630435,Hafezi F,ELZA Institute,Switzerland,"PubMed affiliation reads ""Zurich, Switzerland."" with no institution named; resolved to ELZA under the authors' rule for Hafezi's 2015-onward Zurich affiliations that are not IROC (the rule applied in the CXL analysis)",2026-09-28

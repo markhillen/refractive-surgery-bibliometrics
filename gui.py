@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gui.py — Refractive Surgery Bibliometric Analysis — Local Web GUI
+gui.py — CXL Bibliometric Analysis — Local Web GUI
 ====================================================
 Zero extra dependencies beyond the standard library.
 Launches a local web server and opens the GUI in your browser.
@@ -35,10 +35,8 @@ PORT = 7434
 _log_queue:  queue.Queue = queue.Queue()
 _run_state = {"running": False, "done": False, "error": False, "pid": None}
 _run_lock:   threading.Lock = threading.Lock()
-
 # ── HTML template ─────────────────────────────────────────────────────────────
-# Tokens replaced at serve time: __START_YEAR__, __END_YEAR__, __LAST25_START__,
-# __LAST10_START__, __LAST5_START__, __SPAN_YEARS__, __PERIODS_JSON__
+# Tokens replaced at serve time: see __PLACEHOLDER__ markers in static/index.html
 
 def _load_html() -> str:
     """Load and return the HTML template from static/index.html."""
@@ -68,7 +66,8 @@ def _list_periods():
     """Return list of period subfolders that contain output."""
     if not OUTPUT_DIR.exists():
         return []
-    order = ["all_time", "last_25yr", "last_20yr", "last_15yr", "last_10yr", "last_5yr"]
+    order = ["all_time", "last_20yr", "last_15yr", "last_10yr", "last_5yr", "last_3yr",
+             "decade_2011_20", "decade_2001_10"]
     found = [d.name for d in OUTPUT_DIR.iterdir() if d.is_dir()]
     return [p for p in order if p in found] + [p for p in found if p not in order]
 
@@ -91,11 +90,10 @@ class Handler(BaseHTTPRequestHandler):
                 for n, s, e in _cfg.ANALYSIS_PERIODS
             ])
             html = (_load_html()
-                .replace("__START_YEAR__",    str(ay))
-                .replace("__END_YEAR__",      str(ey))
-                .replace("__LAST25_START__",  str(ey - 24))
+                .replace("__END_YEAR__",     str(ey))
                 .replace("__LAST10_START__",  str(ey - 9))
                 .replace("__LAST5_START__",   str(ey - 4))
+                .replace("__LAST3_START__",   str(ey - 2))
                 .replace("__SPAN_YEARS__",    str(ey - ay + 1))
                 .replace("__PERIODS_JSON__",  periods_json)
                 .replace("__PROJECT_NAME__",  _cfg.PROJECT_NAME)
@@ -249,16 +247,16 @@ class Handler(BaseHTTPRequestHandler):
         body   = self.rfile.read(length) if length else b""
 
         if path == "/api/run":
-            with _run_lock:
-                if _run_state["running"]:
-                    self._send(409, "text/plain", b"already running")
-                    return
-                _run_state["running"] = True
             try:
                 cfg = json.loads(body)
             except Exception:
                 self._send(400, "text/plain", b"bad json")
                 return
+            with _run_lock:
+                if _run_state["running"]:
+                    self._send(409, "text/plain", b"already running")
+                    return
+                _run_state["running"] = True
             threading.Thread(target=_run_pipeline, args=(cfg,), daemon=True).start()
             self._send(200, "application/json", b'{"ok":true}')
 
@@ -272,10 +270,11 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/api/validate_query":
             # Run an esearch count for the given query + date range
             try:
+                import config as _cfg
                 req_data = json.loads(body)
                 q     = req_data.get("query", "").strip()
-                sy    = int(req_data.get("start_year", 1950))
-                ey    = int(req_data.get("end_year",   2026))
+                sy    = int(req_data.get("start_year", _cfg.ALL_TIME_START))
+                ey    = int(req_data.get("end_year",   _cfg.END_YEAR))
                 akey  = req_data.get("api_key", "").strip()
                 if not q:
                     self._send(200, "application/json",
@@ -309,7 +308,6 @@ def _log(msg: str):
 
 def _run_pipeline(cfg: dict):
     _run_state.update({"done": False, "error": False})
-    _orig_query = None
 
     try:
         import importlib
@@ -318,7 +316,6 @@ def _run_pipeline(cfg: dict):
 
         # ── Patch config ──────────────────────────────────────────────────
         import config as conf
-        _orig_query            = conf.PUBMED_QUERY
         conf.START_YEAR        = cfg["start_year"]
         conf.END_YEAR          = cfg["end_year"]
         conf.FETCH_CITATIONS   = cfg["fetch_citations"]
@@ -331,6 +328,7 @@ def _run_pipeline(cfg: dict):
             conf.NCBI_API_KEY  = cfg["api_key"]
 
         # Strip any existing date filter from the base query and add the new range.
+        _orig_query = conf.PUBMED_QUERY
         import re as _re
         _date_re = _re.compile(
             r'\s+AND\s+\("\d{4}/\d{2}/\d{2}"\[PDAT\]\s*:\s*"\d{4}/\d{2}/\d{2}"\[PDAT\]\)')
@@ -392,9 +390,10 @@ def _run_pipeline(cfg: dict):
             _log(f"  ERROR: Unknown source mode: {mode}")
             raise ValueError(f"Unknown mode: {mode}")
 
-        # Filter to date range. In multi-period mode use ALL_TIME_START so
-        # pre-slider records (e.g. 1988 PRK papers) are retained for
-        # the all-time window; periods.py then slices each window.
+        # Filter to date range. In multi-period mode use the project's
+        # ALL_TIME_START so pre-slider records (e.g. pre-2001 keratoconus
+        # papers) are retained for the all-time window; periods.py then slices
+        # each window. In single-window mode honour the slider start year.
         import config as _cfgmod
         _filt_start = (getattr(_cfgmod, "ALL_TIME_START", cfg["start_year"])
                        if cfg.get("multi_period", True) else cfg["start_year"])
@@ -439,23 +438,30 @@ def _run_pipeline(cfg: dict):
         if multi:
             # ── Steps 5–6: Multi-period analysis ──────────────────────────
             _log("[5/6] Running multi-period analysis …")
-            # Build period windows from ALL_TIME_START so "all time" reflects
-            # the full indexed refractive surgery literature (1988–present). Rolling windows
-            # are only included if meaningfully shorter than the all-time span.
+            # Build period windows from the project's ALL_TIME_START so that
+            # "all time" reflects the full indexed literature (e.g. 1950 for
+            # keratoconus, 2001 for CXL). A rolling window is only included if
+            # it is meaningfully shorter than the all-time span.
             e        = cfg["end_year"]
             at_start = getattr(conf, "ALL_TIME_START", cfg["start_year"])
             windows  = [("all_time", at_start, e)]
             for label, span in [("last_25yr", 25), ("last_20yr", 20),
                                  ("last_15yr", 15), ("last_10yr", 10),
-                                 ("last_5yr", 5)]:
+                                 ("last_5yr", 5), ("last_3yr", 3)]:
                 w_start = e - (span - 1)
                 if w_start > at_start:          # skip windows == all-time
                     windows.append((label, w_start, e))
+            # Fixed decade windows — always included when corpus spans them
+            for label, s, en in [("decade_2011_20", 2011, 2020),
+                                  ("decade_2001_10", 2001, 2010)]:
+                if at_start <= s and en <= e:
+                    windows.append((label, s, en))
             conf.ANALYSIS_PERIODS = windows
             _log(f"  Periods: {[w[0] for w in windows]} "
                  f"(all-time from {at_start})")
             import periods as per
-            # Figures need matplotlib; if missing, still produce CSV/Excel reports
+            # Figures need matplotlib; if it is missing, still produce CSV/Excel
+            # reports rather than crashing the whole run.
             try:
                 import matplotlib  # noqa: F401
                 _skip_viz = False
@@ -479,15 +485,12 @@ def _run_pipeline(cfg: dict):
                 _log(f"  {label:<12} {p.get('n','?'):>5} records "
                      f"({p.get('start','?')}–{p.get('end','?')})")
             _log(f"  Outputs in   : {conf.OUTPUT_DIR}/<period>/")
-            # Save all_time analysis.json for the results panel fallback.
-            # DATA_DIR is not defined in RS config — fall back to output/all_time/.
+            # Save all_time analysis.json for the results panel
             import json as _json
             at = all_results.get("all_time")
             if at:
-                data_dir = pathlib.Path(getattr(conf, "DATA_DIR", None) or
-                                        pathlib.Path(conf.OUTPUT_DIR) / "all_time")
-                data_dir.mkdir(parents=True, exist_ok=True)
-                with open(data_dir / "analysis.json", "w") as f:
+                pathlib.Path(conf.DATA_DIR).mkdir(parents=True, exist_ok=True)
+                with open(pathlib.Path(conf.DATA_DIR) / "analysis.json", "w") as f:
                     _json.dump(at, f, indent=2, default=str)
             _run_state.update({"running": False, "done": True, "error": False})
 
@@ -512,9 +515,8 @@ def _run_pipeline(cfg: dict):
             single_dir.mkdir(parents=True, exist_ok=True)
             _orig_out = conf.OUTPUT_DIR
             conf.OUTPUT_DIR = str(single_dir)
-
-            _log("[6/6] Generating figures and reports …")
             try:
+                _log("[6/6] Generating figures and reports …")
                 import visualize as viz
                 viz.run_visualizations(results, records)
 
@@ -539,13 +541,11 @@ def _run_pipeline(cfg: dict):
             _log(line)
         _run_state.update({"running": False, "done": True, "error": True})
     finally:
-        # Restore PUBMED_QUERY so the next GUI run starts from the original base string
-        if _orig_query is not None:
-            try:
-                import config as conf
-                conf.PUBMED_QUERY = _orig_query
-            except Exception:
-                pass
+        # Restore PUBMED_QUERY so the next run starts from the original base string
+        try:
+            conf.PUBMED_QUERY = _orig_query
+        except NameError:
+            pass  # query patch was never reached (early error)
 
 # ── Server launch ─────────────────────────────────────────────────────────────
 
@@ -575,7 +575,7 @@ def main():
 
     print(f"""
 ╔══════════════════════════════════════════════════╗
-║     Refractive Surgery Bibliometrics — Local Web GUI    ║
+║     CXL Bibliometrics — Local Web GUI            ║
 ╠══════════════════════════════════════════════════╣
 ║  Server: {url:<40}║
 ║  Press Ctrl+C to quit                            ║

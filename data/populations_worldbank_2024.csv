@@ -1,0 +1,120 @@
+# Source: World Bank WDI, indicator SP.POP.TOTL (Population, total), year 2024, retrieved 2026-09-10 from https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?date=2024&format=json ; WDI population figures derive from the UN World Population Prospects 2024 revision and national statistical offices.
+iso2,country,population_2024
+AF,Afghanistan,42647492
+AL,Albania,2377128
+DZ,Algeria,46814308
+AR,Argentina,45696159
+AM,Armenia,3033500
+AU,Australia,27194286
+AT,Austria,9177982
+AZ,Azerbaijan,10202830
+BH,Bahrain,1588670
+BD,Bangladesh,173562364
+BY,Belarus,9132629
+BE,Belgium,11858610
+BO,Bolivia,12413315
+BA,Bosnia and Herzegovina,3164253
+BR,Brazil,211998573
+BN,Brunei,462721
+BG,Bulgaria,6441421
+KH,Cambodia,17638801
+CM,Cameroon,29123744
+CA,Canada,41262329
+CL,Chile,19764771
+CN,China,1408975000
+CO,Colombia,52886363
+CR,Costa Rica,5129910
+HR,Croatia,3866200
+CU,Cuba,10979783
+CY,Cyprus,1358282
+CZ,Czechia,10905028
+DK,Denmark,5976992
+DO,Dominican Republic,11427557
+EC,Ecuador,18135478
+EG,Egypt,116538258
+EE,Estonia,1372341
+ET,Ethiopia,132059767
+FI,Finland,5619911
+FR,France,68551653
+GE,Georgia (country),3694600
+DE,Germany,83516593
+GH,Ghana,34427414
+GR,Greece,10405134
+GT,Guatemala,18406359
+HK,Hong Kong,7524100
+HU,Hungary,9562065
+IS,Iceland,386506
+IN,India,1450935791
+ID,Indonesia,283487931
+IR,Iran,91567738
+IQ,Iraq,46042015
+IE,Ireland,5395790
+IL,Israel,10002200
+IT,Italy,58952704
+JP,Japan,123975371
+JO,Jordan,11552876
+KZ,Kazakhstan,20592571
+KE,Kenya,56432944
+XK,Kosovo,1594353
+KW,Kuwait,4897263
+KG,Kyrgyzstan,7221868
+LV,Latvia,1866124
+LB,Lebanon,5805962
+LY,Libya,7381023
+LT,Lithuania,2888278
+LU,Luxembourg,677012
+MO,Macao,687000
+MY,Malaysia,35557673
+MT,Malta,568847
+MX,Mexico,130861007
+MD,Moldova,2402306
+MN,Mongolia,3524788
+ME,Montenegro,623525
+MA,Morocco,38081173
+MM,Myanmar,54500091
+NP,Nepal,29651054
+NL,Netherlands,17993485
+NZ,New Zealand,5290000
+NG,Nigeria,232679478
+MK,North Macedonia,1824359
+NO,Norway,5572279
+OM,Oman,5281538
+PK,Pakistan,251269164
+PS,Palestine,5289152
+PA,Panama,4515577
+PY,Paraguay,6929153
+PE,Peru,34217848
+PH,Philippines,115843670
+PL,Poland,36559233
+PT,Portugal,10694681
+QA,Qatar,2857822
+RO,Romania,19051804
+RU,Russia,143669648
+SA,Saudi Arabia,35300280
+SN,Senegal,18501984
+RS,Serbia,6586476
+SG,Singapore,6036860
+SK,Slovakia,5422069
+SI,Slovenia,2127400
+ZA,South Africa,64007187
+KR,South Korea,51751065
+ES,Spain,48848840
+LK,Sri Lanka,21916000
+SD,Sudan,50448963
+SE,Sweden,10569709
+CH,Switzerland,9005582
+SY,Syria,24672760
+TW,Taiwan,23400220
+TZ,Tanzania,68560157
+TH,Thailand,71668011
+TN,Tunisia,12277109
+TR,Turkey,85518661
+UG,Uganda,50015092
+UA,Ukraine,37860221
+AE,United Arab Emirates,10986400
+GB,United Kingdom,69281000
+US,United States,340003797
+UY,Uruguay,3386588
+UZ,Uzbekistan,36361859
+VE,Venezuela,28405543
+VN,Vietnam,100987686

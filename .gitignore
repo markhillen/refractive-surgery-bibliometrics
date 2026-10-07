@@ -13,3 +13,13 @@ data/*/cache/
 data/*/output/
 *.tmp
 *.json.tmp
+# local working folders (not part of the published pipeline)
+_to_delete/
+_claude_sync/
+_kc2_run/
+cache_prerefresh/
+output_prehybrid_backup/
+output_prepatch_backup2/
+CLAE submission figures/
+*.patch
+.pytest_cache/

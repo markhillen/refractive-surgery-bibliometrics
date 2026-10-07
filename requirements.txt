@@ -1,4 +1,4 @@
-# Keratoconus Bibliometrics — Python dependencies
+# CXL Bibliometrics — Python dependencies
 # Install with:  python3 -m pip install -r requirements.txt
 #
 # HTTP uses the standard-library urllib, so `requests` is NOT required.

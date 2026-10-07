@@ -10,7 +10,7 @@ Outputs:
   - mesh_top.csv             — top MeSH terms
   - institutions_top.csv     — top institutions
   - temporal.csv             — year-by-year
-  - refractive_surgery_bibliometrics.xlsx   — all of the above as separate sheets
+  - rs_bibliometrics.xlsx    — all of the above as separate sheets
 """
 
 import csv
@@ -20,7 +20,6 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import config
-
 
 def _write_csv(filename: str, fieldnames: list, rows: list[dict]):
     out = pathlib.Path(config.OUTPUT_DIR)
@@ -43,12 +42,24 @@ def generate_reports(results: dict):
     peak_year  = temporal["years"][temporal["counts"].index(max(temporal["counts"]))] \
                  if temporal["counts"] else "N/A"
     total_cites = sum(temporal["citations"]) if temporal["citations"] else 0
+    n_cite_null = sum(temporal.get("citations_null", [])) if temporal.get("citations_null") else 0
 
     summary_rows = [
         {"metric": "Total publications",          "value": n},
         {"metric": "Year range",                  "value": f"{first_year}–{last_year}"},
         {"metric": "Peak publication year",        "value": peak_year},
-        {"metric": "Total citations (CrossRef)",   "value": total_cites},
+        {"metric": "Total citations (OpenAlex)",   "value": total_cites},
+        {"metric": "Records with citation count",  "value": n - n_cite_null},
+        {"metric": "Records without citation count", "value": n_cite_null},
+        {"metric": "Mean citations per record (known)", "value": round(total_cites / (n - n_cite_null), 1) if n - n_cite_null else ""},
+        {"metric": "Records with resolved first-author country", "value": sum(c["count"] for c in results["countries"] if c["country"] != "Unknown")},
+        {"metric": "Records with unresolved first-author country", "value": sum(c["count"] for c in results["countries"] if c["country"] == "Unknown")},
+        {"metric": "Records with institution resolved / unresolved / no affiliation",
+         "value": "{n_resolved} / {n_unresolved} / {n_no_affiliation}".format(**results.get("institutions_meta", {"n_resolved": "", "n_unresolved": "", "n_no_affiliation": ""}))},
+        {"metric": "Institution attribution scheme",
+         "value": ("first author only" if results.get("institutions_meta", {}).get("first_author_only")
+                   else "all authors") + ", " +
+                  str(results.get("institutions_meta", {}).get("counting", ""))},
         {"metric": "Unique journals",              "value": len(results["journals"])},
         {"metric": "Unique countries",             "value": len([c for c in results["countries"] if c["country"] != "Unknown"])},
         {"metric": "Unique institutions (top)",    "value": len(results["institutions"])},
@@ -88,6 +99,8 @@ def generate_reports(results: dict):
             "first_author":       a["first_author_count"],
             "last_author":        a.get("last_author_count", 0),
             "total_citations":    a["citation_total"],
+            "citations_median":   a.get("citations_median", ""),
+            "n_cited_known":      a.get("n_cited_known", ""),
             "h_index_estimate":   a["h_index_est"],
             "year_first":         a.get("year_first", ""),
             "year_last":          a.get("year_last", ""),
@@ -97,7 +110,7 @@ def generate_reports(results: dict):
         })
     _write_csv("authors_top.csv",
                ["rank", "author", "publications", "first_author", "last_author",
-                "total_citations", "h_index_estimate", "year_first", "year_last",
+                "total_citations", "citations_median", "n_cited_known", "h_index_estimate", "year_first", "year_last",
                 "years_active", "journal_count", "sample_affiliation"],
                author_rows)
 
@@ -111,27 +124,61 @@ def generate_reports(results: dict):
             "publications":   j["count"],
             "percentage":     j["percentage"],
             "total_citations":j["citations"],
+            "cites_per_pub":  j.get("citations_mean", ""),
+            "citations_median": j.get("citations_median", ""),
+            "n_cited_known":  j.get("n_cited_known", ""),
         })
     _write_csv("journals_top.csv",
                ["rank", "journal", "abbreviation", "publications",
-                "percentage", "total_citations"],
+                "percentage", "total_citations", "cites_per_pub", "citations_median", "n_cited_known"],
                journal_rows)
+
+    # ── Bradford zones ────────────────────────────────────────────────────
+    bradford = results.get("bradford") or {}
+    if bradford.get("zones"):
+        zone_rows = []
+        for z in bradford["zones"]:
+            zone_rows.append({
+                "zone":              z["zone"],
+                "journals":          z["journal_count"],
+                "publications":      z["publications"],
+                "publication_pct":   z["publication_pct"],
+                "total_citations":   z["citations"],
+                "citations_per_pub": z["citations_per_pub"],
+                "example_journals":  "; ".join(
+                    j["abbr"] for j in z["journals"][:5]),
+            })
+        _write_csv("bradford_zones.csv",
+                   ["zone", "journals", "publications", "publication_pct",
+                    "total_citations", "citations_per_pub", "example_journals"],
+                   zone_rows)
+
+        _write_csv("bradford_curve.csv",
+                   ["rank", "journal", "abbr", "count", "cumulative",
+                    "cumulative_pct", "zone"],
+                   bradford["curve"])
 
     # ── Countries ─────────────────────────────────────────────────────────
     country_rows = []
     valid = [c for c in results["countries"] if c["country"] != "Unknown"]
     for rank, c in enumerate(valid[:config.TOP_N_COUNTRIES], 1):
         country_rows.append({
-            "rank":              rank,
+            "rank":              c.get("rank", rank),
             "country":           c["country"],
             "publications":      c["count"],
             "percentage":        c["percentage"],
+            "pct_of_resolved":   c.get("pct_of_resolved", ""),
             "total_citations":   c["citations"],
+            "cites_per_pub":     c.get("citations_mean", ""),
+            "citations_median":  c.get("citations_median", ""),
+            "n_cited_known":     c.get("n_cited_known", ""),
+            "population_2024":   c.get("population_2024", ""),
             "pubs_per_million":  c.get("pubs_per_million", ""),
             "cites_per_million": c.get("cites_per_million", ""),
         })
     _write_csv("countries_top.csv",
-               ["rank", "country", "publications", "percentage", "total_citations",
+               ["rank", "country", "publications", "percentage", "pct_of_resolved", "total_citations",
+                "cites_per_pub", "citations_median", "n_cited_known", "population_2024",
                 "pubs_per_million", "cites_per_million"],
                country_rows)
 
@@ -151,9 +198,23 @@ def generate_reports(results: dict):
     _write_csv("mesh_top.csv", ["rank", "mesh_term", "frequency"], mesh_rows)
 
     # ── Institutions ───────────────────────────────────────────────────────
-    inst_rows = [{"rank": i+1, "institution": r["institution"], "publications": r["count"]}
+    inst_rows = [{"rank": r.get("rank", i+1), "institution": r["institution"], "publications": r["count"],
+                  "pct_of_resolved": r.get("pct_of_resolved", ""), "total_citations": r.get("citations", ""),
+                  "n_cited_known": r.get("n_cited_known", "")}
                  for i, r in enumerate(results["institutions"][:50])]
-    _write_csv("institutions_top.csv", ["rank", "institution", "publications"], inst_rows)
+    _write_csv("institutions_top.csv", ["rank", "institution", "publications", "pct_of_resolved",
+                                        "total_citations", "n_cited_known"], inst_rows)
+
+    if results.get("institutions_alt"):
+        alt_rows = [{"rank": r.get("rank", i+1), "institution": r["institution"],
+                     "publications": r["count"],
+                     "pct_of_resolved": r.get("pct_of_resolved", ""),
+                     "total_citations": r.get("citations", ""),
+                     "n_cited_known": r.get("n_cited_known", "")}
+                    for i, r in enumerate(results["institutions_alt"][:50])]
+        _write_csv("institutions_alt_scheme.csv",
+                   ["rank", "institution", "publications", "pct_of_resolved",
+                    "total_citations", "n_cited_known"], alt_rows)
 
     # ── Languages ──────────────────────────────────────────────────────────
     _LANG_NAMES = {
@@ -259,7 +320,7 @@ def _write_excel(results, summary_rows, temporal_rows, author_rows,
     if pub_type_rows:
         _add_sheet(wb, "Pub Types",    ["publication_type", "n"],                  pub_type_rows)
 
-    path = pathlib.Path(config.OUTPUT_DIR) / "refractive_surgery_bibliometrics.xlsx"
+    path = pathlib.Path(config.OUTPUT_DIR) / "rs_bibliometrics.xlsx"
     wb.save(path)
     print(f"  wrote: {path.name}")
 

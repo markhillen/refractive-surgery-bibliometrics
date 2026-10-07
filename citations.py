@@ -17,7 +17,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import config
 
 CROSSREF_BASE = "https://api.crossref.org/works/"
-MAILTO = "bibliometric-tool@example.com"   # polite pool
+MAILTO = "markhillen@gmail.com"   # CrossRef polite pool contact
 
 
 def fetch_citation_count(doi: str) -> int | None:

@@ -22,9 +22,14 @@ Pipeline use: main.py --use-openalex  (calls overlay() after citations)
 """
 import collections
 import json
+import re
 import pathlib
+import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import config  # noqa: E402
+
 CACHE = HERE / "cache"
 OUT = HERE / "output"
 
@@ -45,13 +50,103 @@ CC = {"US": "United States", "GB": "United Kingdom", "CN": "China", "IT": "Italy
       "RS": "Serbia", "BG": "Bulgaria", "LT": "Lithuania", "UA": "Ukraine"}
 
 
+def _pick_country(first_author: dict, rec: dict) -> str:
+    """Choose the first author's country when OpenAlex resolves more than one.
+
+    OpenAlex returns an author's institutions (and countries) in its own order,
+    which is not the order the author listed them in and is not reliably the
+    primary affiliation.  Taking countries[0] therefore mis-assigns a country
+    on roughly a quarter of the records whose first author lists more than one
+    affiliation — about 6% of this corpus — and does so invisibly.  Examples
+    from this dataset: a Queen Victoria Hospital (UK) paper assigned to
+    Australia, a Columbia University (New York) paper assigned to Egypt, and a
+    Geneva University Hospitals paper assigned to the United States because
+    OpenAlex matched "Geneva" to Geneva College, Pennsylvania.
+
+    Fix: prefer the country whose resolved institution name actually appears in
+    the PubMed affiliation string of the first author, which reflects what the
+    author wrote.  Fall back to the previous behaviour when nothing matches.
+    """
+    countries = first_author.get("countries") or []
+    if len(set(countries)) <= 1:
+        return countries[0] if countries else None
+
+    authors = rec.get("authors") or []
+    affil_text = " ".join(authors[0].get("affils", [])).lower() if authors else ""
+    if affil_text:
+        # Among the institutions OpenAlex resolved, keep those whose name
+        # actually appears in what the author wrote, and prefer the one the
+        # author listed FIRST — the primary affiliation by convention.
+        # OpenAlex's own array order is arbitrary and must not decide this.
+        best_pos, best_cc = None, None
+        for inst in first_author.get("insts") or []:
+            name = (inst.get("name") or "").lower()
+            country = inst.get("cc") or inst.get("country")
+            if not name or not country:
+                continue
+            tokens = [t for t in re.findall(r"[a-z]{4,}", name)
+                      if t not in _GENERIC_INST_WORDS]
+            if not tokens:
+                continue
+            positions = [affil_text.find(t) for t in tokens]
+            if any(pos < 0 for pos in positions):
+                continue
+            pos = min(positions)
+            if best_pos is None or pos < best_pos:
+                best_pos, best_cc = pos, country
+        if best_cc:
+            return best_cc
+    # Nothing the author wrote identifies the institution (often because PubMed
+    # carries no affiliation for this author).  OpenAlex's `countries` array is
+    # alphabetical, so countries[0] favours whichever country sorts first; use
+    # the country most of the author's resolved institutions share instead,
+    # breaking ties by OpenAlex's institution order.
+    insts = [i.get("cc") or i.get("country") for i in (first_author.get("insts") or [])]
+    insts = [c for c in insts if c]
+    if insts:
+        counts = {c: insts.count(c) for c in insts}
+        top = max(counts.values())
+        return next(c for c in insts if counts[c] == top)
+    return countries[0]
+
+
+_GENERIC_INST_WORDS = {
+    "university", "hospital", "hospitals", "institute", "institution",
+    "college", "school", "medical", "medicine", "center", "centre",
+    "department", "faculty", "clinic", "national", "research", "health",
+}
+
 def country_name(cc: str) -> str:
-    return CC.get(cc, cc)
+    """ISO-2 → display name, via the single table in geo.py (CC kept for reference)."""
+    from geo import display_name
+    return display_name(cc)
 
 
 def load_cache() -> dict:
     p = CACHE / "openalex_cache.json"
     return json.load(open(p)) if p.exists() else {}
+
+
+_GREATER_CHINA = {"China", "Hong Kong", "Taiwan", "Macau", "Macao"}
+
+
+def _text_overrides(author: dict, oa_country: str) -> bool:
+    """True when the author's PubMed affiliation names a country explicitly
+    (geo.py source 'affil_country_name', or the same from an affiliation PubMed
+    printed once for all authors of an older record) and it differs from
+    OpenAlex's.
+    Greater China is left to ROR, whose SAR/territory coding is more exact
+    than affiliation strings that name several of these at once."""
+    txt = author.get("country")
+    if txt in (None, "", "Unknown"):
+        return False
+    if author.get("country_source") not in ("affil_country_name", "affil_country_name_propagated"):
+        return False
+    if txt == oa_country:
+        return False
+    if txt in _GREATER_CHINA and oa_country in _GREATER_CHINA:
+        return False
+    return True
 
 
 def overlay(records: list[dict], oa: dict, verbose: bool = True) -> tuple[list[dict], dict]:
@@ -61,6 +156,17 @@ def overlay(records: list[dict], oa: dict, verbose: bool = True) -> tuple[list[d
         w = oa.get(str(rec.get("pmid")))
         if not w or not w.get("found"):
             rec["oa_matched"] = False
+            # Keep any CrossRef count in its own field; the primary citation
+            # count is OpenAlex-only unless config.CITATION_FILL_CROSSREF is set,
+            # so mixed-source means are never produced silently.
+            if "citation_count_crossref" not in rec:
+                rec["citation_count_crossref"] = rec.get("citation_count")
+            if getattr(config, "CITATION_FILL_CROSSREF", False) and rec.get("citation_count") is not None:
+                rec["citation_source"] = "crossref"
+            else:
+                rec["citation_count"] = None
+                rec["citation_source"] = None
+            rec.setdefault("country_source", rec.get("country_source", "affil_regex"))
             continue
         rec["oa_matched"] = True
         n_match += 1
@@ -75,20 +181,37 @@ def overlay(records: list[dict], oa: dict, verbose: bool = True) -> tuple[list[d
         aus = w.get("authors") or []
         first = next((a for a in aus if a.get("pos") == "first"),
                      aus[0] if aus else None)
-        # First-author country via ROR; if the first author has no resolved
-        # institution, fall back to the first co-author who does; never guess
-        # from the journal's country of publication (the baseline's bug).
+        # First-author country via ROR.  If OpenAlex resolved nothing for the
+        # first author, fall back to the first author's OWN PubMed affiliation
+        # string (geo.py); never to a co-author, never to the journal's country.
         cc = None
         if first and first.get("countries"):
-            cc = first["countries"][0]
-        else:
-            for a in aus:
-                if a.get("countries"):
-                    cc = a["countries"][0]
-                    break
-        rec["country"] = country_name(cc) if cc else "Unknown"
+            cc = _pick_country(first, rec)
+        recauth0 = (rec.get("authors") or [None])[0]
         if cc:
+            rec["country"] = country_name(cc)
+            rec["country_source"] = "openalex_ror" if w.get("source") in (None, "openalex") \
+                else str(w.get("source"))
             n_country += 1
+            # An explicit country name in the first author's own affiliation
+            # outranks a conflicting ROR country: ROR matching occasionally lands
+            # on a same-named institution abroad (e.g. "University of Health
+            # Sciences" in Istanbul matched to one in Antigua).
+            if recauth0 and _text_overrides(recauth0, rec["country"]):
+                rec["country"] = recauth0["country"]
+                rec["country_source"] = "affil_country_name_over_openalex"
+        else:
+            if recauth0 and recauth0.get("country") not in (None, "", "Unknown"):
+                rec["country"] = recauth0["country"]
+                rec["country_source"] = recauth0.get("country_source", "affil_regex")
+            else:
+                rec["country"] = "Unknown"
+                rec["country_source"] = (recauth0 or {}).get("country_source", "unresolved")
+        if "citation_source" not in rec:
+            rec["citation_source"] = None
+        if w.get("cited_by") is not None:
+            rec["citation_source"] = "openalex" if w.get("source") in (None, "openalex") \
+                else str(w.get("source"))
 
         # attach per-author signals (aligned by author order)
         recauth = rec.get("authors", [])
@@ -98,8 +221,14 @@ def overlay(records: list[dict], oa: dict, verbose: bool = True) -> tuple[list[d
                 a["oa_id"] = oaa.get("id")
                 a["orcid"] = a.get("orcid") or oaa.get("orcid")
                 ccs = oaa.get("countries") or []
+                a["oa_countries"] = [country_name(c) for c in ccs]
                 if ccs:
-                    a["oa_country_name"] = country_name(ccs[0])
+                    a["oa_country_name"] = country_name(_pick_country(oaa, {"authors": [a]}) or ccs[0])
+                    if not _text_overrides(a, a["oa_country_name"]):
+                        a["country"] = a["oa_country_name"]
+                        a["country_source"] = "openalex_ror"
+        rec["countries_all"] = sorted({a.get("country") for a in recauth
+                                       if a.get("country") not in (None, "", "Unknown")})
 
         insts = []
         for a in aus:

@@ -20,6 +20,34 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import config
+
+
+# ── Citation helpers ──────────────────────────────────────────────────────────
+# A record without a citation count (no OpenAlex/CrossRef match) is None, never
+# 0: it must not drag means down, and the number of such records is reported.
+
+def _cc(rec: dict):
+    v = rec.get("citation_count")
+    return None if v is None else int(v)
+
+
+def _cite_summary(vals: list) -> dict:
+    """mean / median / IQR / n over KNOWN citation counts, plus n_null."""
+    known = sorted(v for v in vals if v is not None)
+    n = len(known)
+    out = {"n_cited_known": n, "n_cite_null": len(vals) - n,
+           "citations": int(sum(known)), "citations_mean": None,
+           "citations_median": None, "citations_q1": None, "citations_q3": None}
+    if n:
+        out["citations_mean"] = round(sum(known) / n, 1)
+        def q(p):
+            k = (n - 1) * p
+            f, c = int(math.floor(k)), int(math.ceil(k))
+            return known[f] if f == c else known[f] + (known[c] - known[f]) * (k - f)
+        out["citations_median"] = round(q(0.5), 1)
+        out["citations_q1"] = round(q(0.25), 1)
+        out["citations_q3"] = round(q(0.75), 1)
+    return out
 from geo import extract_country
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -30,6 +58,8 @@ def temporal_trends(records: list[dict]) -> dict:
     """Publications per year, cumulative, and moving average."""
     by_year: dict[int, int] = collections.Counter()
     cite_by_year: dict[int, int] = collections.defaultdict(int)
+    cite_null_by_year: dict[int, int] = collections.Counter()
+    cites_list_by_year: dict[int, list] = collections.defaultdict(list)
     for rec in records:
         try:
             y = int(rec.get("year", 0))
@@ -37,13 +67,21 @@ def temporal_trends(records: list[dict]) -> dict:
             continue
         if config.START_YEAR <= y <= config.END_YEAR:
             by_year[y] += 1
-            cc = rec.get("citation_count") or 0
-            cite_by_year[y] += cc
+            cc = _cc(rec)
+            if cc is None:
+                cite_null_by_year[y] += 1
+            else:
+                cite_by_year[y] += cc
+                cites_list_by_year[y].append(cc)
 
     years = sorted(by_year.keys())
     counts = [by_year[y] for y in years]
     cumulative = list(itertools.accumulate(counts))
     citations = [cite_by_year[y] for y in years]
+    cite_null = [cite_null_by_year[y] for y in years]
+    cite_mean = [round(cite_by_year[y] / len(cites_list_by_year[y]), 1) if cites_list_by_year[y] else None
+                 for y in years]
+    cite_median = [_cite_summary(cites_list_by_year[y])["citations_median"] for y in years]
 
     # 3-year moving average
     def moving_avg(vals, window=3):
@@ -60,6 +98,9 @@ def temporal_trends(records: list[dict]) -> dict:
         "cumulative":  cumulative,
         "moving_avg":  moving_avg(counts),
         "citations":   citations,
+        "citations_null": cite_null,
+        "citations_mean_per_paper": cite_mean,
+        "citations_median_per_paper": cite_median,
     }
 
 
@@ -78,12 +119,13 @@ def author_stats(records: list[dict]) -> list[dict]:
     first_auth: dict[str, int]        = collections.Counter()
     last_auth:  dict[str, int]        = collections.Counter()
     citations:  dict[str, int]        = collections.defaultdict(int)
+    cite_lists: dict[str, list]       = collections.defaultdict(list)
     affils_sample: dict[str, list]    = collections.defaultdict(list)
     journals_per_auth: dict[str, set] = collections.defaultdict(set)
     years_per_auth: dict[str, set]    = collections.defaultdict(set)
 
     for rec in records:
-        cc = rec.get("citation_count") or 0
+        cc = _cc(rec)
         jrnl = rec.get("journal_abbr") or rec.get("journal", "")
         try:
             yr = int(rec.get("year", 0))
@@ -91,15 +133,20 @@ def author_stats(records: list[dict]) -> list[dict]:
             yr = 0
 
         authors = rec.get("authors", [])
-        # Filter out collective/anonymous entries for position calculation
+        # Filter out collective/anonymous entries for position calculation.
+        # Build an index by object id so last-author detection is O(1) and
+        # immune to duplicate dicts (named.index() would return the first match).
         named = [a for a in authors if a.get("author_id") and a["author_id"] != "__collective__"]
         n_named = len(named)
+        named_last_id = id(named[-1]) if named else None
         for pos, a in enumerate(authors):
             aid = a.get("author_id")
             if not aid or aid == "__collective__":
                 continue
             pubs[aid].append(rec)
-            citations[aid] += cc
+            cite_lists[aid].append(cc)
+            if cc is not None:
+                citations[aid] += cc
             journals_per_auth[aid].add(jrnl)
             if yr:
                 years_per_auth[aid].add(yr)
@@ -107,8 +154,7 @@ def author_stats(records: list[dict]) -> list[dict]:
                 first_auth[aid] += 1
             # Last author: final named position (senior/PI convention).
             # Only meaningful for multi-author papers (≥2 named authors).
-            named_pos = named.index(a) if a in named else -1
-            if n_named >= 2 and named_pos == n_named - 1:
+            if n_named >= 2 and id(a) == named_last_id:
                 last_auth[aid] += 1
             if a.get("affils") and len(affils_sample[aid]) < 3:
                 affils_sample[aid].extend(a["affils"][:2])
@@ -119,7 +165,7 @@ def author_stats(records: list[dict]) -> list[dict]:
     def est_h(total_cites, n_pubs):
         if n_pubs == 0 or total_cites is None:
             return 0
-        return round(math.sqrt(total_cites * 0.5))
+        return min(round(math.sqrt(total_cites * 0.5)), n_pubs)
 
     rows = []
     for aid, rec_list in pubs.items():
@@ -128,9 +174,14 @@ def author_stats(records: list[dict]) -> list[dict]:
             continue
         tc = citations[aid]
         yrs = sorted(years_per_auth[aid])
+        csum = _cite_summary(cite_lists[aid])
         rows.append({
             "author_id":          aid,
             "pub_count":          n,
+            "n_cited_known":      csum["n_cited_known"],
+            "citations_median":   csum["citations_median"],
+            "citations_q1":       csum["citations_q1"],
+            "citations_q3":       csum["citations_q3"],
             "first_author_count": first_auth[aid],
             "last_author_count":  last_auth[aid],
             "citation_total":     tc,
@@ -155,91 +206,173 @@ def journal_stats(records: list[dict]) -> list[dict]:
     for rec in records:
         jname = rec.get("journal") or "Unknown"
         jabbr = rec.get("journal_abbr") or jname
-        cc = rec.get("citation_count") or 0
+        cc = _cc(rec)
         if jname not in counter:
             counter[jname] = {"journal": jname, "abbr": jabbr,
-                               "count": 0, "citations": 0}
+                               "count": 0, "_cites": []}
         counter[jname]["count"] += 1
-        counter[jname]["citations"] += cc
+        counter[jname]["_cites"].append(cc)
 
     rows = sorted(counter.values(), key=lambda x: x["count"], reverse=True)
     total = len(records)
     for r in rows:
+        r.update(_cite_summary(r.pop("_cites")))
         r["percentage"] = round(r["count"] / total * 100, 2)
+        r["cites_per_pub"] = r["citations_mean"]
     return rows
+
+
+def bradford_zones(journals: list[dict], n_records: int = None,
+                   n_zones: int = 3) -> dict:
+    """Partition the journal list into Bradford zones of equal productivity.
+
+    Bradford's Law of Scattering holds that if journals are ranked by the
+    number of papers they carry on a subject and then divided into zones
+    each containing roughly the same number of papers, the number of
+    journals in successive zones grows in the ratio 1 : n : n^2.
+
+    The partition here is the standard one: walk the rank-ordered list
+    accumulating publications and close a zone as soon as its running
+    total reaches total/n_zones.  The journal that crosses the boundary is
+    kept in the zone it completes, so zone totals are approximately, not
+    exactly, equal - which is what the law describes.
+
+    Returns a dict with per-zone summaries, the Bradford multipliers
+    between consecutive zones, and the rank-ordered cumulative curve used
+    to draw the Bradford plot.
+    """
+    ranked = sorted(journals, key=lambda r: r["count"], reverse=True)
+    total  = n_records if n_records is not None else sum(r["count"] for r in ranked)
+    if not ranked or total <= 0:
+        return {"total_publications": 0, "total_journals": 0,
+                "n_zones": n_zones, "zones": [], "multipliers": [],
+                "curve": []}
+
+    target = total / float(n_zones)
+
+    zones: list[dict] = []
+    cum = 0
+    running = 0
+    zone_idx = 1
+    members: list[dict] = []
+    curve: list[dict] = []
+
+    for rank, r in enumerate(ranked, 1):
+        members.append(r)
+        running += r["count"]
+        cum     += r["count"]
+        curve.append({
+            "rank":            rank,
+            "journal":         r["journal"],
+            "abbr":            r.get("abbr") or r["journal"],
+            "count":           r["count"],
+            "cumulative":      cum,
+            "cumulative_pct":  round(cum / total * 100, 2),
+            "zone":            zone_idx,
+        })
+        # Close the zone once it holds its share, unless this is the last
+        # zone (which takes the remainder) or nothing would be left over.
+        if zone_idx < n_zones and running >= target and rank < len(ranked):
+            zones.append(_zone_summary(zone_idx, members, total))
+            members = []
+            running = 0
+            zone_idx += 1
+
+    if members:
+        zones.append(_zone_summary(zone_idx, members, total))
+
+    multipliers = []
+    for a, b in zip(zones, zones[1:]):
+        multipliers.append(round(b["journal_count"] / a["journal_count"], 2)
+                           if a["journal_count"] else None)
+
+    return {
+        "total_publications": total,
+        "total_journals":     len(ranked),
+        "n_zones":            n_zones,
+        "zones":              zones,
+        "multipliers":        multipliers,
+        "curve":              curve,
+    }
+
+
+def _zone_summary(idx: int, members: list[dict], total: int) -> dict:
+    pubs  = sum(r["count"] for r in members)
+    cites = sum(r.get("citations", 0) for r in members)
+    return {
+        "zone":                idx,
+        "journal_count":       len(members),
+        "publications":        pubs,
+        "publication_pct":     round(pubs / total * 100, 2),
+        "citations":           cites,
+        "citations_per_pub":   round(cites / pubs, 2) if pubs else 0.0,
+        "journals":            [{"journal": r["journal"],
+                                 "abbr":    r.get("abbr") or r["journal"],
+                                 "count":   r["count"],
+                                 "citations": r.get("citations", 0)}
+                                for r in members],
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. Country analysis
 # ─────────────────────────────────────────────────────────────────────────────
 
-def country_stats(records: list[dict]) -> list[dict]:
+_POP_CACHE: dict[str, int] | None = None
+
+
+def load_populations() -> dict[str, int]:
+    """country display name → 2024 population (data/populations_worldbank_2024.csv)."""
+    global _POP_CACHE
+    if _POP_CACHE is None:
+        import csv as _csv
+        p = pathlib.Path(config.DATA_DIR) / "populations_worldbank_2024.csv"
+        d: dict[str, int] = {}
+        if p.exists():
+            with open(p, encoding="utf-8") as fh:
+                for row in _csv.DictReader(l for l in fh if not l.startswith("#")):
+                    try:
+                        d[row["country"]] = int(row["population_2024"])
+                    except (KeyError, ValueError):
+                        pass
+        _POP_CACHE = d
+    return _POP_CACHE
+
+
+def country_stats(records: list[dict], min_pubs_per_capita: int = 0) -> list[dict]:
     """Publication and citation counts per country (first author).
 
-    Per-capita metrics use 2024 UN population estimates (millions).
-    Countries absent from the lookup table receive pubs_per_million = None.
+    Per-capita output uses the 2024 populations in
+    data/populations_worldbank_2024.csv (World Bank WDI SP.POP.TOTL, which
+    follows UN WPP 2024).  Rows carry percentage of all records and of the
+    records with a resolved country; ranks are competition ranks (ties '=n').
     """
-    # 2024 UN population estimates (millions), covering all countries likely
-    # to appear in the keratoconus literature.
-    _POP_MILLIONS: dict[str, float] = {
-        "Australia":       26.5,
-        "Austria":          9.1,
-        "Belgium":         11.7,
-        "Brazil":         215.3,
-        "Canada":          38.8,
-        "China":         1412.0,
-        "Czech Republic":  10.9,
-        "Denmark":          5.9,
-        "Egypt":          107.0,
-        "Finland":          5.6,
-        "France":          68.4,
-        "Germany":         84.4,
-        "Greece":          10.4,
-        "Hungary":          9.7,
-        "India":         1441.0,
-        "Iran":            89.2,
-        "Israel":           9.8,
-        "Italy":           59.0,
-        "Japan":          123.3,
-        "Jordan":          10.3,
-        "Lebanon":          5.5,
-        "Netherlands":     17.9,
-        "New Zealand":      5.1,
-        "Norway":           5.5,
-        "Poland":          41.0,
-        "Portugal":        10.3,
-        "Romania":         19.0,
-        "Saudi Arabia":    36.4,
-        "Singapore":        6.0,
-        "South Korea":     51.7,
-        "Spain":           47.4,
-        "Sweden":          10.5,
-        "Switzerland":      8.8,
-        "Taiwan":          23.6,
-        "Turkey":          85.3,
-        "Ukraine":         43.5,
-        "United Arab Emirates": 9.8,
-        "United Kingdom":  67.7,
-        "United States":  335.9,
-    }
-
     counter: dict[str, dict] = {}
     for rec in records:
-        c = rec.get("country", "Unknown")
-        cc = rec.get("citation_count") or 0
+        c = rec.get("country", "Unknown") or "Unknown"
         if c not in counter:
-            counter[c] = {"country": c, "count": 0, "citations": 0}
+            counter[c] = {"country": c, "count": 0, "_cites": []}
         counter[c]["count"] += 1
-        counter[c]["citations"] += cc
+        counter[c]["_cites"].append(_cc(rec))
 
-    rows = sorted(counter.values(), key=lambda x: x["count"], reverse=True)
+    rows = sorted(counter.values(), key=lambda x: (-x["count"], x["country"]))
     total = len(records)
+    resolved = sum(r["count"] for r in rows if r["country"] != "Unknown")
+    pops = load_populations()
+    from institutions import competition_ranks
+    ranks = competition_ranks([r["count"] for r in rows if r["country"] != "Unknown"])
+    ri = iter(ranks)
     for r in rows:
+        r.update(_cite_summary(r.pop("_cites")))
         r["percentage"] = round(r["count"] / total * 100, 2)
-        pop = _POP_MILLIONS.get(r["country"])
-        if pop:
-            r["pubs_per_million"]   = round(r["count"]   / pop, 2)
-            r["cites_per_million"]  = round(r["citations"] / pop, 1)
+        r["pct_of_resolved"] = round(r["count"] / resolved * 100, 2) if resolved and r["country"] != "Unknown" else None
+        r["rank"] = next(ri) if r["country"] != "Unknown" else ""
+        r["cites_per_pub"] = r["citations_mean"]
+        pop = pops.get(r["country"])
+        r["population_2024"] = pop
+        if pop and r["count"] >= min_pubs_per_capita:
+            r["pubs_per_million"]  = round(r["count"] / (pop / 1e6), 2)
+            r["cites_per_million"] = round(r["citations"] / (pop / 1e6), 1)
         else:
             r["pubs_per_million"]  = None
             r["cites_per_million"] = None
@@ -257,6 +390,8 @@ def country_collab_network(records: list[dict]) -> dict:
     for rec in records:
         countries_in_paper: set[str] = set()
         for a in rec.get("authors", []):
+            # Prefer OpenAlex/ROR country when the hybrid overlay supplied it;
+            # fall back to affiliation-string parsing otherwise.
             c = a.get("oa_country_name")
             if not c:
                 affils = a.get("affils", [])
@@ -281,211 +416,76 @@ def country_collab_network(records: list[dict]) -> dict:
 # ── Keyword synonym map ───────────────────────────────────────────────────────
 # All variants on the left collapse to the canonical term on the right.
 # Applied BEFORE counting, so merged terms appear as a single entry.
-_KW_SYNONYMS: dict[str, str] = {
-    # ── CXL procedure name variants ──────────────────────────────────────────
-    # These are all the same procedure — merge into one canonical term so the
-    # keyword chart reflects clinical themes, not indexing inconsistency.
-    "corneal cross-linking":                    "corneal cross-linking (CXL)",
-    "corneal crosslinking":                     "corneal cross-linking (CXL)",
-    "corneal collagen cross-linking":           "corneal cross-linking (CXL)",
-    "corneal collagen crosslinking":            "corneal cross-linking (CXL)",
-    "collagen cross-linking":                   "corneal cross-linking (CXL)",
-    "collagen crosslinking":                    "corneal cross-linking (CXL)",
-    "cross-linking":                            "corneal cross-linking (CXL)",
-    "crosslinking":                             "corneal cross-linking (CXL)",
-    "cxl":                                      "corneal cross-linking (CXL)",
-    "corneal collagen cxl":                     "corneal cross-linking (CXL)",
-    "uva/riboflavin cross-linking":             "corneal cross-linking (CXL)",
-    "uva-riboflavin cross-linking":             "corneal cross-linking (CXL)",
-    "riboflavin/uva cross-linking":             "corneal cross-linking (CXL)",
-    "riboflavin/ultraviolet-a cross-linking":   "corneal cross-linking (CXL)",
-    "riboflavin uv-a corneal cross-linking":    "corneal cross-linking (CXL)",
-    "corneal collagen cross linking":           "corneal cross-linking (CXL)",
-    "cross linking":                            "corneal cross-linking (CXL)",
-    "kxl":                                      "corneal cross-linking (CXL)",
-
-    # ── Accelerated CXL variants ─────────────────────────────────────────────
-    "accelerated cxl":                          "accelerated CXL",
-    "accelerated corneal cross-linking":        "accelerated CXL",
-    "accelerated corneal crosslinking":         "accelerated CXL",
-    "accelerated collagen cross-linking":       "accelerated CXL",
-    "a-cxl":                                    "accelerated CXL",
-    "acxl":                                     "accelerated CXL",
-
-    # ── Epithelium-on/off variants ────────────────────────────────────────────
-    "epithelium-off cxl":                       "epi-off CXL",
-    "epi-off cxl":                              "epi-off CXL",
-    "epithelium off cxl":                       "epi-off CXL",
-    "standard cxl":                             "epi-off CXL",
-    "dresden protocol":                         "epi-off CXL",
-    "transepithelial cxl":                      "epi-on CXL (transepithelial)",
-    "epithelium-on cxl":                        "epi-on CXL (transepithelial)",
-    "epi-on cxl":                               "epi-on CXL (transepithelial)",
-    "trans-epithelial cxl":                     "epi-on CXL (transepithelial)",
-    "iontophoresis cxl":                        "epi-on CXL (transepithelial)",
-
-    # ── PACK-CXL / infectious keratitis ──────────────────────────────────────
-    # NOTE: PACK-CXL treats infectious keratitis, not keratoconus/ectasia.
-    # These terms are NOT canonical keywords for the keratoconus literature.
-    # Papers mentioning PACK-CXL only are excluded by the fetch relevance filter.
-    # Any that remain (e.g. papers discussing CXL mechanism broadly) will appear
-    # under the general CXL synonym group above, which is appropriate.
-
-    # ── Keratoconus variants ─────────────────────────────────────────────────
-    "keratoconus":                              "keratoconus",
-    "progressive keratoconus":                  "keratoconus",
-    "pediatric keratoconus":                    "paediatric keratoconus",
-    "paediatric keratoconus":                   "paediatric keratoconus",
-    "childhood keratoconus":                    "paediatric keratoconus",
-
-    # ── Corneal ectasia variants ──────────────────────────────────────────────
-    # All clinical variants of the ectasia disease spectrum
-    "corneal ectasia":                          "corneal ectasia",
-    "ectasia":                                  "corneal ectasia",
-    "keratectasia":                             "corneal ectasia",
-    "ectatic corneal disease":                  "corneal ectasia",
-    "corneal ectatic disease":                  "corneal ectatic disease",
-
-    # Post-refractive ectasia
-    "post-lasik ectasia":                       "post-refractive ectasia",
-    "post lasik ectasia":                       "post-refractive ectasia",
-    "post-refractive ectasia":                  "post-refractive ectasia",
-    "post refractive ectasia":                  "post-refractive ectasia",
-    "post-surgical ectasia":                    "post-refractive ectasia",
-    "post surgical ectasia":                    "post-refractive ectasia",
-    "iatrogenic ectasia":                       "post-refractive ectasia",
-    "ectasia after lasik":                      "post-refractive ectasia",
-    "ectasia after refractive surgery":         "post-refractive ectasia",
-    "laser in situ keratomileusis ectasia":     "post-refractive ectasia",
-
-    # Pellucid marginal degeneration
-    "pellucid marginal degeneration":           "pellucid marginal degeneration (PMD)",
-    "pellucid marginal corneal degeneration":   "pellucid marginal degeneration (PMD)",
-    "pmd":                                      "pellucid marginal degeneration (PMD)",
-    "pellucid":                                 "pellucid marginal degeneration (PMD)",
-
-    # Keratoglobus
-    "keratoglobus":                             "keratoglobus",
-    "kerato-globus":                            "keratoglobus",
-
-    # Forme fruste / subclinical keratoconus
-    "forme fruste keratoconus":                 "forme fruste / subclinical keratoconus",
-    "forme fruste":                             "forme fruste / subclinical keratoconus",
-    "subclinical keratoconus":                  "forme fruste / subclinical keratoconus",
-    "suspected keratoconus":                    "forme fruste / subclinical keratoconus",
-    "keratoconus suspect":                      "forme fruste / subclinical keratoconus",
-    "keratoconus susceptibility":               "forme fruste / subclinical keratoconus",
-    "pre-clinical keratoconus":                 "forme fruste / subclinical keratoconus",
-    "preclinical keratoconus":                  "forme fruste / subclinical keratoconus",
-
-    # Posterior keratoconus
-    "posterior keratoconus":                    "posterior keratoconus",
-
-    # ── Riboflavin/UVA — keep as clinical concept, not just procedural label ─
-    "riboflavin":                               "riboflavin",
-    "vitamin b2":                               "riboflavin",
-    "uva":                                      "ultraviolet-A (UVA)",
-    "ultraviolet-a":                            "ultraviolet-A (UVA)",
-    "ultraviolet a":                            "ultraviolet-A (UVA)",
-    "uv-a":                                     "ultraviolet-A (UVA)",
-
-    # ── Corneal topography/imaging ────────────────────────────────────────────
-    "corneal topography":                       "corneal topography",
-    "scheimpflug":                              "corneal topography",
-    "pentacam":                                 "corneal topography",
-    "corneal tomography":                       "corneal topography",
-    "optical coherence tomography":             "OCT",
-    "oct":                                      "OCT",
-    "anterior segment oct":                     "OCT",
-
-    # ── Biomechanics ─────────────────────────────────────────────────────────
-    "corneal biomechanics":                     "corneal biomechanics",
-    "corneal hysteresis":                       "corneal biomechanics",
-    "ocular response analyzer":                 "corneal biomechanics",
-    "corvis st":                                "corneal biomechanics",
-    "young's modulus":                          "corneal biomechanics",
-    "stress-strain":                            "corneal biomechanics",
-
-    # ── Infectious keratitis ─────────────────────────────────────────────────
-    "infectious keratitis":                     "infectious keratitis",
-    "fungal keratitis":                         "infectious keratitis",
-    "bacterial keratitis":                      "infectious keratitis",
-    "acanthamoeba keratitis":                   "infectious keratitis",
-    "microbial keratitis":                      "infectious keratitis",
-    "corneal ulcer":                            "infectious keratitis",
-}
-
-# Terms to exclude entirely from keyword charts — too generic or purely procedural
+# Keyword synonyms now live in data/keyword_synonyms.csv (keywords.py).
+# MeSH noise headings excluded from thematic charts:
 _KW_EXCLUDE: set[str] = {
-    "cornea",           # everything in the dataset involves the cornea
-    "humans",           # MeSH noise
-    "adult",
-    "female",
-    "male",
-    "aged",
-    "middle aged",
-    "prospective studies",
-    "retrospective studies",
-    "treatment outcome",
-    "follow-up studies",
-    "visual acuity",    # near-universal in ophthalmology, not discriminating
-    "refraction, ocular",
+    "cornea", "humans", "adult", "female", "male", "aged", "middle aged",
+    "prospective studies", "retrospective studies", "treatment outcome",
+    "follow-up studies", "visual acuity", "refraction, ocular", "young adult",
+    "adolescent", "child", "aged, 80 and over", "animals",
 }
 
 
 def _clean_keyword(kw: str) -> str | None:
-    """
-    Normalise a keyword: lowercase, strip punctuation, apply synonym map.
-    Returns None if the term should be excluded entirely.
-    """
-    cleaned = kw.lower().strip().rstrip(".,;:")
-    # Apply synonym map (exact match first, then substring for common prefixes)
-    if cleaned in _KW_SYNONYMS:
-        cleaned = _KW_SYNONYMS[cleaned]
-    # Exclude generic terms
-    if cleaned in _KW_EXCLUDE:
+    """Backward-compatible wrapper: normalise one author keyword (keywords.py)."""
+    import keywords
+    t = keywords.normalize(kw)
+    if t is None or t.lower() in _KW_EXCLUDE:
         return None
-    return cleaned if cleaned else None
+    return t
 
 
-def keyword_stats(records: list[dict], use_mesh: bool = False) -> dict:
+def keyword_stats(records: list[dict], use_mesh: bool | None = None,
+                  source: str = "author", exclude_search_terms: bool = True) -> dict:
     """
-    Returns:
-      - freq: {keyword: count}
-      - cooccurrence: {(kw1, kw2): count}  (edges for network)
-    Synonymous keyword variants are merged before counting.
+    Keyword frequencies and co-occurrences.
+
+    source: "author" (author-supplied keywords, normalised via keywords.py),
+            "mesh" (MeSH descriptors only), or "both".
+    use_mesh: deprecated alias — True → "mesh" (was MeSH ∪ author keywords in
+            v2, which the paper mislabelled as MeSH).
+    exclude_search_terms: drop the canonical search concept ("corneal
+            cross-linking (CXL)") from freq; its count is kept in "excluded".
+    Returns freq, cooccurrence, excluded, coverage (share of records with any
+    author keyword — the denominator for every thematic statement).
     """
+    import keywords as _kw
+    if use_mesh is not None:
+        source = "mesh" if use_mesh else "author"
     freq:  dict[str, int]   = collections.Counter()
     cooc:  dict[tuple, int] = collections.Counter()
+    excluded: dict[str, int] = collections.Counter()
 
     for rec in records:
-        kws = rec.get("mesh", []) if use_mesh else rec.get("keywords", [])
-        if use_mesh:
-            kws = list(kws) + rec.get("keywords", [])
-
-        # Clean, deduplicate, and exclude after synonym mapping
-        cleaned = list({
-            ck for k in kws
-            if k.strip()
-            for ck in [_clean_keyword(k)]
-            if ck is not None
-        })
-
-        for k in cleaned:
+        terms = set()
+        for t in _kw.record_terms(rec, source):
+            if t.lower() in _KW_EXCLUDE:
+                continue
+            if exclude_search_terms and t in _kw.SEARCH_TERM_CANONICALS:
+                excluded[t] += 1
+                continue
+            terms.add(t)
+        for k in terms:
             freq[k] += 1
-        for k1, k2 in itertools.combinations(sorted(cleaned), 2):
+        for k1, k2 in itertools.combinations(sorted(terms), 2):
             cooc[(k1, k2)] += 1
 
-    # Filter by minimum frequency / co-occurrence
     freq_filtered = {k: v for k, v in freq.items() if v >= config.MIN_KEYWORD_FREQ}
     cooc_filtered = {k: v for k, v in cooc.items()
                      if v >= config.MIN_COOCCURRENCE
-                     and k[0] in freq_filtered
-                     and k[1] in freq_filtered}
+                     and k[0] in freq_filtered and k[1] in freq_filtered}
+    cov = _kw.coverage_overall(records) if source != "mesh" else \
+        {"n_records": len(records), "n_with_author_keywords": sum(1 for r in records if r.get("mesh")),
+         "pct": round(100 * sum(1 for r in records if r.get("mesh")) / len(records), 1) if records else 0.0}
 
     return {
-        "freq":        freq_filtered,
+        "source":       source,
+        "freq":         freq_filtered,
         "cooccurrence": {f"{k[0]}|||{k[1]}": v for k, v in cooc_filtered.items()},
+        "excluded":     dict(excluded),
+        "coverage":     {"overall_pct": cov["pct"], "n_with_keywords": cov["n_with_author_keywords"],
+                         "n_records": cov["n_records"],
+                         "by_year": _kw.coverage_by_year(records) if source != "mesh" else []},
     }
 
 
@@ -496,114 +496,7 @@ def keyword_stats(records: list[dict], use_mesh: bool = False) -> dict:
 # ── Institution alias table ──────────────────────────────────────────────────
 # Maps lowercase fragments → canonical institution name.
 # Checked BEFORE the generic extractor. Add new entries here freely.
-_INST_ALIASES = {
-    # Switzerland
-    "elza institute":                   "ELZA Institute",
-    "iroc":                             "IROC Zurich",
-    "universitätsspital zürich":        "University Hospital Zurich",
-    "university hospital zurich":       "University Hospital Zurich",
-    "inselspital":                      "Inselspital Bern",
-    "university of zurich":             "University of Zurich",
-    "univ zurich":                      "University of Zurich",
-    "univ. of zurich":                  "University of Zurich",
-    # Germany
-    "tu dresden":                       "TU Dresden",
-    "technische universität dresden":   "TU Dresden",
-    "universitätsklinikum dresden":     "University Hospital Dresden",
-    "charité":                          "Charité – Universitätsmedizin Berlin",
-    "ludwig-maximilians-universität":   "Ludwig Maximilian University Munich",
-    "lmu munich":                       "Ludwig Maximilian University Munich",
-    "university of erlangen":           "University of Erlangen-Nuremberg",
-    "university of marburg":            "University of Marburg",
-    # Greece
-    "university of crete":              "University of Crete",
-    "laservision":                      "Laservision Institute Athens",
-    "athens eye":                       "Athens Eye Hospital",
-    # Italy
-    "university of siena":              "University of Siena",
-    "humanitas":                        "Humanitas University Milan",
-    "milan eye":                        "Milan Eye Center",
-    "university of rome":               "Sapienza University of Rome",
-    "sapienza":                         "Sapienza University of Rome",
-    "university of milan":              "University of Milan",
-    # United States
-    "bascom palmer":                    "Bascom Palmer Eye Institute",
-    "wills eye":                        "Wills Eye Hospital",
-    "mayo clinic":                      "Mayo Clinic",
-    "harvard":                          "Harvard Medical School",
-    "johns hopkins":                    "Johns Hopkins University",
-    "massachusetts eye":                "Mass Eye and Ear / Harvard",
-    "university of southern california":"University of Southern California",
-    "usc roski":                        "University of Southern California",
-    "emory":                            "Emory University",
-    "rutgers":                          "Rutgers University",
-    "university of miami":              "University of Miami",
-    "university of illinois":           "University of Illinois Chicago",
-    "university of arizona":            "University of Arizona",
-    "stanford":                         "Stanford University",
-    "ucsf":                             "University of California San Francisco",
-    "columbia university":              "Columbia University",
-    "new york eye":                     "New York Eye and Ear Infirmary",
-    # United Kingdom
-    "moorfields":                       "Moorfields Eye Hospital",
-    "university of nottingham":         "University of Nottingham",
-    "university of liverpool":          "University of Liverpool",
-    "university of edinburgh":          "University of Edinburgh",
-    "university of bristol":            "University of Bristol",
-    "university of manchester":         "University of Manchester",
-    "king's college":                   "King's College London",
-    "ucl":                              "University College London",
-    # Iran
-    "noor eye":                         "Noor Eye Hospital Tehran",
-    "tehran university of medical":     "Tehran University of Medical Sciences",
-    "shahid beheshti":                  "Shahid Beheshti University of Medical Sciences",
-    "mashhad university":               "Mashhad University of Medical Sciences",
-    "isfahan university":               "Isfahan University of Medical Sciences",
-    # India
-    "lv prasad":                        "LV Prasad Eye Institute",
-    "l v prasad":                       "LV Prasad Eye Institute",
-    "aravind":                          "Aravind Eye Care System",
-    "sankara nethralaya":               "Sankara Nethralaya Chennai",
-    "narayana nethralaya":              "Narayana Nethralaya Bangalore",
-    "aiims":                            "All India Institute of Medical Sciences",
-    "all india institute":              "All India Institute of Medical Sciences",
-    # Singapore
-    "singapore national eye":           "Singapore National Eye Centre",
-    "snec":                             "Singapore National Eye Centre",
-    "nanyang technological":            "Nanyang Technological University",
-    # China / Hong Kong / Taiwan
-    "wenzhou medical":                  "Wenzhou Medical University",
-    "peking university":                "Peking University",
-    "tianjin eye":                      "Tianjin Eye Hospital",
-    "chinese university of hong kong":  "Chinese University of Hong Kong",
-    "cuhk":                             "Chinese University of Hong Kong",
-    "university of hong kong":          "University of Hong Kong",
-    # Australia
-    "royal victorian eye":              "Royal Victorian Eye and Ear Hospital",
-    "centre for eye research australia":"Centre for Eye Research Australia",
-    "cera":                             "Centre for Eye Research Australia",
-    "university of melbourne":          "University of Melbourne",
-    # Spain
-    "universidad de alicante":          "University of Alicante",
-    "university of alicante":           "University of Alicante",
-    # Belgium
-    "university of ghent":              "Ghent University",
-    "ghent university":                 "Ghent University",
-    "katholieke universiteit leuven":   "KU Leuven",
-    "ku leuven":                        "KU Leuven",
-    # Netherlands
-    "maastricht university":            "Maastricht University",
-    "erasmus":                          "Erasmus University Rotterdam",
-    # Israel
-    "tel aviv university":              "Tel Aviv University",
-    "hadassah":                         "Hadassah Medical Center",
-    # Brazil
-    "unifesp":                          "Federal University of São Paulo",
-    "federal university of são paulo":  "Federal University of São Paulo",
-    "universidade de são paulo":        "University of São Paulo",
-    # Other
-    "irwin army":                       "Irwin Army Community Hospital",
-}
+# Institution alias table now lives in data/institution_aliases.csv (institutions.py).
 
 # ── Prefixes that indicate a sub-unit, NOT the institution itself ─────────────
 # Any comma-separated segment STARTING with one of these should be SKIPPED.
@@ -676,127 +569,128 @@ def _is_inst(segment: str) -> bool:
     return any(tok in sl for tok in _INST_TOKENS)
 
 
-def _norm_institution(affil: str) -> str:
+# ── Affiliation segmentation (added: fixes institution attribution) ───────────
+_EMAIL_RE = re.compile(r"\b[\w.+-]+@[\w.-]+\.\w+\.?")
+_ATTRIB_RE = re.compile(r"\([A-Z][a-zA-Z'\-]+(?:,\s*[A-Z][a-zA-Z'\-]+)*\)")
+
+
+def _affil_segments(affil: str, first_surname: str = "") -> list[str]:
+    """Split one PubMed <Affiliation> element into individual institution segments.
+
+    PubMed supplies an author's affiliations in two shapes that the naive
+    parser mishandles:
+
+    1. All affiliations joined into ONE element with semicolons.  Taking the
+       whole string yields only the first institution and silently discards
+       every other one the author listed.
+    2. Journal-style combined blocks that list SEVERAL authors' affiliations
+       with parenthesised name attributions, e.g.
+       "Dept, Inst A, City (Smith, Jones); Dept, Inst B, City (Brown)".
+       Parsing the whole string credits Inst A to every first author on such a
+       paper, regardless of where that author actually works.
+
+    A trailing corresponding-author e-mail also defeats the parser, which then
+    returns fragments like "Switzerland. name@example.com".
     """
-    Extract the canonical parent institution from a PubMed affiliation string.
+    s = _EMAIL_RE.sub("", affil or "").strip().rstrip(".").strip()
+    if not s:
+        return []
+    if _ATTRIB_RE.search(s):
+        parts = re.split(r";\s*", s)
+        if first_surname:
+            mine = [p for p in parts
+                    if "(" in p and re.search(r"\b" + re.escape(first_surname) + r"\b", p)]
+            if mine:
+                return [p.strip() for p in mine if p.strip()]
+        return [parts[0].strip()] if parts else []
+    return [p.strip() for p in re.split(r";\s*", s) if p.strip()]
 
-    Strategy (in order):
-    1. Check alias table — fast path for known institutions.
-    2. Split on commas; skip leading department/sub-unit segments.
-    3. Among remaining segments, prefer those containing university/hospital tokens.
-    4. Fall back to the first non-department segment of reasonable length.
-    5. If all else fails, return the whole string truncated.
-    """
-    if not affil:
-        return "Unknown"
 
-    al = affil.lower()
-
-    # ── 1. Alias lookup ────────────────────────────────────────────────────────
-    # Named hospitals/eye centres beat generic universities when both match.
-    # Within each tier, longest key wins (more specific match preferred).
-    _PRIORITY_TOKENS = ("eye", "hospital", "clinic", "nethralaya", "palmer",
-                        "moorfields", "wills", "aravind", "sankara", "prasad",
-                        "bascom", "elza", "iroc", "snec", "noor")
-    tier1 = {}  # named clinical institutions
-    tier2 = {}  # universities / everything else
-    for key, canonical in _INST_ALIASES.items():
-        if key in al:
-            if any(t in key for t in _PRIORITY_TOKENS):
-                tier1[key] = canonical
-            else:
-                tier2[key] = canonical
-    for tier in (tier1, tier2):
-        if tier:
-            best_key = max(tier, key=len)
-            return tier[best_key]
-
-    # ── 2. Split on commas and score each segment ─────────────────────────────
-    parts = [p.strip() for p in affil.split(",") if p.strip()]
-
-    # Score: dept-like = -1, inst-like = +1, neutral = 0; skip very short/country-only
-    COUNTRY_WORDS = {"usa", "uk", "germany", "france", "italy", "spain",
-                     "china", "india", "iran", "brazil", "australia",
-                     "switzerland", "netherlands", "israel", "japan",
-                     "south korea", "turkey", "egypt", "canada"}
-
-    candidates = []
-    for seg in parts:
-        sl = seg.lower().strip(".")
-        if len(seg) < 5:
-            continue
-        if sl in COUNTRY_WORDS or sl.isdigit():
-            continue
-        # Skip zip/postal codes
-        if re.match(r'^[0-9\s\-]+$', sl):
-            continue
-        score = 0
-        if _is_dept(seg):
-            score -= 2
-        if _is_inst(seg):
-            score += 2
-        # Longer = more likely to be the full institution name
-        score += min(len(seg) / 40, 1.0)
-        candidates.append((score, seg))
-
-    if not candidates:
-        return None
-
-    # Sort by score descending; among ties keep original order (stable)
-    candidates.sort(key=lambda x: x[0], reverse=True)
-    best_score, best = candidates[0]
-
-    # If the best candidate is still dept-like, no recoverable institution → None
-    if best_score <= -1:
-        return None
-
-    # Final guard: reject any result that is itself a generic sub-unit label
-    # (catches cases where a division/institute name is the only segment)
-    _GENERIC_RESULTS = {
-        "division of clinical neuroscience", "school of medicine",
-        "school of optometry", "college of medicine",
-        "institute of biochemical and biomedical engineering",
-        "research institute of eye diseases",
-        "augenheilkunde", "augenabteilung",
-    }
-    if best.lower().strip(".").rstrip(",") in _GENERIC_RESULTS:
-        return None
-
-    return best
+def _norm_institution(affil: str) -> str | None:
+    """Canonical institution for one affiliation segment (see institutions.py)."""
+    import institutions
+    return institutions.resolve(affil).canonical
 
 
 def institution_stats(records: list[dict],
-                      first_author_only: bool = False) -> list[dict]:
+                      first_author_only: bool = False,
+                      level: str = "canonical",
+                      counting: str = "primary",
+                      top_n: int = 50) -> list[dict]:
     """Institutional publication and citation counts.
 
-    Args:
-        first_author_only: If True, count only the first author's institution
-            per paper (corresponding to the originating research group).
-            If False (default), count all co-authors' institutions, which
-            inflates counts for institutions that frequently appear as
-            co-authors on others' papers.
+    first_author_only: True → the first author only (the originating group);
+        False → all co-authors' institutions (inflates frequent co-authors).
+    level: "canonical" | "parent" | "cluster" (institutions.py alias table).
+    counting: "primary" → one institution per author (their first resolvable
+        affiliation); "whole" → every institution the author lists, 1 each;
+        "fractional" → every institution, 1/k each.
+    Rows carry competition ranks (ties shown as '=n').  Use
+    institution_stats_meta() to also get the unresolved counts.
     """
-    counter:  dict[str, int] = collections.Counter()
-    cite_sum: dict[str, int] = collections.defaultdict(int)
-    for rec in records:
-        cc = rec.get("citation_count") or 0
-        seen = set()
-        authors = rec.get("authors", [])
-        if first_author_only:
-            # Only the first named author
-            authors = authors[:1]
-        for a in authors:
-            for affil in a.get("affils", []):
-                inst = _norm_institution(affil)
-                if not inst or len(inst) < 6:
-                    continue
-                if inst not in seen:
-                    counter[inst] += 1
-                    cite_sum[inst] += cc
-                    seen.add(inst)
-    rows = [{"institution": k, "count": v, "citations": cite_sum[k]}
-            for k, v in counter.most_common(50)]
+    rows, _ = institution_stats_meta(records, first_author_only, level, counting, top_n)
     return rows
+
+
+def institution_stats_meta(records: list[dict], first_author_only: bool = False,
+                           level: str = "canonical", counting: str = "primary",
+                           top_n: int = 50) -> tuple[list[dict], dict]:
+    import institutions
+    counter: dict[str, float] = collections.Counter()
+    cite_sum: dict[str, float] = collections.defaultdict(float)
+    n_cited: dict[str, int] = collections.Counter()
+    meta = {"n_records": len(records), "n_no_affiliation": 0, "n_unresolved": 0,
+            "n_resolved": 0, "level": level, "counting": counting,
+            "first_author_only": first_author_only}
+    for rec in records:
+        cc = rec.get("citation_count")
+        authors = rec.get("authors", []) or []
+        if first_author_only:
+            authors = authors[:1]
+        surname = (authors[0].get("last") or "") if authors else ""
+        seen: dict[str, float] = {}
+        any_affil = False
+        for a in authors:
+            if a.get("affils"):
+                any_affil = True
+            res = institutions.author_institutions(a, surname, rec.get("pmid"))
+            if not res:
+                continue
+            if counting == "primary":
+                res = res[:1]
+            w = 1.0 / len(res) if counting == "fractional" else 1.0
+            for r in res:
+                name = r.at(level)
+                if not name or len(name) < 4:
+                    continue
+                seen[name] = max(seen.get(name, 0.0), w)
+        # Denominators, on the same basis as the counting scheme: a record counts
+        # as resolved when the authors being credited yield at least one
+        # institution. Reported percentages then share a denominator with the
+        # counts above them, whichever scheme is in use.
+        if not any_affil:
+            meta["n_no_affiliation"] += 1
+        elif not seen:
+            meta["n_unresolved"] += 1
+        else:
+            meta["n_resolved"] += 1
+        for name, w in seen.items():
+            counter[name] += w
+            if cc is not None:
+                cite_sum[name] += w * cc
+                n_cited[name] += 1
+    top = counter.most_common(top_n)
+    counts = [round(v, 3) for _, v in top]
+    ranks = institutions.competition_ranks([int(round(c)) if counting != "fractional" else c for c in counts])
+    rows = []
+    for (k, v), rk in zip(top, ranks):
+        rows.append({"institution": k, "count": (int(round(v)) if counting != "fractional" else round(v, 2)),
+                     "citations": int(round(cite_sum[k])), "n_cited_known": n_cited[k],
+                     "rank": rk,
+                     "pct_of_total": round(100 * v / len(records), 2) if records else 0.0,
+                     "pct_of_resolved": (round(100 * v / meta["n_resolved"], 2)
+                                         if meta["n_resolved"] else None)})
+    return rows, meta
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -903,6 +797,9 @@ def run_analysis(records: list[dict]) -> dict:
     print("[analyze] Computing journal statistics …")
     journals = journal_stats(records)
 
+    print("[analyze] Computing Bradford zones …")
+    bradford = bradford_zones(journals, n_records=len(records))
+
     print("[analyze] Computing country statistics …")
     countries = country_stats(records)
 
@@ -910,12 +807,23 @@ def run_analysis(records: list[dict]) -> dict:
     country_net = country_collab_network(records)
 
     print("[analyze] Computing keyword statistics …")
-    kw_stats = keyword_stats(records, use_mesh=False)
-    mesh_stats = keyword_stats(records, use_mesh=True)
+    kw_stats = keyword_stats(records, source="author")
+    mesh_stats = keyword_stats(records, source="mesh")
+    kw_both = keyword_stats(records, source="both")
 
     print("[analyze] Computing institution statistics …")
-    institutions            = institution_stats(records, first_author_only=True)
-    institutions_all_authors = institution_stats(records, first_author_only=False)
+    _first_only = getattr(config, "INSTITUTION_FIRST_AUTHOR_ONLY", True)
+    institutions, institutions_meta = institution_stats_meta(
+        records, first_author_only=_first_only,
+        level=getattr(config, "INSTITUTION_LEVEL", "canonical"),
+        counting=getattr(config, "INSTITUTION_COUNTING", "primary"))
+    # The scheme not used as the headline is always computed too, so the
+    # manuscript's sensitivity table cannot drift from the main one.
+    institutions_alt, institutions_alt_meta = institution_stats_meta(
+        records, first_author_only=not _first_only,
+        level=getattr(config, "INSTITUTION_LEVEL", "canonical"),
+        counting="primary" if _first_only else "primary")
+    institutions_all_authors = institution_stats(records, first_author_only=False, counting="whole")
 
     print("[analyze] Computing publication type breakdown …")
     pubtypes = pubtype_stats(records)
@@ -931,11 +839,16 @@ def run_analysis(records: list[dict]) -> dict:
         "temporal":      temporal,
         "authors":       authors,
         "journals":      journals,
+        "bradford":      bradford,
         "countries":     countries,
         "country_net":   country_net,
         "keywords":      kw_stats,
         "mesh":          mesh_stats,
+        "keywords_combined": kw_both,
         "institutions":         institutions,
+        "institutions_meta":    institutions_meta,
+        "institutions_alt":      institutions_alt,
+        "institutions_alt_meta": institutions_alt_meta,
         "institutions_all":     institutions_all_authors,
         "pub_types":     pubtypes,
         "languages":     languages,

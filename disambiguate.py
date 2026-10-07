@@ -15,30 +15,115 @@ import collections
 import json
 import pathlib
 import sys
+import unicodedata
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import config
 
 
+_UMLAUT = {"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "æ": "ae", "ø": "o"}
+
+
 def _norm_last(s: str) -> str:
-    """Normalize last name: lowercase, strip diacritics (simple ASCII fold)."""
+    """Normalize last name for bucketing: lowercase; German umlauts to their
+    transliterations (Spörl = Spoerl); other diacritics stripped; hyphens,
+    apostrophes and spaces removed (Sinha-Roy = Sinha Roy, O'Brart = OBrart)."""
     s = s.lower().strip()
-    # Simple transliteration of common accented chars
-    accents = {'à':'a','á':'a','â':'a','ã':'a','ä':'a','å':'a','ç':'c',
-               'è':'e','é':'e','ê':'e','ë':'e','ì':'i','í':'i','î':'i','ï':'i',
-               'ñ':'n','ò':'o','ó':'o','ô':'o','õ':'o','ö':'o',
-               'ù':'u','ú':'u','û':'u','ü':'u','ý':'y','ÿ':'y'}
-    tr = str.maketrans(accents)
-    return s.translate(tr)
+    for k, v in _UMLAUT.items():
+        s = s.replace(k, v)
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    return re.sub(r"[\s\-'’.]", "", s)
 
 
 def _norm_fore(s: str) -> str:
     return s.lower().strip()
 
 
-def _initials(fore: str) -> str:
-    """Return initials string, e.g. 'John A' -> 'ja', 'J' -> 'j'."""
-    return "".join(w[0] for w in fore.split() if w).lower()
+def _initials(fore: str, initials: str = "") -> str:
+    """
+    Initials string for an author occurrence.
+
+    PubMed's own <Initials> field is authoritative when present ("TG" for
+    "Theo Günter"); it is used first.  Deriving initials from the forename
+    alone turned "TG" (a one-word forename) into "t", which put Theo Seiler
+    senior and junior into the same bucket where the KNOWN_DISTINCT safelist
+    could not reach them.
+    """
+    from_fore = "".join(w[0] for w in re.split(r"[\s.]+", fore) if w).lower()
+    if initials and initials.strip():
+        ini = re.sub(r"[^a-z]", "", initials.lower())
+        # "D P S" with Initials "DP": the forename carries more information
+        if from_fore.startswith(ini) and len(from_fore) > len(ini):
+            return from_fore
+        return ini
+    return from_fore
+
+
+def _fore_key(fore: str, initials: str) -> str:
+    """Grouping key inside a surname bucket: full forename, or the full
+    initials for initials-only occurrences ("__init__:tg")."""
+    f = _norm_fore(fore) if fore else ""
+    toks = [t for t in re.split(r"[\s.]+", f) if t]
+    if toks and any(len(t) > 1 for t in toks):        # a real forename, not "T G" / "T.G."
+        return f
+    return "__init__:" + _initials(fore, initials)
+
+
+def _initials_compatible(key_a: str, key_b: str) -> bool:
+    """Initials of two group keys agree: equal, or one is a prefix of the other
+    ("t" ~ "ta"; "tg" !~ "t" only when both are complete — a bare "t" may be an
+    abbreviation of anything, so prefix relations are allowed)."""
+    ia = key_a.split(":", 1)[1] if key_a.startswith("__init__:") else _initials(key_a)
+    ib = key_b.split(":", 1)[1] if key_b.startswith("__init__:") else _initials(key_b)
+    return ia == ib or ia.startswith(ib) or ib.startswith(ia)
+
+
+def _key_forms(key: str) -> set[str]:
+    """All name forms a group key can be compared under: the forename itself
+    (if any) and its initials."""
+    if key.startswith("__init__:"):
+        return {key.split(":", 1)[1]}
+    return {key, _initials(key)}
+
+
+_NAME_SUFFIXES = {"junior", "júnior", "jr", "filho", "neto", "sobrinho", "senior", "sr"}
+
+
+def _first_forename(fore_key: str) -> str:
+    """First full forename token of a group key, folded ('' for initials only)."""
+    if not fore_key or fore_key.startswith("__init__"):
+        return ""
+    toks = [t for t in re.split(r"[\s.]+", fore_key.lower()) if t and t not in _NAME_SUFFIXES]
+    if not toks or len(toks[0]) < 2:
+        return ""
+    t = unicodedata.normalize("NFKD", toks[0]).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z]", "", t)
+
+
+def _first_forenames_compatible(a: set, b: set) -> bool:
+    """Every first forename in one cluster equals, or is a prefix of, every
+    first forename in the other ('theo' ~ 'theodor'; 'yan' !~ 'yiran')."""
+    for x in a:
+        for y in b:
+            if not (x == y or x.startswith(y) or y.startswith(x)):
+                return False
+    return True
+
+
+def _forenames_compatible(a: str, b: str) -> bool:
+    """'theo g' ~ 'theo günter' (same person, one abbreviates the other);
+    'theo' !~ 'theo günter' (left to the co-author rule and the safelist)."""
+    ta, tb = a.split(), b.split()
+    if ta == tb:
+        return True
+    if len(ta) != len(tb) or not ta or ta[0] != tb[0]:
+        return False
+    for x, y in zip(ta[1:], tb[1:]):
+        x, y = x.rstrip("."), y.rstrip(".")
+        if x == y or (len(x) == 1 and y.startswith(x)) or (len(y) == 1 and x.startswith(y)):
+            continue
+        return False
+    return True
 
 
 def _affil_tokens(affil: str) -> set:
@@ -66,30 +151,37 @@ def _affil_sim(a1: list, a2: list) -> float:
 # regardless of co-author overlap or affiliation similarity.
 # Add new entries here whenever a disambiguation error is identified.
 KNOWN_DISTINCT: list[tuple[str, str, str]] = [
-    # Theo Seiler Sr (corneal refractive surgery, IROC Zurich) vs
-    # Theo Günter Seiler Jr (ELZA Institute) — both active in keratoconus/ectasia
+    # Theo Seiler Sr (Theo) vs Theo Günter Seiler Jr (Theo Günter / T.G.)
     ("seiler",  "theo",         "theo günter"),
     ("seiler",  "theo",         "theo g"),
-    ("seiler",  "t",            "tg"),
-    # Farhad Hafezi (ELZA Institute, Zurich — CXL/keratoconus) vs
-    # Nikki L. Hafezi (ELZA Institute — distinct author)
+    ("seiler",  "t",            "tg"),           # initials-only variants
+    ("seiler",  "theo",         "tg"),           # forename vs junior's initials
+    ("seiler",  "theo günter",  "t"),
+    ("seiler",  "theo g",       "t"),
+    # Farhad Hafezi (ELZA Institute, Zurich) vs Nikki L. Hafezi (ELZA Institute)
     ("hafezi",  "farhad",       "nikki"),
     ("hafezi",  "f",            "n"),
-    # Add further forename-pair entries as disambiguation errors are identified:
-    # ("surname", "forename_a", "forename_b"),
+    # Add further forename-pair entries as needed:
+    # ("surname", "forename_a",  "forename_b"),
 ]
 
-# Build fast lookup: (last_norm, init_a, init_b) → True (unordered)
+# Build a fast lookup: (last_norm, init_a, init_b) → True (unordered)
 _DISTINCT_SET: set[frozenset] = set()
 for _last, _fa, _fb in KNOWN_DISTINCT:
     _DISTINCT_SET.add(frozenset({(_last, _fa), (_last, _fb)}))
 
 # ── Affiliation-based exclusions ──────────────────────────────────────────────
-# Handles same-full-name collisions between unrelated authors.
+# For cases where two authors share an IDENTICAL full name but are confirmed
+# different people at different institutions/specialties.
 # Each entry: (last_norm, fore_norm, affil_keyword_lowercase)
+# Any occurrence whose affiliation contains affil_keyword will NEVER be merged
+# with occurrences that lack it — even though forenames match exactly.
+#
+# Known case: Prof. Farhad Hafezi (plastic surgeon, Tehran University of Medical
+# Sciences / Iran University of Medical Sciences) shares an identical full name
+# with Prof. Farhad Hafezi (ophthalmologist, ELZA Institute Zurich / CXL pioneer).
+# Layer 2 (exact forename match) would otherwise unconditionally merge these.
 KNOWN_DISTINCT_AFFIL: list[tuple[str, str, str]] = [
-    # Prof. Farhad Hafezi (plastic surgeon, Tehran / Iran University of Medical
-    # Sciences) vs Prof. Farhad Hafezi (ophthalmologist, ELZA Institute Zurich).
     ("hafezi", "farhad", "tehran university"),
     ("hafezi", "farhad", "iran university of medical"),
     ("hafezi", "farhad", "iums.ac.ir"),
@@ -114,16 +206,15 @@ def _has_excluded_affil(last_n: str, fore_n: str, affils: list[str]) -> bool:
     return any(kw in affil_blob for kw in keywords)
 
 
-def _are_known_distinct(last_n: str, fore_a: str, fore_b: str) -> bool:
-    """Return True if these two forenames for the same surname are known to be different people."""
-    pair = frozenset({(last_n, fore_a.lower()), (last_n, fore_b.lower())})
-    if pair in _DISTINCT_SET:
-        return True
-    # Also check initials: if one is a full forename, derive its initials
-    init_a = _initials(fore_a) if len(fore_a) > 2 else fore_a.lower()
-    init_b = _initials(fore_b) if len(fore_b) > 2 else fore_b.lower()
-    pair_init = frozenset({(last_n, init_a), (last_n, init_b)})
-    return pair_init in _DISTINCT_SET
+def _are_known_distinct(last_n: str, key_a: str, key_b: str) -> bool:
+    """True if two group keys (forename or "__init__:xx") for the same surname
+    are listed as different people, compared under every name form each key
+    has (forename, initials)."""
+    for fa in _key_forms(key_a.lower()):
+        for fb in _key_forms(key_b.lower()):
+            if frozenset({(last_n, fa), (last_n, fb)}) in _DISTINCT_SET:
+                return True
+    return False
 
 
 def _display_name(last: str, fore: str, initials: str) -> str:
@@ -198,10 +289,17 @@ def _inst_key(affils: list[str]) -> str | None:
         for pattern in _INST_TOKENS_DIS:
             m = _re.search(pattern, al)
             if m:
-                key = m.group(1).strip().rstrip(".,")
+                toks = [t for t in m.group(1).strip().rstrip(".,").split()
+                        if t not in _KEY_STOPWORDS]
+                key = " ".join(toks[-2:])
                 if len(key) >= 3:
                     return key
     return None
+
+
+_KEY_STOPWORDS = {"of", "to", "the", "at", "and", "an", "a", "in", "for", "with", "affiliated",
+                  "from", "de", "di", "del", "della", "la", "le", "des", "der", "die", "das",
+                  "national", "state", "medical", "normal", "technical", "technological"}
 
 
 def _inst_conflict(affils_i: list[str], affils_j: list[str]) -> bool:
@@ -222,10 +320,11 @@ def _inst_conflict(affils_i: list[str], affils_j: list[str]) -> bool:
 
 # ── Build author occurrence table ─────────────────────────────────────────────
 
-def build_occurrence_table(records: list[dict]) -> list[dict]:
+def build_occurrence_table(records: list[dict], oa_cache: dict | None = None) -> list[dict]:
     """
     Returns flat list of author occurrence dicts:
-      pmid, position, last, fore, initials, affils, orcid,
+      pmid, position, last, fore, initials, affils, orcid, oa_id (when an
+      OpenAlex cache is supplied; aligned by author order as in the overlay),
       co_authors (set of (last_norm, init) tuples of other authors in same paper)
     """
     occurrences = []
@@ -233,11 +332,16 @@ def build_occurrence_table(records: list[dict]) -> list[dict]:
         authors = rec.get("authors", [])
         pmid = rec["pmid"]
         year = rec.get("year", "")
+        oa_authors = []
+        if oa_cache:
+            w = oa_cache.get(str(pmid)) or {}
+            if w.get("found"):
+                oa_authors = w.get("authors") or []
         # Build co-author fingerprint set for this paper
         co_fps = set()
         for a in authors:
             if a["last"]:
-                co_fps.add((_norm_last(a["last"]), _initials(a["fore"] or a["initials"])))
+                co_fps.add((_norm_last(a["last"]), _initials(a.get("fore", ""), a.get("initials", ""))))
 
         for pos, a in enumerate(authors):
             if not a["last"]:
@@ -251,10 +355,12 @@ def build_occurrence_table(records: list[dict]) -> list[dict]:
                 "initials":  a["initials"],
                 "affils":    a["affils"],
                 "orcid":     a["orcid"],
+                "oa_id":     (oa_authors[pos].get("id") if pos < len(oa_authors) and len(oa_authors) == len(authors) else None),
                 "last_norm": _norm_last(a["last"]),
-                "init":      _initials(a["fore"] or a["initials"]),
+                "init":      _initials(a.get("fore", ""), a.get("initials", "")),
+                "fore_key":  _fore_key(a.get("fore", ""), a.get("initials", "")),
                 "co_fps":    co_fps - {(_norm_last(a["last"]),
-                                        _initials(a["fore"] or a["initials"]))},
+                                        _initials(a.get("fore", ""), a.get("initials", "")))},
             }
             occurrences.append(occ)
     return occurrences
@@ -276,30 +382,81 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
             x = parent[x]
         return x
 
+    # Cannot-link constraints, checked on every merge: two name forms that sit
+    # on the same paper are two people (e.g. Xingtao and Xueyi Zhou, Jacek and
+    # Jerzy Szaflik), and two clusters whose full first forenames differ are two
+    # people however many co-authors they share (Yan / Yiran Wang).  Without
+    # these an initials-only group ("Wang Y") can chain unrelated people.
+    pm: dict[int, set] = {i: {occurrences[i]["pmid"]} for i in range(n)}
+    fo: dict[int, set] = {i: ({_first_forename(occurrences[i]["fore_key"])} - {""}) for i in range(n)}
+
     def union(x, y):
-        parent[find(x)] = find(y)
+        rx, ry = find(x), find(y)
+        if rx == ry:
+            return
+        if pm[rx] & pm[ry]:
+            return
+        if not _first_forenames_compatible(fo[rx], fo[ry]):
+            return
+        parent[rx] = ry
+        pm[ry] |= pm.pop(rx)
+        fo[ry] |= fo.pop(rx)
 
     # ── Pass 1: ORCID identity ─────────────────────────────────────────────
-    orcid_map: dict[str, int] = {}  # orcid -> first occurrence index
+    # PubMed occasionally attaches an ORCID to the wrong author of a paper, so
+    # an ORCID merges two occurrences only when their surnames are compatible
+    # (equal, or one ending in the other, e.g. a double-barrelled surname).
+    # Without this check one misplaced iD merges two different people.
+    orcid_map: dict[str, list[int]] = collections.defaultdict(list)
     for i, occ in enumerate(occurrences):
-        if occ["orcid"]:
-            if occ["orcid"] in orcid_map:
-                union(i, orcid_map[occ["orcid"]])
-            else:
-                orcid_map[occ["orcid"]] = i
+        if not occ["orcid"]:
+            continue
+        la = occ["last_norm"]
+        for j in orcid_map[occ["orcid"]]:
+            lb = occurrences[j]["last_norm"]
+            if la == lb or la.endswith(lb) or lb.endswith(la):
+                union(i, j)
+                break
+        else:
+            orcid_map[occ["orcid"]].append(i)
 
-    # ── Pass 2: Group by (last_norm, init) ────────────────────────────────
+    # ── Pass 1b: OpenAlex author ID (when supplied) ────────────────────────
+    # Same OpenAlex author ID + compatible surname → same person, unless the
+    # pair is on the KNOWN_DISTINCT safelist (OpenAlex conflates the two Theo
+    # Seilers under one ID) or one side carries a KNOWN_DISTINCT_AFFIL marker.
+    oa_map: dict[str, int] = {}
+    for i, occ in enumerate(occurrences):
+        oid = occ.get("oa_id")
+        if not oid:
+            continue
+        if oid not in oa_map:
+            oa_map[oid] = i
+            continue
+        j = oa_map[oid]
+        a, b = occurrences[i], occurrences[j]
+        la, lb = a["last_norm"], b["last_norm"]
+        if not (la == lb or la.endswith(lb) or lb.endswith(la)):
+            continue
+        if _are_known_distinct(la, a["fore_key"], b["fore_key"]):
+            continue
+        fa = "" if a["fore_key"].startswith("__init__") else a["fore_key"]
+        fb = "" if b["fore_key"].startswith("__init__") else b["fore_key"]
+        if _has_excluded_affil(la, fa, a["affils"]) != _has_excluded_affil(lb, fb, b["affils"]):
+            continue
+        union(i, j)
+
+    # ── Pass 2: Group by (last_norm, first initial) ───────────────────────
+    # The coarse bucket keeps "T" and "TG" variants of one surname as merge
+    # candidates; inside it, occurrences are grouped by full forename, or by
+    # full initials for initials-only occurrences ("__init__:tg").
     bucket: dict[tuple, list[int]] = collections.defaultdict(list)
     for i, occ in enumerate(occurrences):
-        bucket[(occ["last_norm"], occ["init"])].append(i)
+        bucket[(occ["last_norm"], occ["init"][:1])].append(i)
 
     for (last_n, init), indices in bucket.items():
-        # Everyone with same last + initials is a candidate cluster
-        # Sub-split by forename if available
         fore_groups: dict[str, list[int]] = collections.defaultdict(list)
         for i in indices:
-            fore_key = _norm_fore(occurrences[i]["fore"]) if occurrences[i]["fore"] else "__init__"
-            fore_groups[fore_key].append(i)
+            fore_groups[occurrences[i]["fore_key"]].append(i)
 
         # Merge groups that share ≥ N co-authors (same-lab heuristic)
         group_list = list(fore_groups.items())
@@ -330,16 +487,21 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
                 elif _inst_conflict(affil_i, affil_j):
                     should_merge = False
 
-                elif fname_i != "__init__" and fname_j != "__init__":
-                    # Both have full forenames: only merge if identical
-                    # For common surnames, also require institution agreement
-                    if fname_i == fname_j:
+                elif not fname_i.startswith("__init__") and not fname_j.startswith("__init__"):
+                    # Both have forenames: merge only if the same or one
+                    # abbreviates the other ("theo g" ~ "theo günter").
+                    if _forenames_compatible(fname_i, fname_j):
                         if last_n in _COMMON_SURNAMES and _inst_conflict(affil_i, affil_j):
                             should_merge = False
                         else:
                             should_merge = True
                     else:
                         should_merge = False
+
+                elif not _initials_compatible(fname_i, fname_j):
+                    # e.g. "__init__:tg" vs forename "theo" (initials "t"):
+                    # the initials disagree, so these are not one person
+                    should_merge = False
 
                 elif overlap >= config.DISAMBIGUATION_CO_AUTHOR_THRESHOLD:
                     # Initials-only group merging: for common surnames, also
@@ -349,17 +511,25 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
                     else:
                         should_merge = True
 
-                elif asim >= 0.35 and overlap >= 1:
-                    # Affiliation-similarity merge: tighten threshold for
+                elif asim >= config.DISAMBIGUATION_AFFIL_JACCARD and overlap >= 1:
+                    # Affiliation-similarity merge: tighter threshold for
                     # common surnames to avoid false positives
                     if last_n in _COMMON_SURNAMES:
-                        should_merge = (asim >= 0.55 and overlap >= 2)
+                        should_merge = (asim >= config.DISAMBIGUATION_AFFIL_JACCARD_COMMON
+                                        and overlap >= config.DISAMBIGUATION_CO_AUTHOR_THRESHOLD_COMMON)
                     else:
                         should_merge = True
 
                 if should_merge:
-                    for ki in idxs_i:
-                        for kj in idxs_j:
+                    # Occurrences carrying a KNOWN_DISTINCT_AFFIL marker never
+                    # take part in cross-group merges; they only merge with
+                    # exact-forename occurrences carrying the same marker.
+                    def _plain(idxs, fname):
+                        fn = "" if fname.startswith("__init__") else fname.lower()
+                        return [k for k in idxs
+                                if not _has_excluded_affil(last_n, fn, occurrences[k]["affils"])]
+                    for ki in _plain(idxs_i, fname_i):
+                        for kj in _plain(idxs_j, fname_j):
                             union(ki, kj)
 
         # Within each fore_group, union occurrences (same forename = same person)
@@ -369,7 +539,7 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         #   (KNOWN_DISTINCT_AFFIL safelist — handles same full-name collisions).
         # Use a secondary union-find within the group to handle chains correctly.
         for fname, idxs in fore_groups.items():
-            fore_norm = fname.lower()
+            fore_norm = "" if fname.startswith("__init__") else fname.lower()
             # Partition by affiliation-exclusion first: occurrences carrying an
             # excluded affiliation are kept permanently separate from those that don't.
             excluded_idxs = [k for k in idxs
@@ -426,10 +596,21 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
     comp_canonical: dict[int, str] = {}
     for root, counter in comp_names.items():
         best_last, best_fore = counter.most_common(1)[0][0]
-        # Prefer the longest forename for deriving initials
+        # Prefer the longest forename for deriving initials — but only among
+        # occurrences that use the modal surname, so a "Netto, Emilio A Torres"
+        # parse cannot lend its initials to "Torres-Netto".
+        # A variant seen once cannot set the label: "Júnior Renato" once
+        # against "Renato" 114 times gave "Ambrósio JR", and "Seyed-Hassan"
+        # once against "Hassan" 114 times gave "Hashemi S".  Generational
+        # suffixes parsed into the forename are ignored for the same reason.
         best_initials = ""
-        for (last, fore), _ in counter.most_common():
-            if fore and len(fore) > len(best_initials):
+        multi = [(k, n) for k, n in counter.most_common() if n >= 2] or counter.most_common()
+        for (last, fore), _ in multi:
+            if not fore or last != best_last:
+                continue
+            if re.search(r"\b(j[uú]nior|jr|filho|neto|sobrinho)\b", fore, re.I):
+                continue
+            if len(fore) > len(best_initials):
                 best_initials = fore
         canonical = _display_name(best_last, best_initials, best_fore)
 
@@ -445,17 +626,50 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
 
         comp_canonical[root] = canonical
 
+    # Two different components must never share one author_id: downstream
+    # counting is keyed by the id string, so a collision would silently merge
+    # people the disambiguator had kept apart (e.g. the two Farhad Hafezis).
+    by_name: dict[str, list[int]] = collections.defaultdict(list)
+    for root, name in comp_canonical.items():
+        by_name[name].append(root)
+    for name, roots in by_name.items():
+        if len(roots) < 2:
+            continue
+        roots.sort(key=lambda r: -sum(comp_names[r].values()))   # largest keeps the bare name
+        used = {name}
+        for k, root in enumerate(roots[1:], start=2):
+            key = _inst_key(comp_affils.get(root, []))
+            label = key.title() if key else f"#{k}"
+            cand = f"{name} ({label})"
+            if cand in used or name.endswith(f"({label})"):
+                # same institution too (e.g. Xingtao and Xueyi Zhou, both at
+                # Fudan): distinguish by the component's modal forename
+                fore = comp_names[root].most_common(1)[0][0][1] or f"#{k}"
+                cand = (name[:-1] + f", {fore})") if name.endswith(")") else f"{name} ({fore})"
+            while cand in used:
+                cand = f"{cand} #{k}"
+            used.add(cand)
+            comp_canonical[root] = cand
+
     result = {i: comp_canonical[find(i)] for i in range(n)}
     return result
 
 
-def assign_author_ids(records: list[dict]) -> tuple[list[dict], dict]:
+def assign_author_ids(records: list[dict], oa_cache: dict | None = None) -> tuple[list[dict], dict]:
     """
     Adds 'author_id' field to each author in every record.
     Returns (enriched_records, occurrence_table).
     """
     print("[disambiguate] Building author occurrence table …")
-    occ = build_occurrence_table(records)
+    if oa_cache is None:
+        try:
+            from openalex_integrate import load_cache
+            oa_cache = load_cache() or None
+        except Exception:  # noqa: BLE001
+            oa_cache = None
+    if oa_cache:
+        print(f"[disambiguate] OpenAlex author IDs available for {len(oa_cache)} records (used as identity signal)")
+    occ = build_occurrence_table(records, oa_cache)
     print(f"[disambiguate] {len(occ)} author occurrences across {len(records)} records")
     print("[disambiguate] Running disambiguation …")
     mapping = disambiguate(occ)
