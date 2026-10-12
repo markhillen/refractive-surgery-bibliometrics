@@ -97,7 +97,7 @@ def fig2(recs):
     for k in fams:
         ax[0].plot(ys, [100 * by[y][k] / tot[y] for y in ys], color=col[k], lw=1.5, label=lab[k])
     ax[0].set_ylabel("Share of the year's publications (%)"); ax[0].set_ylim(0, 100); ax[0].set_xlim(1990, config.END_YEAR)
-    for i, x in enumerate([1995, 1998, 2011, 2016], 1):
+    for i, x in enumerate([1995, 1998, 2010, 2016], 1):
         ax[0].axvline(x, color=GREY, lw=0.6, ls=":")
         ax[0].text(x, 102, str(i), ha="center", va="bottom", fontsize=6.5, color="#555555", clip_on=False)
     ax[0].legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.2), fontsize=6.5, ncol=1)
