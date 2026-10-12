@@ -1,8 +1,8 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Fudan University,74.17,3.54,539,94
-2,Wenzhou Medical University,31.07,1.48,338,39
+1,Fudan University,70.83,3.39,504,88
+2,Wenzhou Medical University,31.07,1.49,338,39
 3,Peking University,29.0,1.39,150,34
-4,Tianjin Medical University,23.75,1.13,207,36
+4,Tianjin Medical University,23.75,1.14,207,36
 5,All India Institute of Medical Sciences,23.0,1.1,186,23
 6,Tehran University of Medical Sciences,22.0,1.05,139,26
 7,Beijing Tongren Eye Center,19.83,0.95,111,22
@@ -10,7 +10,7 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 9,Hoopes Vision Research Center,16.67,0.8,114,42
 10,Saarland University,16.17,0.77,81,18
 11,Tianjin Eye Hospital,14.83,0.71,116,26
-12,Utah Lions Eye Bank,14.33,0.68,148,43
+12,Utah Lions Eye Bank,14.33,0.69,148,43
 13,Narayana Nethralaya Bangalore,14.0,0.67,91,14
 14,University of Utah School of Medicine,13.42,0.64,150,40
 15,Mashhad University of Medical Sciences,13.33,0.64,42,14
@@ -29,13 +29,13 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 28,LV Prasad Eye Institute,8.0,0.38,32,9
 29,Yonsei University College of Medicine,7.95,0.38,54,10
 30,Tel Aviv University,7.83,0.37,24,10
-31,Chinese Academy of Medical Sciences,7.17,0.34,62,13
-=32,University of Marburg,7.0,0.33,95,7
-=32,Nanchang Hangkong University,7.0,0.33,32,8
-=32,Rio de Janeiro,7.0,0.33,49,7
-=35,Beyoglu Eye Training and Research Hospital,6.5,0.31,25,7
-=35,McGill University,6.5,0.31,30,11
-=35,Hangzhou MSK Eye Hospital,6.5,0.31,50,8
-=35,Baylor College of Medicine,6.5,0.31,86,7
-=35,West China Hospital of Sichuan University,6.5,0.31,29,7
-=35,Krasnov Research Institute of Eye Diseases,6.5,0.31,4,9
+=31,University of Marburg,7.0,0.33,95,7
+=31,Nanchang Hangkong University,7.0,0.33,32,8
+=31,Nanchang,7.0,0.33,82,7
+=31,Rio de Janeiro,7.0,0.33,49,7
+35,Chinese Academy of Medical Sciences,6.83,0.33,61,12
+=36,Beyoglu Eye Training and Research Hospital,6.5,0.31,25,7
+=36,McGill University,6.5,0.31,30,11
+=36,Baylor College of Medicine,6.5,0.31,86,7
+=36,West China Hospital of Sichuan University,6.5,0.31,29,7
+=36,Krasnov Research Institute of Eye Diseases,6.5,0.31,4,9

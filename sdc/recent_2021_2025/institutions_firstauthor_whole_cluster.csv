@@ -1,11 +1,11 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Fudan University,94,4.49,681,94
-2,Utah Lions Eye Bank,43,2.05,445,43
+1,Fudan University,88,4.21,620,88
+2,Utah Lions Eye Bank,43,2.06,445,43
 3,Hoopes Vision Research Center,42,2.01,281,42
 4,University of Utah School of Medicine,40,1.91,430,40
-5,Wenzhou Medical University,39,1.86,429,39
+5,Wenzhou Medical University,39,1.87,429,39
 6,Tianjin Medical University,36,1.72,322,36
-7,Peking University,34,1.62,188,34
+7,Peking University,34,1.63,188,34
 =8,Tehran University of Medical Sciences,26,1.24,170,26
 =8,Tianjin Eye Hospital,26,1.24,216,26
 =10,All India Institute of Medical Sciences,23,1.1,186,23
@@ -20,12 +20,12 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =16,Chung Shan Medical University,14,0.67,51,14
 =20,Columbia University,13,0.62,304,13
 =20,Sun Yat-sen University,13,0.62,76,13
-=20,Chinese Academy of Medical Sciences,13,0.62,114,13
 =20,Nobel Eye Institute,13,0.62,58,13
-=24,zurich_cluster,12,0.57,115,12
-=24,Chinese University of Hong Kong,12,0.57,88,12
-=24,Chinese Academy of Medical Sciences & Peking Union Medical College,12,0.57,120,12
-=24,Jen-Ai Hospital Dali Branch,12,0.57,51,12
+=23,zurich_cluster,12,0.57,115,12
+=23,Chinese University of Hong Kong,12,0.57,88,12
+=23,Chinese Academy of Medical Sciences,12,0.57,112,12
+=23,Chinese Academy of Medical Sciences & Peking Union Medical College,12,0.57,120,12
+=23,Jen-Ai Hospital Dali Branch,12,0.57,51,12
 =28,McGill University,11,0.53,55,11
 =28,Shahid Beheshti University of Medical Sciences,11,0.53,105,11
 =28,London Vision Clinic,11,0.53,277,11

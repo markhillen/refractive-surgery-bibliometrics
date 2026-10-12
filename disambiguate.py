@@ -434,26 +434,37 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
     # Same OpenAlex author ID + compatible surname → same person, unless the
     # pair is on the KNOWN_DISTINCT safelist (OpenAlex conflates the two Theo
     # Seilers under one ID) or one side carries a KNOWN_DISTINCT_AFFIL marker.
-    oa_map: dict[str, int] = {}
+    # OpenAlex also conflates different people who share a common name
+    # (several Yu Zhangs at Peking, Chongqing and Xi'an under one ID), so for
+    # common surnames an OpenAlex match does not override a clear institution
+    # conflict: each OpenAlex ID keeps one representative per institution.
+    oa_map: dict[str, list[int]] = {}
     for i, occ in enumerate(occurrences):
         oid = occ.get("oa_id")
         if not oid:
             continue
-        if oid not in oa_map:
-            oa_map[oid] = i
-            continue
-        j = oa_map[oid]
-        a, b = occurrences[i], occurrences[j]
-        la, lb = a["last_norm"], b["last_norm"]
-        if not (la == lb or la.endswith(lb) or lb.endswith(la)):
-            continue
-        if _are_known_distinct(la, a["fore_key"], b["fore_key"]):
-            continue
-        fa = "" if a["fore_key"].startswith("__init__") else a["fore_key"]
-        fb = "" if b["fore_key"].startswith("__init__") else b["fore_key"]
-        if _has_excluded_affil(la, fa, a["affils"]) != _has_excluded_affil(lb, fb, b["affils"]):
-            continue
-        union(i, j)
+        reps = oa_map.setdefault(oid, [])
+        a = occ
+        la = a["last_norm"]
+        joined = False
+        for j in reps:
+            b = occurrences[j]
+            lb = b["last_norm"]
+            if not (la == lb or la.endswith(lb) or lb.endswith(la)):
+                continue
+            if _are_known_distinct(la, a["fore_key"], b["fore_key"]):
+                continue
+            fa = "" if a["fore_key"].startswith("__init__") else a["fore_key"]
+            fb = "" if b["fore_key"].startswith("__init__") else b["fore_key"]
+            if _has_excluded_affil(la, fa, a["affils"]) != _has_excluded_affil(lb, fb, b["affils"]):
+                continue
+            if la in _COMMON_SURNAMES and _inst_conflict(a["affils"], b["affils"]):
+                continue
+            union(i, j)
+            joined = True
+            break
+        if not joined:
+            reps.append(i)
 
     # ── Pass 2: Group by (last_norm, first initial) ───────────────────────
     # The coarse bucket keeps "T" and "TG" variants of one surname as merge
@@ -618,7 +629,7 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         for (last, fore), _ in multi:
             if not fore or last != best_last:
                 continue
-            if re.search(r"\b(j[uú]nior|jr|filho|neto|sobrinho)\b", fore, re.I):
+            if re.search(r"\b(j[uú]nior|jr|filho|neto|sobrinho|senior|sr)\b", fore, re.I):
                 continue
             if len(fore) > len(best_initials):
                 best_initials = fore

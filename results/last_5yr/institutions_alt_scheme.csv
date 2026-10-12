@@ -1,14 +1,14 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,87,4.16,661,87
+1,Eye & ENT Hospital of Fudan University,80,3.83,591,80
 2,Hoopes Vision Research Center,41,1.96,273,41
 3,Wenzhou Medical University,36,1.72,387,36
-4,Peking University,34,1.62,188,34
+4,Peking University,34,1.63,188,34
 5,Tianjin Medical University,31,1.48,247,31
 =6,All India Institute of Medical Sciences,23,1.1,186,23
 =6,Cleveland Clinic,23,1.1,304,23
 8,Farabi Eye Hospital,22,1.05,150,22
 9,Beijing Tongren Eye Center,21,1.0,129,21
-10,Saarland University Medical Center,16,0.76,81,16
+10,Saarland University Medical Center,16,0.77,81,16
 =11,Narayana Nethralaya Bangalore,14,0.67,91,14
 =11,West China Hospital,14,0.67,54,14
 =11,Mashhad University of Medical Sciences,14,0.67,42,14
@@ -37,15 +37,15 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =36,University of Marburg,7,0.33,95,7
 =36,Humanitas University Milan,7,0.33,64,7
 =36,University of Seville,7,0.33,30,7
+=36,Nanchang,7,0.33,82,7
 =36,Baylor College of Medicine,7,0.33,90,7
+=36,Peking Union Medical College Hospital,7,0.33,30,7
 =36,West China Hospital of Sichuan University,7,0.33,32,7
 =36,Rio de Janeiro,7,0.33,49,7
-=42,Beyoglu Eye Training and Research Hospital,6,0.29,25,6
-=42,The Eye Foundation,6,0.29,49,6
-=42,University of Salerno,6,0.29,61,6
-=42,Central South University,6,0.29,68,6
-=42,Nanchang Hangkong University,6,0.29,21,6
-=42,Ludwig-Maximilians-University,6,0.29,56,6
-=42,Kitasato University,6,0.29,16,6
-=42,Matrika Eye Center,6,0.29,79,6
-=42,Tel Aviv University,6,0.29,23,6
+=44,Beyoglu Eye Training and Research Hospital,6,0.29,25,6
+=44,The Eye Foundation,6,0.29,49,6
+=44,University of Salerno,6,0.29,61,6
+=44,Central South University,6,0.29,68,6
+=44,Nanchang Hangkong University,6,0.29,21,6
+=44,Ludwig-Maximilians-University,6,0.29,56,6
+=44,Kitasato University,6,0.29,16,6

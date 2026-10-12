@@ -1,14 +1,14 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Fudan University,92,4.4,675,92
+1,Fudan University,85,4.07,605,85
 2,Hoopes Vision Research Center,41,1.96,273,41
 3,Wenzhou Medical University,36,1.72,387,36
-4,Peking University,34,1.62,188,34
+4,Peking University,34,1.63,188,34
 5,Tianjin Medical University,31,1.48,247,31
 =6,Tehran University of Medical Sciences,23,1.1,150,23
 =6,All India Institute of Medical Sciences,23,1.1,186,23
 =6,Cleveland Clinic,23,1.1,304,23
 9,Beijing Tongren Eye Center,21,1.0,129,21
-10,Saarland University,16,0.76,81,16
+10,Saarland University,16,0.77,81,16
 =11,Narayana Nethralaya Bangalore,14,0.67,91,14
 =11,West China Hospital,14,0.67,54,14
 =11,Mashhad University of Medical Sciences,14,0.67,42,14
@@ -37,5 +37,5 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =36,University of Marburg,7,0.33,95,7
 =36,Humanitas University Milan,7,0.33,64,7
 =36,University of Seville,7,0.33,30,7
+=36,Nanchang,7,0.33,82,7
 =36,Baylor College of Medicine,7,0.33,90,7
-=36,West China Hospital of Sichuan University,7,0.33,32,7

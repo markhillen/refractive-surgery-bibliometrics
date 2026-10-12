@@ -1,9 +1,9 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Fudan University,105.5,4.92,778,116
+1,Fudan University,105.5,4.93,778,116
 2,Hoopes Vision Research Center,53.5,2.5,381,58
 3,Wenzhou Medical University,42.18,1.97,489,48
 4,Tianjin Medical University,36.92,1.72,290,53
-5,University of Arizona,34.58,1.61,351,36
+5,University of Arizona,34.58,1.62,351,36
 6,Peking University,32.83,1.53,225,38
 7,University of Utah School of Medicine,30.92,1.44,296,65
 8,Tianjin Eye Hospital,30.17,1.41,301,44
@@ -23,12 +23,12 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =21,Baylor College of Medicine,16.5,0.77,252,17
 23,Mashhad University of Medical Sciences,16.33,0.76,79,17
 24,Chinese University of Hong Kong,15.67,0.73,171,19
-25,Nankai University,15.42,0.72,161,22
-26,Vissum Alicante,15.33,0.72,195,20
-27,Sun Yat-sen University,15.17,0.71,84,18
-=28,Bascom Palmer Eye Institute,15.0,0.7,124,15
-=28,Stanford University,15.0,0.7,206,15
-30,Federal University of São Paulo,14.5,0.68,185,22
+25,Vissum Alicante,15.33,0.72,195,20
+26,Sun Yat-sen University,15.17,0.71,84,18
+=27,Bascom Palmer Eye Institute,15.0,0.7,124,15
+=27,Stanford University,15.0,0.7,206,15
+29,Federal University of São Paulo,14.5,0.68,185,22
+30,Nankai University,14.42,0.67,157,21
 =31,London Vision Clinic,14.0,0.65,305,18
 =31,West China Hospital,14.0,0.65,54,14
 =31,Chung Shan Medical University Hospital,14.0,0.65,60,14

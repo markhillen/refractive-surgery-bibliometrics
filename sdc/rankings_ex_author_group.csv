@@ -13,15 +13,15 @@ author,Archer TJ,110,
 author,Kohnen T,107,
 author,Krueger RR,104,
 author,Kymionis GD,100,
-author,Kim EK (Yonsei),99,
 author,Manche EE,96,
 author,Seiler T,95,
+author,Kim EK (Yonsei),95,
 author,Randleman JB,92,
 author,Seitz B,90,
-author,Mehta JS (Singapore),88,
-author,Hoopes PCS,87,
+author,Hoopes PC,87,
 author,Teus MA,86,
 author,Azar DT,84,
+author,Waring GO,82,
 country,United States,2620,1
 country,China,1373,2
 country,Germany,757,3
@@ -39,7 +39,7 @@ country,Australia,212,14
 country,Canada,211,15
 institution,Eye & ENT Hospital of Fudan University,240,1
 institution,Cleveland Clinic,220,2
-institution,Vissum Alicante,161,3
+institution,Vissum Alicante,162,3
 institution,Massachusetts Eye and Ear,136,4
 institution,Tianjin Eye Hospital,134,5
 institution,Wenzhou Medical University,124,6

@@ -1,7 +1,7 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 1,Eye & ENT Hospital of Fudan University,240,2.38,4742,240
 2,Cleveland Clinic,202,2.0,10033,199
-3,Vissum Alicante,161,1.59,6198,160
+3,Vissum Alicante,162,1.61,6205,161
 =4,Wenzhou Medical University,132,1.31,2760,132
 =4,Tianjin Eye Hospital,132,1.31,2550,132
 =6,Massachusetts Eye and Ear,106,1.05,3503,105
@@ -27,7 +27,7 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =26,Moorfields Eye Hospital,70,0.69,2445,70
 =26,Federal University of São Paulo,70,0.69,2389,70
 28,Johns Hopkins University,69,0.68,1670,69
-29,University of California San Francisco,67,0.66,2161,67
+29,University of California San Francisco,66,0.65,2134,66
 30,Tel Aviv University,65,0.64,898,65
 =31,University of California Los Angeles,64,0.63,2666,64
 =31,Columbia University,64,0.63,2488,63
@@ -36,10 +36,10 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =34,University of Arizona,62,0.61,1086,62
 =36,Fudan University,61,0.6,1653,61
 =36,Hoopes Vision Research Center,61,0.6,440,61
-38,Beijing Tongren Eye Center,59,0.58,468,59
+38,Beijing Tongren Eye Center,58,0.57,443,58
 39,Ben-Gurion University of the Negev,56,0.55,928,56
 40,Laservision Institute Athens,55,0.54,2668,54
-41,University of Toronto,52,0.51,979,52
+41,University of Toronto,52,0.52,979,52
 42,University of Pittsburgh,47,0.47,955,47
 =43,Noor Eye Hospital Tehran,44,0.44,630,44
 =43,Aarhus University Hospital,44,0.44,2808,44

@@ -1,5 +1,5 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,107,4.99,839,107
+1,Eye & ENT Hospital of Fudan University,107,5.0,839,107
 2,Hoopes Vision Research Center,58,2.71,392,58
 3,Wenzhou Medical University,43,2.01,496,43
 4,Tianjin Medical University,40,1.87,307,40
@@ -29,13 +29,13 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =28,Stanford University,15,0.7,206,15
 =28,University of Liverpool,15,0.7,244,15
 =28,Federal University of São Paulo,15,0.7,205,15
-=31,Central South University,14,0.65,127,14
 =31,Yonsei University College of Medicine,14,0.65,96,14
 =31,West China Hospital,14,0.65,54,14
 =31,McGill University,14,0.65,65,14
 =31,Fudan University,14,0.65,69,14
 =31,Reinstein Vision,14,0.65,326,14
-=31,Nankai University,14,0.65,170,14
 =31,Chang Gung Memorial Hospital,14,0.65,54,14
 =31,Chung Shan Medical University Hospital,14,0.65,60,14
-40,Humanitas University Milan,13,0.61,98,13
+=38,Central South University,13,0.61,125,13
+=38,Humanitas University Milan,13,0.61,98,13
+=38,Nankai University,13,0.61,166,13

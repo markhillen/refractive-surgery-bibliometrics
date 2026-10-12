@@ -1,18 +1,18 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,207,1.72,4154,207
+1,Eye & ENT Hospital of Fudan University,201,1.67,4093,201
 2,Cleveland Clinic,196,1.63,9345,193
-3,Vissum Alicante,139,1.15,5081,138
+3,Vissum Alicante,139,1.16,5081,138
 4,Massachusetts Eye and Ear,114,0.95,4634,113
 5,All India Institute of Medical Sciences,103,0.86,1664,103
 6,University of Crete,101,0.84,5703,101
 =7,Tianjin Eye Hospital,97,0.81,2074,97
 =7,Wenzhou Medical University,97,0.81,1818,97
 9,Emory University,92,0.76,6944,92
-10,Stanford University,91,0.76,2227,91
+10,Stanford University,90,0.75,2200,90
 11,Chinese University of Hong Kong,89,0.74,1906,87
-12,Yonsei University College of Medicine,79,0.66,2648,79
-=13,Baylor College of Medicine,74,0.61,3533,73
-=13,Singapore Eye Research Institute,74,0.61,2910,74
+12,Yonsei University College of Medicine,78,0.65,2633,78
+=13,Baylor College of Medicine,74,0.62,3533,73
+=13,Singapore Eye Research Institute,74,0.62,2910,74
 15,Farabi Eye Hospital,72,0.6,1029,72
 16,University of Southern California,71,0.59,2886,70
 17,University of California Los Angeles,70,0.58,3885,69

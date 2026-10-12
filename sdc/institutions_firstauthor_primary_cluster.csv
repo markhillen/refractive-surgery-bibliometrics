@@ -1,5 +1,5 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
-1,Fudan University,222,1.84,4532,222
+1,Fudan University,215,1.79,4462,215
 2,Cleveland Clinic,194,1.61,9440,191
 3,Vissum Alicante,137,1.14,5020,136
 4,Harvard Medical School,118,0.98,4715,117
@@ -7,12 +7,12 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =5,All India Institute of Medical Sciences,103,0.86,1664,103
 7,University of Crete,100,0.83,5696,100
 8,Emory University,92,0.76,6944,92
-9,Stanford University,90,0.75,2223,90
+9,Stanford University,89,0.74,2196,89
 10,Wenzhou Medical University,82,0.68,1492,82
-=11,Baylor College of Medicine,74,0.61,3533,73
-=11,Chinese University of Hong Kong,74,0.61,1722,72
-=13,Yonsei University College of Medicine,73,0.61,2416,73
-=13,Tianjin Eye Hospital,73,0.61,1747,73
+=11,Baylor College of Medicine,74,0.62,3533,73
+=11,Chinese University of Hong Kong,74,0.62,1722,72
+13,Tianjin Eye Hospital,73,0.61,1747,73
+14,Yonsei University College of Medicine,72,0.6,2401,72
 =15,University of California Los Angeles,69,0.57,3883,68
 =15,Tehran University of Medical Sciences,69,0.57,955,69
 17,Johns Hopkins University,67,0.56,2647,67

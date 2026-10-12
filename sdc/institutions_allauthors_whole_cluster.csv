@@ -1,13 +1,13 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
 1,Fudan University,259,2.11,5103,259
 2,Cleveland Clinic,222,1.81,11060,218
-3,Vissum Alicante,161,1.31,6198,160
+3,Vissum Alicante,162,1.32,6205,161
 4,Harvard Medical School,153,1.25,5437,152
 5,Singapore National Eye Centre,144,1.17,5618,143
 6,Tianjin Eye Hospital,134,1.09,2563,134
-7,Wenzhou Medical University,132,1.07,2760,132
+7,Wenzhou Medical University,132,1.08,2760,132
 8,Chinese University of Hong Kong,119,0.97,2603,117
-9,University of Crete,116,0.94,6156,116
+9,University of Crete,116,0.95,6156,116
 10,All India Institute of Medical Sciences,109,0.89,1804,109
 =11,Stanford University,104,0.85,2428,104
 =11,Tehran University of Medical Sciences,104,0.85,1455,104
@@ -29,13 +29,13 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 28,Federal University of São Paulo,73,0.59,2457,73
 =29,Columbia University,71,0.58,2659,70
 =29,Narayana Nethralaya Bangalore,71,0.58,1257,71
-31,University of California San Francisco,68,0.55,2174,68
-32,Tel Aviv University,67,0.55,970,67
+=31,Tel Aviv University,67,0.55,970,67
+=31,University of California San Francisco,67,0.55,2147,67
 33,University of Arizona,66,0.54,1374,66
 34,zurich_cluster,63,0.51,2563,63
-35,Peking University,62,0.5,488,62
+35,Peking University,62,0.51,488,62
 36,Hoopes Vision Research Center,61,0.5,440,61
-37,Beijing Tongren Eye Center,59,0.48,468,59
+37,Beijing Tongren Eye Center,58,0.47,443,58
 38,University of Toronto,57,0.46,1042,57
 =39,Laservision Institute Athens,56,0.46,2699,55
 =39,Ben-Gurion University of the Negev,56,0.46,928,56

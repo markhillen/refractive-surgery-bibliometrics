@@ -1,7 +1,7 @@
 rank,institution,publications,pct_of_resolved,citations,n_cited_known
 1,Fudan University,254,2.07,4921,254
 2,Cleveland Clinic,221,1.8,11037,217
-3,Vissum Alicante,160,1.3,6001,159
+3,Vissum Alicante,161,1.31,6008,160
 4,Harvard Medical School,144,1.17,5223,143
 5,Singapore National Eye Centre,137,1.12,5455,136
 6,University of Crete,114,0.93,6140,114
@@ -24,11 +24,11 @@ rank,institution,publications,pct_of_resolved,citations,n_cited_known
 =22,Narayana Nethralaya Bangalore,71,0.58,1257,71
 24,London Vision Clinic,70,0.57,3900,70
 25,Moorfields Eye Hospital,69,0.56,2395,69
-26,University of California San Francisco,68,0.55,2174,68
+26,University of California San Francisco,67,0.55,2147,67
 27,University of Arizona,65,0.53,1374,65
 =28,Peking University,61,0.5,481,61
 =28,Hoopes Vision Research Center,61,0.5,440,61
-30,Beijing Tongren Eye Center,58,0.47,452,58
+30,Beijing Tongren Eye Center,57,0.46,427,57
 31,Laservision Institute Athens,56,0.46,2699,55
 =32,University of Toronto,54,0.44,1016,54
 =32,Tel Aviv University,54,0.44,839,54

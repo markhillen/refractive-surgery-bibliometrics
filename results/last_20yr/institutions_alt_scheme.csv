@@ -1,21 +1,21 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,187,2.39,3824,187
+1,Eye & ENT Hospital of Fudan University,180,2.31,3754,180
 2,Cleveland Clinic,138,1.77,6177,137
 3,Vissum Alicante,132,1.69,4798,131
 4,Wenzhou Medical University,80,1.02,1472,80
 5,Tianjin Eye Hospital,70,0.9,1733,70
 6,University of Crete,68,0.87,2593,68
-7,All India Institute of Medical Sciences,66,0.84,900,66
+7,All India Institute of Medical Sciences,66,0.85,900,66
 8,Farabi Eye Hospital,61,0.78,775,61
 =9,Narayana Nethralaya Bangalore,58,0.74,1048,58
 =9,Singapore Eye Research Institute,58,0.74,2336,58
-=11,Stanford University,57,0.73,1308,57
-=11,Shahid Beheshti University of Medical Sciences,57,0.73,882,57
-13,Peking University,56,0.72,406,56
+11,Shahid Beheshti University of Medical Sciences,57,0.73,882,57
+=12,Stanford University,56,0.72,1281,56
+=12,Peking University,56,0.72,406,56
 14,Tianjin Medical University,54,0.69,656,54
 15,Laservision Institute Athens,53,0.68,2599,52
-=16,Yonsei University College of Medicine,52,0.67,1516,52
-=16,Sun Yat-sen University,52,0.67,1016,52
+16,Sun Yat-sen University,52,0.67,1016,52
+17,Yonsei University College of Medicine,51,0.65,1501,51
 18,Chinese University of Hong Kong,48,0.61,1123,48
 19,Beijing Tongren Eye Center,46,0.59,364,46
 =20,Bascom Palmer Eye Institute,44,0.56,990,44
@@ -45,7 +45,7 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =43,University of Toronto,23,0.29,459,23
 =45,Mayo Clinic,22,0.28,825,22
 =45,Ludwig-Maximilians-University,22,0.28,489,22
-47,Capital Medical University,21,0.27,274,21
-=48,University of New South Wales,20,0.26,789,20
-=48,University of São Paulo,20,0.26,279,20
-=48,University of Salerno,20,0.26,278,20
+=47,University of New South Wales,20,0.26,789,20
+=47,University of São Paulo,20,0.26,279,20
+=47,Capital Medical University,20,0.26,274,20
+=47,University of Salerno,20,0.26,278,20

@@ -1,5 +1,5 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,148,3.65,2184,148
+1,Eye & ENT Hospital of Fudan University,141,3.48,2114,141
 2,Cleveland Clinic,55,1.36,1577,55
 3,Wenzhou Medical University,53,1.31,834,53
 4,Narayana Nethralaya Bangalore,48,1.18,869,48
@@ -12,7 +12,7 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 11,Beijing Tongren Eye Center,37,0.91,309,37
 12,Sun Yat-sen University,34,0.84,589,34
 13,Singapore Eye Research Institute,32,0.79,1149,32
-14,Yonsei University College of Medicine,28,0.69,855,28
+14,Yonsei University College of Medicine,27,0.67,840,27
 =15,Vissum Alicante,26,0.64,457,26
 =15,Saarland University Medical Center,26,0.64,277,26
 =15,McGill University,26,0.64,338,26
@@ -46,6 +46,6 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =43,Johns Hopkins University,13,0.32,152,13
 =46,University of Siena,12,0.3,157,12
 =46,Massachusetts Eye and Ear,12,0.3,152,12
-=46,Second Affiliated Hospital,12,0.3,392,12
 =46,University of Utah School of Medicine,12,0.3,190,12
 =46,Motwani LASIK Institute,12,0.3,192,12
+=46,University of Toronto,12,0.3,160,12

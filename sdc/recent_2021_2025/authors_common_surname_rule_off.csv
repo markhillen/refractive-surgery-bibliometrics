@@ -1,25 +1,25 @@
 author_id (rule off),publications (rule off),matching identity in primary run,its publications in primary run,occurrences shared,primary identities covered
 Zhou X,89,Zhou X (Fudan),94,89,1
 Moshirfar M,82,Moshirfar M,82,82,1
-Hoopes PC,62,Hoopes PCS,62,62,1
+Hoopes PC,62,Hoopes PC,62,62,1
 Wang Y,48,Wang Y (Tianjin),48,48,1
 Arba-Mosquera S,35,Arba-Mosquera S,35,35,1
-Zhang Y,35,Zhang Y (Peking),33,33,3
+Zhang Y,35,Zhang Y (Peking),26,26,6
 Chen Y,32,Chen Y (Peking),32,32,1
 Ronquillo YC,31,Ronquillo YC,31,31,1
 Zhao J,31,Zhao J (Fudan),31,31,1
 Mimouni M,28,Mimouni M,28,28,1
-Li Y,27,Li Y (Beijing),27,27,1
-Mehta JS,23,Mehta JS (Singapore),23,23,1
+Li Y,27,Li Y (Beijing),24,23,2
+Mehta JS,23,Mehta JS (Singapore),22,22,2
 Han T,22,Han T (Fudan),22,22,1
 Kaiserman I,21,Kaiserman I,21,21,1
 Ganesh S,20,Ganesh S,20,20,1
 Reinstein DZ,20,Reinstein DZ,20,20,1
 Archer TJ,20,Archer TJ,20,20,1
-Liu S,20,Liu S (Fudan),20,20,1
+Liu S,20,Liu S (Fudan),11,11,2
 Yuan Y,20,Yuan Y,20,20,1
 Shetty R,19,Shetty R,19,19,1
-Zhang F,19,Zhang F (Capital),19,19,1
+Zhang F,19,Zhang F (Capital),17,17,2
 Santhiago MR,19,Santhiago MR,19,19,1
 Li M,19,Li M (Fudan),19,19,1
 Alió JL,18,Alió JL,19,18,1
@@ -37,5 +37,5 @@ Bao F,16,Bao F,16,16,1
 Sela T,16,Sela T,16,16,1
 Lee C,16,Lee C (Shan),16,16,1
 Brar S,15,Brar S,15,15,1
-Wang Z,15,Wang Z (Sen),14,14,2
+Wang Z,15,Wang Z (Central South),5,5,6
 Khamar P,15,Khamar P,15,15,1

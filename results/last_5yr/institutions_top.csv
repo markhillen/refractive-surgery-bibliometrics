@@ -1,11 +1,11 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,110,5.13,857,110
-2,University of Utah School of Medicine,65,3.03,565,65
+1,Eye & ENT Hospital of Fudan University,110,5.14,857,110
+2,University of Utah School of Medicine,65,3.04,565,65
 3,Hoopes Vision Research Center,58,2.71,392,58
 4,Utah Lions Eye Bank,55,2.57,502,55
-5,Tianjin Medical University,53,2.47,428,53
+5,Tianjin Medical University,53,2.48,428,53
 6,Wenzhou Medical University,48,2.24,551,48
-7,Tianjin Eye Hospital,44,2.05,378,44
+7,Tianjin Eye Hospital,44,2.06,378,44
 8,Peking University,38,1.77,269,38
 9,University of Arizona,36,1.68,354,36
 10,Farabi Eye Hospital,31,1.45,242,31
@@ -19,7 +19,7 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =17,Tel Aviv University,22,1.03,93,22
 =17,Federal University of São Paulo,22,1.03,255,22
 =17,Shahid Beheshti University of Medical Sciences,22,1.03,200,22
-=17,Nankai University,22,1.03,203,22
+21,Nankai University,21,0.98,199,21
 =22,Columbia University,20,0.93,389,20
 =22,Vissum Alicante,20,0.93,280,20
 =22,Nobel Eye Institute,20,0.93,92,20
@@ -38,14 +38,14 @@ rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
 =32,Fudan University,17,0.79,103,17
 =32,Chung Shan Medical University,17,0.79,97,17
 =39,Bascom Palmer Eye Institute,16,0.75,125,15
-=39,Central South University,16,0.75,146,16
 =39,Sorbonne Université,16,0.75,374,16
 =39,Moorfields Eye Hospital,16,0.75,239,16
-=43,Stanford University,15,0.7,206,15
-=43,Yonsei University College of Medicine,15,0.7,100,15
-=43,Universidad Miguel Hernández,15,0.7,219,15
-=43,Beihang University,15,0.7,251,15
-=43,Chinese Academy of Medical Sciences,15,0.7,142,15
-=43,Da-Yeh University,15,0.7,89,15
+=42,Central South University,15,0.7,144,15
+=42,Stanford University,15,0.7,206,15
+=42,Yonsei University College of Medicine,15,0.7,100,15
+=42,Universidad Miguel Hernández,15,0.7,219,15
+=42,Beihang University,15,0.7,251,15
+=42,Chinese Academy of Medical Sciences,15,0.7,142,15
+=42,Da-Yeh University,15,0.7,89,15
 =49,University of Zurich,14,0.65,122,14
 =49,West China Hospital,14,0.65,54,14

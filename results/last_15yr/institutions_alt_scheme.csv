@@ -1,22 +1,22 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,176,2.99,3703,176
+1,Eye & ENT Hospital of Fudan University,169,2.88,3633,169
 2,Cleveland Clinic,97,1.65,3356,97
 3,Wenzhou Medical University,76,1.29,1379,76
 =4,Tianjin Eye Hospital,63,1.07,1628,63
 =4,Vissum Alicante,63,1.07,1586,62
 6,Narayana Nethralaya Bangalore,57,0.97,1046,57
 7,Singapore Eye Research Institute,56,0.95,2248,56
-8,Peking University,52,0.88,369,52
+8,Peking University,52,0.89,369,52
 9,Tianjin Medical University,51,0.87,591,51
 10,Farabi Eye Hospital,50,0.85,487,50
 11,All India Institute of Medical Sciences,49,0.83,693,49
 12,Laservision Institute Athens,48,0.82,1682,47
 =13,Sun Yat-sen University,44,0.75,930,44
 =13,Hoopes Vision Research Center,44,0.75,321,44
-15,Stanford University,43,0.73,948,43
-16,Beijing Tongren Eye Center,42,0.71,361,42
-=17,Yonsei University College of Medicine,40,0.68,1142,40
-=17,Shahid Beheshti University of Medical Sciences,40,0.68,612,40
+=15,Stanford University,42,0.71,921,42
+=15,Beijing Tongren Eye Center,42,0.71,361,42
+17,Shahid Beheshti University of Medical Sciences,40,0.68,612,40
+18,Yonsei University College of Medicine,39,0.66,1127,39
 =19,Mashhad University of Medical Sciences,32,0.54,354,32
 =19,Noor Eye Hospital Tehran,32,0.54,396,32
 =21,Bascom Palmer Eye Institute,31,0.53,646,31
