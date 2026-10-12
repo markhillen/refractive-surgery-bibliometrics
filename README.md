@@ -234,17 +234,18 @@ demo.py          synthetic smoke test
 
 ## Data behind the published analysis
 
-The analysis in the paper was run on 7 October 2026 for publications dated
-1988–2025. Everything needed to check or repeat it is in this repository:
+The search was run on 7 October 2026 for publications dated 1988–2025 (the
+abbreviation SMILE was added to the query the same day); the records were
+re-downloaded and the analysis rerun on 12 October 2026. Everything needed to check or repeat it is in this repository:
 
 | Path | Contents |
 |------|----------|
 | `sdc/SupplementalFile1_search_strategy.txt` | The PubMed query |
-| `data/retrieved_pmids.txt` | The 14,112 identifiers the query returned |
-| `data/final_pmids.txt` | The 12,887 publications analyzed (fixed list) |
-| `data/screening_summary.txt` | How 14,112 became 12,887 |
-| `data/excluded_records.csv` | The 1,210 excluded records with rule and reason |
-| `data/manual_screening.csv` | All 1,840 individual screening decisions (every exclusion confirmed by an author) |
+| `data/retrieved_pmids.txt` | The 14,188 identifiers the query returned |
+| `data/final_pmids.txt` | The 12,909 publications analyzed (fixed list) |
+| `data/screening_summary.txt` | How 14,188 became 12,909 |
+| `data/excluded_records.csv` | The 1,264 excluded records with rule and reason |
+| `data/manual_screening.csv` | All 1,913 individual screening decisions (every exclusion confirmed by an author) |
 | `validation/screening/` | Decision rule, precision sample, recall samples and the procedure-classification check |
 | `data/affiliation_corrections.csv`, `data/institution_aliases.csv`, `data/keyword_synonyms.csv` | Curated corrections and normalization tables |
 | `data/author_group.csv` | The pre-specified author group removed in the sensitivity analysis |

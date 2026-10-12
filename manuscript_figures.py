@@ -189,8 +189,9 @@ def fig5(flow: dict):
     box(L, 50, W, 15, "Rule-based relevance filter\n(content, journal and MeSH rules;\nevery decision logged)")
     box(L, 26, W, 17, f"Individually screened records: n = {flow['screened']:,}\n"
                       f"rule-unresolved queue {flow['queue']}, random precision sample {flow['sample']},\n"
-                      f"procedure term in abstract or keywords only {flow['stratum']:,}\n"
-                      f"(decisions proposed by Claude; exclusions checked by an author)", fc="#FFF6EC")
+                      f"procedure term in abstract or keywords only {flow['stratum']:,}"
+                      + (f",\nadded by the SMILE search term {flow['smile']}" if flow.get('smile') else "") + "\n"
+                      + f"(decisions proposed by Claude; exclusions checked by an author)", fc="#FFF6EC")
     box(L, 4, W, 13, f"Publications analyzed: n = {flow['final']:,}", fc="#EAF5EE")
     for y1, y2 in [(88, 82), (72, 65), (50, 43), (26, 17)]:
         arrow(L + W / 2, y1, L + W / 2, y2)

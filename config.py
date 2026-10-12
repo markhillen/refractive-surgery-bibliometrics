@@ -86,7 +86,7 @@ PUBMED_QUERY_SPECIFIC = (
     '"Keratectomy, Subepithelial, Laser-Assisted"[MeSH Terms]'
 )
 PUBMED_QUERY_GENERIC = (
-    '"PRK"[tiab] OR "excimer laser"[tiab] OR "excimer lasers"[tiab] OR '
+    '"PRK"[tiab] OR "SMILE"[tiab] OR "excimer laser"[tiab] OR "excimer lasers"[tiab] OR '
     '"surface ablation"[tiab] OR "wavefront-guided"[tiab] OR "wavefront guided"[tiab] OR '
     '"wavefront-optimized"[tiab] OR "topography-guided"[tiab] OR '
     '"topography guided"[tiab] OR "Lasers, Excimer"[MeSH Terms]'

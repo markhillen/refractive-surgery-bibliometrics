@@ -1,8 +1,8 @@
 rank,code,language,n
-1,eng,English,9626
+1,eng,English,9646
 2,chi,Chinese,249
 3,ger,German,224
-4,rus,Russian,95
+4,rus,Russian,97
 5,fre,French,75
 6,spa,Spanish,51
 7,cze,Czech,33
@@ -15,8 +15,8 @@ rank,code,language,n
 14,dan,dan,5
 15,nor,nor,4
 16,heb,Hebrew,4
-17,swe,swe,2
-18,dut,Dutch,2
+17,dut,Dutch,2
+18,swe,swe,2
 19,srp,srp,2
-20,ice,ice,1
-21,fin,fin,1
+20,fin,fin,1
+21,ice,ice,1

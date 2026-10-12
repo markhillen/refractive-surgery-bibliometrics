@@ -1,51 +1,51 @@
 rank,institution,publications,pct_of_resolved,total_citations,n_cited_known
-1,Eye & ENT Hospital of Fudan University,237,2.35,4725,237
-2,Cleveland Clinic,193,1.91,9917,190
-3,Vissum Alicante,162,1.61,6205,161
-4,Tianjin Eye Hospital,138,1.37,2655,138
-5,Wenzhou Medical University,128,1.27,2687,128
-=6,Massachusetts Eye and Ear,104,1.03,3386,103
-=6,Singapore Eye Research Institute,104,1.03,4102,104
-8,All India Institute of Medical Sciences,103,1.02,1623,103
-9,University of Crete,102,1.01,4445,102
-10,Chinese University of Hong Kong,101,1.0,2052,99
-11,Tianjin Medical University,95,0.94,1289,95
-12,University of Utah School of Medicine,91,0.9,1019,91
-=13,Singapore National Eye Centre,90,0.89,3370,89
-=13,Shahid Beheshti University of Medical Sciences,90,0.89,1229,90
-15,Yonsei University College of Medicine,89,0.88,2846,89
-16,Farabi Eye Hospital,88,0.87,1288,88
-17,Stanford University,87,0.86,2051,87
-18,London Vision Clinic,81,0.8,4561,81
-19,Universidad Miguel Hernández,80,0.79,3304,80
-=20,Emory University,78,0.77,5005,78
-=20,Sun Yat-sen University,78,0.77,1388,78
-=22,Moorfields Eye Hospital,77,0.76,2832,77
-=22,Baylor College of Medicine,77,0.76,3564,76
-=22,Bascom Palmer Eye Institute,77,0.76,2399,76
-25,Utah Lions Eye Bank,76,0.75,759,76
-=26,Federal University of São Paulo,72,0.71,2529,72
-=26,Johns Hopkins University,72,0.71,1771,72
-=28,Narayana Nethralaya Bangalore,69,0.68,1237,69
-=28,University of California San Francisco,69,0.68,2169,69
-=30,Tel Aviv University,65,0.64,896,65
-=30,Columbia University,65,0.64,2559,64
-32,University of Southern California,63,0.63,2566,63
-=33,Peking University,62,0.62,488,62
-=33,University of Arizona,62,0.62,1086,62
-35,Hoopes Vision Research Center,61,0.61,440,61
-36,University of California Los Angeles,60,0.6,2611,60
-37,Fudan University,58,0.58,1340,58
-38,Ben-Gurion University of the Negev,56,0.56,909,55
-39,Beijing Tongren Eye Center,55,0.55,444,55
-40,Laservision Institute Athens,53,0.53,2561,52
-=41,University of Toronto,47,0.47,956,47
-=41,University of Pittsburgh,47,0.47,931,47
-43,Noor Eye Hospital Tehran,45,0.45,680,45
-=44,Humanitas University Milan,44,0.44,1160,44
-=44,Aarhus University Hospital,44,0.44,2808,44
-=46,LV Prasad Eye Institute,43,0.43,1268,43
-=46,Mashhad University of Medical Sciences,43,0.43,475,43
-48,Saarland University Medical Center,41,0.41,465,41
-49,University of São Paulo,39,0.39,1100,39
-50,University of Siena,37,0.37,746,37
+1,Eye & ENT Hospital of Fudan University,240,2.38,4742,240
+2,Cleveland Clinic,202,2.0,10033,199
+3,Vissum Alicante,161,1.59,6198,160
+=4,Wenzhou Medical University,132,1.31,2760,132
+=4,Tianjin Eye Hospital,132,1.31,2550,132
+=6,Massachusetts Eye and Ear,106,1.05,3503,105
+=6,Chinese University of Hong Kong,106,1.05,2136,104
+8,Singapore Eye Research Institute,105,1.04,4066,105
+9,All India Institute of Medical Sciences,103,1.02,1623,103
+10,University of Crete,101,1.0,4435,101
+11,University of Utah School of Medicine,95,0.94,1061,95
+12,Singapore National Eye Centre,90,0.89,3363,89
+=13,Yonsei University College of Medicine,89,0.88,2777,89
+=13,Farabi Eye Hospital,89,0.88,1274,89
+=15,Stanford University,88,0.87,2078,88
+=15,Shahid Beheshti University of Medical Sciences,88,0.87,1222,88
+17,Tianjin Medical University,86,0.85,1130,86
+=18,Baylor College of Medicine,79,0.78,3609,78
+=18,London Vision Clinic,79,0.78,4081,79
+=20,Emory University,78,0.77,5233,78
+=20,Bascom Palmer Eye Institute,78,0.77,2496,77
+22,Sun Yat-sen University,77,0.76,1384,77
+23,Utah Lions Eye Bank,75,0.74,737,75
+24,Universidad Miguel Hernández,72,0.71,3204,72
+25,Narayana Nethralaya Bangalore,71,0.7,1257,71
+=26,Moorfields Eye Hospital,70,0.69,2445,70
+=26,Federal University of São Paulo,70,0.69,2389,70
+28,Johns Hopkins University,69,0.68,1670,69
+29,University of California San Francisco,67,0.66,2161,67
+30,Tel Aviv University,65,0.64,898,65
+=31,University of California Los Angeles,64,0.63,2666,64
+=31,Columbia University,64,0.63,2488,63
+33,University of Southern California,63,0.62,2501,63
+=34,Peking University,62,0.61,488,62
+=34,University of Arizona,62,0.61,1086,62
+=36,Fudan University,61,0.6,1653,61
+=36,Hoopes Vision Research Center,61,0.6,440,61
+38,Beijing Tongren Eye Center,59,0.58,468,59
+39,Ben-Gurion University of the Negev,56,0.55,928,56
+40,Laservision Institute Athens,55,0.54,2668,54
+41,University of Toronto,52,0.51,979,52
+42,University of Pittsburgh,47,0.47,955,47
+=43,Noor Eye Hospital Tehran,44,0.44,630,44
+=43,Aarhus University Hospital,44,0.44,2808,44
+45,Mashhad University of Medical Sciences,43,0.43,475,43
+=46,Humanitas University Milan,41,0.41,1128,41
+=46,LV Prasad Eye Institute,41,0.41,1264,41
+=46,Saarland University Medical Center,41,0.41,465,41
+=49,Mayo Clinic,38,0.38,1975,37
+=49,University of Alicante,38,0.38,681,38

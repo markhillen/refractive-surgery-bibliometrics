@@ -1,58 +1,58 @@
 rank,keyword,frequency
 1,LASIK,835
-2,lenticule extraction (SMILE/KLEx),538
+2,lenticule extraction (SMILE/KLEx),546
 3,photorefractive keratectomy (PRK),427
-4,myopia,398
-5,astigmatism,184
+4,myopia,399
+5,astigmatism,185
 6,higher-order aberrations,168
-7,keratoconus,164
-8,femtosecond laser,149
-9,corneal cross-linking (CXL),124
-10,dry eye,112
-11,corneal ectasia,112
-12,corneal biomechanics,102
+7,keratoconus,166
+8,femtosecond laser,151
+9,corneal cross-linking (CXL),126
+10,corneal ectasia,114
+11,dry eye,112
+12,corneal biomechanics,103
 13,transepithelial PRK,98
 14,excimer laser,77
 15,corneal topography,74
-16,hyperopia,71
+16,hyperopia,73
 17,LASEK / epi-LASIK,62
 18,corneal tomography,57
 19,refractive error,55
-20,optical coherence tomography (OCT),53
-21,corneal haze,49
-22,presbyopia,48
+20,optical coherence tomography (OCT),54
+21,presbyopia,50
+22,corneal haze,49
 23,topography-guided ablation,46
 24,cataract,44
-25,mitomycin C,43
-26,cataract surgery,43
-27,visual quality,41
+25,cataract surgery,43
+26,mitomycin C,43
+27,visual quality,42
 28,intraocular pressure,40
 29,IOL power calculation,36
 30,laser,35
 31,glaucoma,31
-32,phototherapeutic keratectomy,30
-33,wound healing,30
+32,wound healing,30
+33,phototherapeutic keratectomy,30
 34,phakic IOL / ICL,29
 35,contrast sensitivity,28
 36,epithelial ingrowth,28
 37,wavefront-guided ablation,27
 38,ophthalmology,26
-39,complication,25
-40,laser presbyopia correction,25
-41,meta-analysis,25
-42,diffuse lamellar keratitis,24
-43,treatment laser,24
-44,lenticule,24
-45,keratometry,24
+39,meta-analysis,25
+40,complication,25
+41,laser presbyopia correction,25
+42,lenticule,25
+43,diffuse lamellar keratitis,24
+44,keratometry,24
+45,treatment laser,24
 46,intraocular lens,23
 47,vector analysis,23
-48,pain,22
-49,visual outcome,22
-50,safety,22
-51,regression,22
-52,bandage contact lens,21
-53,central corneal thickness,21
-54,contact lens,21
-55,corneal thickness,21
+48,safety,22
+49,regression,22
+50,pain,22
+51,visual outcome,22
+52,contact lens,21
+53,bandage contact lens,21
+54,corneal thickness,21
+55,central corneal thickness,21
 56,surface ablation,20
 57,VisuMax,20

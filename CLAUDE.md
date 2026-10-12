@@ -67,9 +67,9 @@ for full architecture notes.
 
 ## Published analysis (JRS submission, 7 Oct 2026)
 
-- 14,112 retrieved → 12,887 analyzed (`data/final_pmids.txt`); screening log in
-  `data/screening_summary.txt`. 1,840 records screened individually (Claude
-  proposed; MH confirmed all 847 exclusions; inclusions not checked).
+- 14,188 retrieved → 12,909 analyzed (`data/final_pmids.txt`); screening log in
+  `data/screening_summary.txt`. 1,913 records screened individually (Claude
+  proposed; MH confirmed all 898 exclusions; inclusions not checked).
 - Extra steps beyond the shared engine: `procedures.py` (multi-label procedure
   families), `field_share.py` (per 1,000 PubMed ophthalmology records),
   `validate_pubmed.py` (PubMed recount), `manuscript_figures.py` (Figs 1–5).

@@ -1,16 +1,17 @@
 {
- "retrieved": 14112,
- "parsed": 14097,
+ "retrieved": 14188,
+ "parsed": 14173,
  "books": 15,
- "screened": 1840,
+ "screened": 1913,
  "queue": 337,
  "sample": 200,
  "stratum": 1303,
- "rule_excluded": 363,
+ "smile": 73,
+ "rule_excluded": 366,
  "ptk": 196,
  "nosignal": 119,
  "nooph": 9,
- "notices": 39,
- "manual_excluded": 847,
- "final": 12887
+ "notices": 42,
+ "manual_excluded": 898,
+ "final": 12909
 }
