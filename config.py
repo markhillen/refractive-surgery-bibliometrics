@@ -11,7 +11,7 @@ from datetime import date
 PROJECT_NAME    = "Refractive Surgery Bibliometrics"
 PROJECT_VERSION = "2.0.0"   # rebased on the shared cxl/kc 3.x engine, Oct 2026
 # Bump when the parsed-record schema changes; main.py refuses stale caches.
-CACHE_SCHEMA    = 4   # 4: author keywords split from NLM keyword lists
+CACHE_SCHEMA    = 5   # 5: PubMed <Suffix> parsed; 4: author keywords split from NLM keyword lists
 
 # ── API Credentials ───────────────────────────────────────────────────────────
 NCBI_API_KEY = os.environ.get("NCBI_API_KEY", "")   # set env var or paste here

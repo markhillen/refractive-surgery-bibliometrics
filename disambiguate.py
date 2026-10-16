@@ -206,6 +206,65 @@ def _has_excluded_affil(last_n: str, fore_n: str, affils: list[str]) -> bool:
     return any(kw in affil_blob for kw in keywords)
 
 
+# ── Suffix-based exclusions (father and son, identical forename) ─────────────
+# PubMed's <Suffix> element is the only thing that separates two authors who
+# share a surname AND a forename.  Splitting wherever a suffix appears would be
+# wrong: many authors are recorded inconsistently (Renato Ambrosio Jr carries
+# "Jr" on some records and not others, and is one person), so the split is
+# applied only to the names listed here.
+#
+# An occurrence of a listed name whose Suffix is a junior marker is never merged
+# with an occurrence of the same name that lacks one.  Records with no suffix,
+# or an explicit senior marker, stay with the senior author: PubMed gives no
+# suffix on most records, and the senior author holds the long publication
+# record and the ORCID.
+#
+# Known case: Phillip C. Hoopes Sr and his son Phillip C. Hoopes Jr, both
+# ophthalmologists at Hoopes Vision, Draper, Utah, so an affiliation rule
+# cannot separate them.  OpenAlex puts three of the son's papers under the
+# father's author ID and ORCID.
+KNOWN_DISTINCT_SUFFIX: list[tuple[str, str]] = [
+    ("hoopes", "phillip c"),
+    # ("surname_norm", "forename_norm"),
+]
+
+_JUNIOR_RE = re.compile(r"^(j[uú]nior|jr|ii|iii)\.?$", re.I)
+
+# Lookup holds both the forename form and its initials ("phillip c", "pc"), so
+# an occurrence recorded either way is matched.
+_DISTINCT_SUFFIX_SET: set[tuple[str, str]] = set()
+for _last, _fore in KNOWN_DISTINCT_SUFFIX:
+    _DISTINCT_SUFFIX_SET.add((_last.lower(), _fore.lower()))
+    _DISTINCT_SUFFIX_SET.add((_last.lower(), _initials(_fore)))
+
+
+def _strip_suffix_tokens(fore: str) -> str:
+    """Forename with generational suffix tokens removed ("Phillip C Sr" →
+    "phillip c"); PubMed sometimes parses the suffix into the forename."""
+    toks = [t for t in re.split(r"[\s.]+", _norm_fore(fore))
+            if t and t not in _NAME_SUFFIXES]
+    return " ".join(toks)
+
+
+def _is_junior_name(last: str, fore: str, initials: str, suffix: str) -> bool:
+    """True when PubMed records an explicit junior suffix for an author whose
+    name is on the KNOWN_DISTINCT_SUFFIX safelist."""
+    if not suffix or not _JUNIOR_RE.match(suffix.strip()):
+        return False
+    last_n = _norm_last(last)
+    forms = {_strip_suffix_tokens(fore), _initials(fore, initials)}
+    return any((last_n, f) in _DISTINCT_SUFFIX_SET for f in forms if f)
+
+
+def _fore_key_jr(fore: str, initials: str, is_jr: bool) -> str:
+    """Group key for an occurrence, carrying a junior marker for a safelisted
+    father/son name so the two can never share a group."""
+    key = _fore_key(fore, initials)
+    if not is_jr:
+        return key
+    return key + (":jr" if key.startswith("__init__") else " jr")
+
+
 def _are_known_distinct(last_n: str, key_a: str, key_b: str) -> bool:
     """True if two group keys (forename or "__init__:xx") for the same surname
     are listed as different people, compared under every name form each key
@@ -356,6 +415,8 @@ def build_occurrence_table(records: list[dict], oa_cache: dict | None = None) ->
         for pos, a in enumerate(authors):
             if not a["last"]:
                 continue  # skip collective names
+            is_jr = _is_junior_name(a["last"], a.get("fore", ""),
+                                    a.get("initials", ""), a.get("suffix", ""))
             occ = {
                 "pmid":      pmid,
                 "year":      year,
@@ -363,12 +424,14 @@ def build_occurrence_table(records: list[dict], oa_cache: dict | None = None) ->
                 "last":      a["last"],
                 "fore":      a["fore"],
                 "initials":  a["initials"],
+                "suffix":    a.get("suffix", ""),
+                "is_jr":     is_jr,
                 "affils":    a["affils"],
                 "orcid":     a["orcid"],
                 "oa_id":     (oa_authors[pos].get("id") if pos < len(oa_authors) and len(oa_authors) == len(authors) else None),
                 "last_norm": _norm_last(a["last"]),
                 "init":      _initials(a.get("fore", ""), a.get("initials", "")),
-                "fore_key":  _fore_key(a.get("fore", ""), a.get("initials", "")),
+                "fore_key":  _fore_key_jr(a.get("fore", ""), a.get("initials", ""), is_jr),
                 "co_fps":    co_fps - {(_norm_last(a["last"]),
                                         _initials(a.get("fore", ""), a.get("initials", "")))},
             }
@@ -425,6 +488,10 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         for j in orcid_map[occ["orcid"]]:
             lb = occurrences[j]["last_norm"]
             if la == lb or la.endswith(lb) or lb.endswith(la):
+                # Three of Phillip C. Hoopes Jr's papers carry his father's
+                # ORCID, so the suffix split has to hold here too.
+                if occ["is_jr"] != occurrences[j]["is_jr"]:
+                    continue
                 union(i, j)
                 break
         else:
@@ -457,6 +524,8 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
             fa = "" if a["fore_key"].startswith("__init__") else a["fore_key"]
             fb = "" if b["fore_key"].startswith("__init__") else b["fore_key"]
             if _has_excluded_affil(la, fa, a["affils"]) != _has_excluded_affil(lb, fb, b["affils"]):
+                continue
+            if a["is_jr"] != b["is_jr"]:
                 continue
             if la in _COMMON_SURNAMES and _inst_conflict(a["affils"], b["affils"]):
                 continue
@@ -496,11 +565,17 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
                 affil_j = next((occurrences[k]["affils"] for k in idxs_j if occurrences[k]["affils"]), [])
                 asim = _affil_sim(affil_i, affil_j)
 
+                # A safelisted junior never merges with the senior of the same
+                # name: they share surname, forename and institution, so no
+                # other signal can separate them.
+                jr_i = any(occurrences[k]["is_jr"] for k in idxs_i)
+                jr_j = any(occurrences[k]["is_jr"] for k in idxs_j)
+
                 # Decision: merge if strong evidence
                 should_merge = False
 
                 # Hard block 1: never merge known-distinct people
-                if _are_known_distinct(last_n, fname_i, fname_j):
+                if _are_known_distinct(last_n, fname_i, fname_j) or jr_i != jr_j:
                     should_merge = False
 
                 # Hard block 2: confirmed different institutions → different people
@@ -614,6 +689,13 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
         if occ["affils"]:
             comp_affils[root].extend(occ["affils"][:1])
 
+    # A component holding the junior of a safelisted father/son pair is
+    # labelled with the suffix, so the two are distinguishable in every table.
+    comp_junior: dict[int, bool] = {}
+    for i, occ in enumerate(occurrences):
+        if occ["is_jr"]:
+            comp_junior[find(i)] = True
+
     comp_canonical: dict[int, str] = {}
     for root, counter in comp_names.items():
         best_last, best_fore = counter.most_common(1)[0][0]
@@ -634,6 +716,8 @@ def disambiguate(occurrences: list[dict]) -> dict[int, str]:
             if len(fore) > len(best_initials):
                 best_initials = fore
         canonical = _display_name(best_last, best_initials, best_fore)
+        if comp_junior.get(root):
+            canonical = f"{canonical} Jr"
 
         # For common surnames, append institution discriminator to the display
         # name so that different Zhang Ls are visually distinguishable in outputs.

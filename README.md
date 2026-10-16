@@ -264,7 +264,7 @@ different set, and citation counts will have grown.
 
 If you use this pipeline in published research, please cite:
 
-> Hillen M, Torres-Netto EA, Furrer ML, Kollros L, Hafezi NL, Hafezi F.
+> Hillen M, Furrer ML, Torres-Netto EA, Kollros L, Hafezi NL, Hafezi F.
 > From LASIK to keratorefractive lenticule extraction: a bibliometric analysis
 > of corneal laser refractive surgery research, 1988–2025. *Journal of
 > Refractive Surgery* [submitted].

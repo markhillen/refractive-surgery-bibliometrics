@@ -321,6 +321,7 @@ def _parse_author(auth_elem) -> dict:
     last     = _text(auth_elem, "LastName")
     fore     = _text(auth_elem, "ForeName")
     initials = _text(auth_elem, "Initials")
+    suffix   = _text(auth_elem, "Suffix")
     affils = [
         _itertext(aff)
         for aff in auth_elem.findall("AffiliationInfo/Affiliation")
@@ -338,6 +339,7 @@ def _parse_author(auth_elem) -> dict:
         "last": last,
         "fore": fore,
         "initials": initials,
+        "suffix": suffix,
         "affils": affils,
         "orcid": orcid,
         "collective": collective,
